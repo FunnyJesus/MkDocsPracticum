@@ -2,3 +2,7 @@ site_name: MkDocsPracticum
 site_url: https://FunnyJesus.github.io/MkDocsPracticum
 theme:
   name: material
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
