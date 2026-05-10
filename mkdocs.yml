@@ -1,1 +1,4 @@
 site_name: MkDocsPracticum
+site_url: https://FunnyJesus.github.io/MkDocsPracticum
+theme:
+  name: material
