@@ -2,6 +2,11 @@ site_name: MkDocsPracticum
 site_url: https://FunnyJesus.github.io/MkDocsPracticum
 theme:
   name: material
+nav:
+  - Главная: index.md
+  - Git: git.md
+  - Linux Command: linux.md
+  - CI: ci.md
 markdown_extensions:
   - admonition
   - pymdownx.details
