@@ -7,6 +7,7 @@ nav:
   - Git: git.md
   - Linux Command: linux.md
   - CI: ci.md
+  - Bash Script: bash-scripts.md
 markdown_extensions:
   - admonition
   - pymdownx.details
