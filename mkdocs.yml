@@ -8,6 +8,7 @@ nav:
   - Linux Command: linux.md
   - CI: ci.md
   - Bash Script: bash-scripts.md
+  - IaC: iac.md
 markdown_extensions:
   - admonition
   - pymdownx.details
