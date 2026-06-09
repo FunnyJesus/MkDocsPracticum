@@ -5,7 +5,7 @@ theme:
 nav:
   - Главная: index.md
   - Git: git.md
-  - Linux Command: linux.md
+  - Linux & Command: linux.md
   - CI: ci.md
   - Bash Script: bash-scripts.md
   - IaC: iac.md
