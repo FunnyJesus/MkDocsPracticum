@@ -170,3 +170,33 @@ main:    A---B---C---D
     terraform.tfstate.backup
     /test // каталог
     ```
+
+### Разрешение конфликтов
+
+Кофликты появляются, когда сливают две ветки кода, но изменения в них противоречат друг другу. `Git` автоматически не решает конфдикты, поэтому их нужно решать самому 
+
+#### Алгоритм 
+
+Пример: в основной ветке main разработчик изменил логику расчёта итоговой цены в корзине интернет-магазина, заменив фиксированную скидку discount на новую функцию calculate_seasonal_discount(). Тем временем в ветке feature/free-shipping в той же строке добавили учёт бесплатной доставки вызовом apply_free_shipping().
+Алгоритм разрешения:
+1. Открыть конфликтный файл `cart.py`.
+2. Найти маркеры `<<<<<<<, =======, >>>>>>>`.
+```
+    # ... previous code ...
+<<<<<<< HEAD
+    total = apply_discount(total, calculate_seasonal_discount())
+=======
+    total = apply_free_shipping(total)
+>>>>>>> feature/free-shipping
+    return total
+```
+3. Выбрать нужный вариант или написать новый.
+4. Удалить маркеры конфликта.
+```
+    # ... previous code ...
+    total = apply_discount(total, calculate_seasonal_discount())
+    total = apply_free_shipping(total)
+    return total
+```
+5. Сохранить файл. <br>
+6. Выполнить `git add cart.py` и `git commit`.
