@@ -9,6 +9,7 @@ nav:
   - CI: ci.md
   - Bash Script: bash-scripts.md
   - IaC: iac.md
+  - Docker: docker.md
 markdown_extensions:
   - admonition
   - pymdownx.details
