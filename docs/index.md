@@ -10,6 +10,7 @@
 - [**CI**](ci.md) — непрерывная интеграция: Pipeline, Stage, Jobs, GitLab CI / GitHub Actions
 - [**IaC (Terraform)**](iac.md) — инфраструктура как код: блоки (resource, provider, variable), команды terraform
 - [**Docker**](docker.md) — контейнеризация: команды, Dockerfile, тома, сети, встроенный DNS
+- [**Kubernetes**](k8s.md) — оркестрация контейнеров: кластер, pods, deployments, services, ingress, k9s
 
 ## Подход
 

@@ -4,12 +4,45 @@ theme:
   name: material
 nav:
   - Главная: index.md
-  - Git: git.md
-  - Linux & Command: linux.md
-  - CI: ci.md
-  - Bash Script: bash-scripts.md
-  - IaC: iac.md
-  - Docker: docker.md
+  - Git:
+      - git.md
+      - git-commands.md
+      - git-cheatsheet.md
+  - Linux & Command:
+      - linux.md
+      - linux-commands.md
+      - linux-cheatsheet.md
+  - CI:
+      - ci.md
+      - ci-cheatsheet.md
+  - CD (Continuous Delivery):
+      - cd.md
+      - cd-strategies.md
+      - cd-cheatsheet.md
+  - Bash Script:
+      - bash-scripts.md
+      - bash-cheatsheet.md
+  - IaC:
+      - iac.md
+      - iac-commands.md
+      - iac-cheatsheet.md
+  - Ansible:
+      - ansible.md
+      - ansible-commands.md
+      - ansible-cheatsheet.md
+  - Docker:
+      - docker.md
+      - docker-commands.md
+      - docker-cheatsheet.md
+  - Docker Compose:
+      - docker-compose.md
+      - compose-networks.md
+      - compose-networks-cheatsheet.md
+  - Kubernetes:
+      - k8s.md
+      - k8s-commands.md
+      - k8s-cheatsheet.md
+      - k9s.md
 markdown_extensions:
   - admonition
   - pymdownx.details
