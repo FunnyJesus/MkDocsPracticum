@@ -38,11 +38,13 @@ nav:
       - docker-compose.md
       - compose-networks.md
       - compose-networks-cheatsheet.md
+      - load-balancing.md
   - Kubernetes:
       - k8s.md
       - k8s-commands.md
       - k8s-cheatsheet.md
       - k9s.md
+      - k8s-loadbalancer.md
 markdown_extensions:
   - admonition
   - pymdownx.details
