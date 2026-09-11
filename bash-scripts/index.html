@@ -1,0 +1,3070 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://FunnyJesus.github.io/MkDocsPracticum/bash-scripts/">
+      
+      
+        <link rel="prev" href="../cd-cheatsheet/">
+      
+      
+        <link rel="next" href="../bash-cheatsheet/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Bash scripts - MkDocsPracticum</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#bash-scripts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MkDocsPracticum" class="md-header__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MkDocsPracticum
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Bash scripts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MkDocsPracticum" class="md-nav__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    MkDocsPracticum
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Git
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux & Command
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux & Command
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD (Continuous Delivery)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CD (Continuous Delivery)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Continuous Delivery / Deployment (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: стратегии деплоя (подробно)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: шпаргалка топ-20
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bash Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash scripts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Примеры скриптов и их описание
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Примеры скриптов и их описание">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Создание скрипта
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PATH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Массивы в Bash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Специальные Переменные
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Оператор | (пайплайн / конвейер)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Оператор || (логическое ИЛИ)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Оператор &amp;&amp; (логическое И)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Сводка: | , || , &amp;&amp;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ввод аргумента и if-else
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Цикл for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#while" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Цикл while
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Операторы сравнения
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        case
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Функции
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Полный пример резервного копирования
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        set - флаги режима скрипта
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chmod-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Права на выполнение и chmod +x
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permission-denied-scriptsh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ошибка «Permission denied» при запуске ./script.sh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cd-dirname-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cd "$(dirname "$0")" — сделать скрипт независимым от каталога запуска
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seq-1n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        seq и {1..N} — генерация последовательностей чисел
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wait-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Паттерн «ожидание готовности» (wait-for) — ждать, пока сервис поднимется
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        -e и защищённые команды в || (важная тонкость)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devtcp-tcp-bash-nccurl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /dev/tcp — встроенная проверка TCP-порта в bash (без nc/curl)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Подпроцесс ( ... ) — временно сменить каталог только для одной команды
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    IaC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaС
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: команды Terraform с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: шпаргалка топ-20 команд Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ansible
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker Compose
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-compose/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Шпаргалка: сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load-balancing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Балансировка нагрузки (Load Balancing)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kubernetes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k9s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    k9s — быстрая навигация по кластеру
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-loadbalancer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoadBalancer в Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Примеры скриптов и их описание
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Примеры скриптов и их описание">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Создание скрипта
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PATH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Массивы в Bash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Специальные Переменные
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Оператор | (пайплайн / конвейер)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Оператор || (логическое ИЛИ)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Оператор &amp;&amp; (логическое И)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Сводка: | , || , &amp;&amp;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ввод аргумента и if-else
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Цикл for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#while" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Цикл while
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Операторы сравнения
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        case
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Функции
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Полный пример резервного копирования
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        set - флаги режима скрипта
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chmod-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Права на выполнение и chmod +x
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permission-denied-scriptsh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ошибка «Permission denied» при запуске ./script.sh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cd-dirname-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cd "$(dirname "$0")" — сделать скрипт независимым от каталога запуска
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seq-1n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        seq и {1..N} — генерация последовательностей чисел
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wait-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Паттерн «ожидание готовности» (wait-for) — ждать, пока сервис поднимется
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        -e и защищённые команды в || (важная тонкость)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devtcp-tcp-bash-nccurl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /dev/tcp — встроенная проверка TCP-порта в bash (без nc/curl)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Подпроцесс ( ... ) — временно сменить каталог только для одной команды
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="bash-scripts">Bash scripts</h1>
+<blockquote>
+<p>Мини-шпаргалка конструкций: <a href="../bash-cheatsheet/">Bash: шпаргалка топ-20</a>.</p>
+</blockquote>
+<h2 id="_1">Примеры скриптов и их описание</h2>
+<blockquote>
+<p>Команды или группу команд можно сохранять в текстовый файл, а после запускать. </p>
+</blockquote>
+<p>Ниже будут приведены примеры скриптов</p>
+<h3 id="_2">Создание скрипта</h3>
+<ol>
+<li>Создать текстовый файл через <code>vim &lt;file&gt;.sh</code> или командый <code>touch + nano</code></li>
+<li>Записать скрипт в файл</li>
+<li>Сохранить</li>
+<li>Выполнить <code>chmod +x &lt;file&gt;</code> </li>
+<li>Выполнить скрипт <code>bash &lt;file&gt;</code> или <code>./&lt;file&gt;</code></li>
+</ol>
+<h3 id="alias">alias</h3>
+<ul>
+<li>Псевдонимы или алиасы (англ. alias) — это команды, которые можно определить самостоятельно.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>ubuntu@linux:~$ alias ll='ls -l'
+ubuntu@linux:~$ ll
+total 4
+-rw-rw-r-- 1 ubuntu ubuntu  0 May 13 17:51 echo
+-rwxrwxr-x 1 ubuntu ubuntu 66 May 13 17:31 hello.sh
+</code></pre></div>
+<h3 id="path">PATH</h3>
+<ul>
+<li><code>PATH</code> - файл, который хранит переменные окружения. Пути к исполняемым файла в директориях</li>
+</ul>
+<p><code>echo $PATH</code> - просмотр файла
+<code>export PATH="${PATH}:&lt;новая директория которую хотите добавить&gt;"</code> - добавление нового пути </p>
+<div class="admonition очень важно">
+<p class="admonition-title">Очень</p>
+<p>Переиспользуйте все заданные стандартно директории. Без этого Bash не сможет функционировать привычным для вас образом, так как потеряет доступ к внешним командам.</p>
+</div>
+<h3 id="hash">Hash</h3>
+<blockquote>
+<p>Чтобы каждый раз не смотреть в PATH, оболочка сперва использует внутреннюю хеш-таблицу для запоминания полного пути к командам, которые уже были запущены.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>ubuntu@linux:~$ hash
+hits    command # hits - указывает на колличество запусков этой команды
+   1    /usr/bin/chmod
+   1    /usr/bin/man
+   3    /usr/bin/ls
+   4    /usr/bin/bash
+   1    /usr/bin/ps
+   4    /usr/bin/vim
+</code></pre></div>
+<ul>
+<li>Если вы хотите очистить хеш-таблицу, можете использовать команду hash -r.</li>
+<li>Добавление в хеш-таблицу: hash &lt;имя_команды&gt;.</li>
+<li>Удаление из хеш-таблицы: hash -d &lt;имя_команды&gt;.</li>
+</ul>
+<h3 id="bash">Массивы в Bash</h3>
+<p>В Bash массивы можно объявлять с помощью ключевого слова <code>declare</code></p>
+<p><div class="highlight"><pre><span></span><code>$ declare -a MY_ARRAY
+$ MY_ARRAY[0]="Hello"
+$ MY_ARRAY[1]="World"
+$ echo ${MY_ARRAY[0]} ${MY_ARRAY[1]}!
+Hello World!
+</code></pre></div>
+Или передавать значения в скобках
+<div class="highlight"><pre><span></span><code>$ MY_ARRAY=("Hello" "World")
+$ echo ${MY_ARRAY[0]}, ${MY_ARRAY[1]}!
+Hello, World!
+</code></pre></div></p>
+<blockquote>
+<p>Конструкцию declare -r можно заменить на одно ключевое слово readonly. Атрибут readonly хорошо подходит для больших, развесистых скриптов, где много переменных и сложно отследить, где и какая меняется. 
+<div class="highlight"><pre><span></span><code>$ readonly MY_VARIABLE="Hello, World!"
+$ MY_VARIABLE="Hello, World?"
+bash: MY_VARIABLE: readonly variable
+</code></pre></div></p>
+</blockquote>
+<h3 id="_3">Специальные Переменные</h3>
+<blockquote>
+<p>Bash хранит код возврата последней выполненной команды в специальной переменной <code>$?</code></p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ bash -c "exit 2"
+$ echo $?
+2
+</code></pre></div>
+<blockquote>
+<p>Переменная <code>$IFS</code> (Internal Field Separator) используется для определения символа, который разделяет слова в строках. В операторе циклов <code>for</code> список элементов разделяется с использованием значения IFS</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+
+# Пусть на вход поступает набор слов, разделённых двоеточием
+line="home-directory:bash-directory"
+# Переопределим IFS
+IFS=":"
+# Создадим массив
+tokens=($line)
+
+echo "${tokens[0]}"  # Выводит "home-directory"
+echo "${tokens[1]}"  # Выводит "bash-directory"
+</code></pre></div>
+<blockquote>
+<p>Переменная <code>$$</code> содержит идентификатор процесса оболочки</p>
+<p>Переменная <code>$!</code> содержит идентификатор последнего запущенного фонового процесса</p>
+</blockquote>
+<h3 id="_4">Оператор | (пайплайн / конвейер)</h3>
+<ul>
+<li><code>|</code> - перенаправляет стандартный вывод (stdout) <strong>левой</strong> команды на стандартный ввод (stdin) <strong>правой</strong> команды. Результат левой становится входом правой.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ ls -l | grep "txt"
+-rw-r--r-- 1 user user 123 file1.txt
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ cat app.log | grep -i error | sort | uniq -c   # цепочка команд
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ docker ps | grep image-compress        # найти контейнер
+$ history | grep docker                  # найти команду в истории
+</code></pre></div>
+<blockquote>
+<p>Пайплайн можно объединять в цепочку сколько угодно: <code>команда1 | команда2 | команда3</code>. Каждая следующая получает вывод предыдущей. Стандартная ошибка (stderr) при этом НЕ передаётся — только stdout. Для ошибок используют <code>2&gt;&amp;1 |</code>.</p>
+<p>В <code>set -o pipefail</code> код возврата пайплайна = код последней упавшей команды (иначе - код последней команды). Это помогает ловить ошибки в середине цепочки.</p>
+</blockquote>
+<h3 id="_5">Оператор || (логическое ИЛИ)</h3>
+<ul>
+<li><code>||</code> - выполняет <strong>правую</strong> команду, <strong>только если левая завершилась с ошибкой</strong> (ненулевой код возврата). Аналог «иначе»/fallback.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ command1 || command2
+# command2 выполнится, только если command1 вернул ошибку (код != 0)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ mkdir /existing_dir || echo "Каталог уже существует"
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ cd /tmp/nonexist || { echo "Нет такого каталога"; exit 1; }
+</code></pre></div>
+<div class="highlight"><pre><span></span><code># типичный паттерн: попытка + логирование ошибки
+$ systemctl restart nginx || echo "Не удалось перезапустить nginx"
+</code></pre></div>
+<blockquote>
+<p>Ключевое отличие от <code>|</code>: <code>||</code> — это про <strong>успех/ошибку</strong> (код возврата), а <code>|</code> — про <strong>передачу данных</strong>.</p>
+</blockquote>
+<h3 id="_6">Оператор &amp;&amp; (логическое И)</h3>
+<ul>
+<li><code>&amp;&amp;</code> - выполняет <strong>правую</strong> команду, <strong>только если левая завершилась успешно</strong> (код 0). Аналог «и», «затем».</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ command1 &amp;&amp; command2
+# command2 выполнится только если command1 завершилась успешно
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ cd /app &amp;&amp; ./start.sh          # зайти в каталог и запустить
+$ mkdir dir &amp;&amp; cd dir            # создать каталог и войти в него
+$ ./build &amp;&amp; ./test &amp;&amp; ./deploy  # цепочка: только если всё прошло
+</code></pre></div>
+<blockquote>
+<p><code>&amp;&amp;</code> и <code>||</code> можно комбинировать: <code>./start &amp;&amp; echo OK || echo FAIL</code> — это удобный короткий паттерн «успех/провал». <code>&amp;&amp;</code> удобно использовать в Dockerfile/RUN, чтобы прервать сборку при ошибке шага.</p>
+</blockquote>
+<h3 id="_7">Сводка: | , || , &amp;&amp;</h3>
+<table>
+<thead>
+<tr>
+<th>Оператор</th>
+<th>Что делает</th>
+<th>Условие выполнения правой части</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\|</code></td>
+<td>Передаёт stdout левой на stdin правой</td>
+<td>всегда (данные)</td>
+</tr>
+<tr>
+<td><code>\|\|</code></td>
+<td>Выполняет правую, если левая ОШИБКА</td>
+<td>левая вернула ненулевой код</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>Выполняет правую, если левая УСПЕШНА</td>
+<td>левая вернула код 0</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>$ ls | grep md            # передаём данные
+$ cd /tmp/x || exit       # если нет каталога — выходим
+$ ./build &amp;&amp; ./test       # запуск только после успеха
+</code></pre></div>
+<h3 id="if-else">Ввод аргумента и if-else</h3>
+<div class="highlight"><pre><span></span><code>if [ "$1" ] ; then
+        echo "Hello {$1}"
+else
+        echo "Hello World"
+fi
+</code></pre></div>
+<p>Описание: </p>
+<ul>
+<li><code>if</code> объявление начала консрукции</li>
+<li>В квадратных скобках пишется условие. В данном случае мы ожидаем "что-то" в первом аргументе, который передадим скрипту</li>
+<li>После скобок идет <code>; then</code>, что выполниться в случае выполнения условия</li>
+<li>
+<ul>
+<li>Скрип выведет в терминал <code>Hello &lt;переданный аргумент&gt;</code></li>
+</ul>
+</li>
+<li><code>else</code> чтобы будет, если условие не выполнено.</li>
+<li>
+<ul>
+<li>В терминале будет <code>Hello World</code></li>
+</ul>
+</li>
+<li><code>fi</code> закрытие конструкции</li>
+</ul>
+<div class="admonition подсказка">
+<p class="admonition-title">Подсказка</p>
+<p>Аргументы в скриптах Bash доступны через переменные $1, $2, $3 и т.д.</p>
+</div>
+<h3 id="for">Цикл for</h3>
+<ul>
+<li><code>for</code> - перебор элементов (по списку, по диапазону, по файлам)</li>
+</ul>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+# по списку
+for name in Оля Дима Лена; do
+    echo "Привет, $name"
+done
+
+# по диапазону чисел
+for i in $(seq 1 5); do
+    echo "Итерация $i"
+done
+
+# по файлам в каталоге
+for file in *.txt; do
+    echo "Нашли файл: $file"
+done
+</code></pre></div>
+<h3 id="while">Цикл while</h3>
+<ul>
+<li><code>while</code> - повтор, пока выполняется условие</li>
+</ul>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+count=1
+while [ $count -le 5 ]; do
+    echo "Счёт: $count"
+    count=$((count + 1))
+done
+
+# Бесконечный цикл с выходом (полезен для мониторинга)
+while true; do
+    uptime
+    sleep 5
+done
+</code></pre></div>
+<h3 id="_8">Операторы сравнения</h3>
+<p>В <code>[ ]</code> сравнение делается не через <code>==</code>/<code>&gt;</code>, а через специальные операторы:</p>
+<table>
+<thead>
+<tr>
+<th>Оператор</th>
+<th>Описание</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-eq</code></td>
+<td>равно (числа)</td>
+<td><code>[ $a -eq 5 ]</code></td>
+</tr>
+<tr>
+<td><code>-ne</code></td>
+<td>не равно</td>
+<td><code>[ $a -ne 5 ]</code></td>
+</tr>
+<tr>
+<td><code>-gt</code></td>
+<td>больше</td>
+<td><code>[ $a -gt 5 ]</code></td>
+</tr>
+<tr>
+<td><code>-lt</code></td>
+<td>меньше</td>
+<td><code>[ $a -lt 5 ]</code></td>
+</tr>
+<tr>
+<td><code>-ge</code></td>
+<td>больше или равно</td>
+<td><code>[ $a -ge 5 ]</code></td>
+</tr>
+<tr>
+<td><code>-le</code></td>
+<td>меньше или равно</td>
+<td><code>[ $a -le 5 ]</code></td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>равно (строки)</td>
+<td><code>[ "$name" = "admin" ]</code></td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>не равно (строки)</td>
+<td><code>[ "$name" != "admin" ]</code></td>
+</tr>
+<tr>
+<td><code>-d</code></td>
+<td>существует каталог</td>
+<td><code>[ -d /etc ]</code></td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td>существует файл</td>
+<td><code>[ -f /etc/hosts ]</code></td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>отрицание</td>
+<td><code>[ ! -d /tmp ]</code></td>
+</tr>
+<tr>
+<td><code>-z</code></td>
+<td>строка пустая</td>
+<td><code>[ -z "$var" ]</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>if [ "$1" = "admin" ]; then
+    echo "Доступ разрешён"
+elif [ -f /etc/hosts ]; then
+    echo "Файл существует"
+else
+    echo "Доступ запрещён"
+fi
+</code></pre></div>
+<blockquote>
+<p>Расширенные версии: <code>[[ ... ]]</code> (для строк и регулярок) и <code>((...))</code> (для арифметики): <code>(( a &gt; 5 ))</code>.</p>
+</blockquote>
+<h3 id="case">case</h3>
+<ul>
+<li><code>case</code> - выбор по нескольким вариантам (аналог switch)</li>
+</ul>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+case "$1" in
+  start)
+    echo "Запуск..."
+    ;;
+  stop)
+    echo "Остановка..."
+    ;;
+  restart)
+    echo "Перезапуск..."
+    ;;
+  *)
+    echo "Неизвестная команда"
+    ;;
+esac
+</code></pre></div>
+<h3 id="_9">Функции</h3>
+<ul>
+<li><code>имя() { ... }</code> - объявление функции, вызывается по имени</li>
+</ul>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+
+greet() {
+    echo "Привет, $1"   # $1 — первый аргумент функции
+}
+
+greet "Мир"
+
+# Функция с возвратом значения
+is_even() {
+    if (( $1 % 2 == 0 )); then
+        return 0    # 0 = true (успех)
+    else
+        return 1    # 1 = false (ошибка)
+    fi
+}
+
+if is_even 4; then
+    echo "4 — чётное"
+fi
+</code></pre></div>
+<blockquote>
+<p>Переменные <code>$1</code>, <code>$2</code> внутри функции — это её аргументы, а не аргументы скрипта. Код возврата функции — через <code>return</code>.</p>
+</blockquote>
+<h3 id="_10">Полный пример резервного копирования</h3>
+<p>Соберём всё вместе — скрипт, который бэкапит каталог с проверками:</p>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+set -euo pipefail    # строгий режим: выход при ошибке, неопределённых переменных
+
+BACKUP_DIR="/backups"
+SOURCE="/app/data"
+DATE=$(date +%Y%m%d_%H%M%S)
+
+# проверяем, что исходный каталог существует
+if [ ! -d "$SOURCE" ]; then
+    echo "Ошибка: каталог $SOURCE не найден"
+    exit 1
+fi
+
+# создаём каталог для бэкапов
+mkdir -p "$BACKUP_DIR"
+
+# создаём архив
+tar -czf "$BACKUP_DIR/data_$DATE.tar.gz" -C "$SOURCE" .
+
+echo "Бэкап создан: $BACKUP_DIR/data_$DATE.tar.gz"
+</code></pre></div>
+<blockquote>
+<p><code>set -euo pipefail</code> — важная строка в начале серьёзных скриптов: <code>-e</code> (остановиться при ошибке), <code>-u</code> (ошибка при неопределённой переменной), <code>-o pipefail</code> (ошибка, если упала любая команда в пайпе).</p>
+</blockquote>
+<h3 id="set-">set - флаги режима скрипта</h3>
+<table>
+<thead>
+<tr>
+<th>Флаг</th>
+<th>Что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set -e</code></td>
+<td>Остановка скрипта при ошибке любой команды</td>
+</tr>
+<tr>
+<td><code>set -u</code></td>
+<td>Ошибка при обращении к неопределённой переменной</td>
+</tr>
+<tr>
+<td><code>set -x</code></td>
+<td>Трассировка: выводить каждую выполняемую команду</td>
+</tr>
+<tr>
+<td><code>set -o pipefail</code></td>
+<td>Ошибка пайпа, если упала любая его часть</td>
+</tr>
+<tr>
+<td><code>set +e</code></td>
+<td>Отключить <code>-e</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Рекомендуемый старт скрипта: <code>#!/bin/bash set -euo pipefail</code> — отлавливает почти все типичные ошибки.</p>
+</blockquote>
+<h3 id="chmod-x">Права на выполнение и <code>chmod +x</code></h3>
+<ul>
+<li>Чтобы запускать скрипт как <code>./script.sh</code> (без <code>bash</code>), у него должен быть бит <strong>выполнения</strong> <code>x</code>:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ ls -la script.sh
+-rw-r--r--  1 user  staff  123 script.sh    # НЕТ x — нельзя запускать ./script.sh
+
+$ chmod +x script.sh
+$ ls -la script.sh
+-rwxr-xr-x  1 user  staff  123 script.sh    # есть x — можно ./script.sh
+</code></pre></div>
+<blockquote>
+<p>Важно! Если перезаписать файл через <code>&gt;</code> / <code>cp</code> / редактор, права (включая <code>x</code>) могут сброситься обратно до <code>-rw-r--r--</code>. Тогда <code>./script.sh</code> упадёт с <code>Permission denied</code>. Лечится повторным <code>chmod +x</code>.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># добавить право всем скриптам сразу
+$ chmod +x *.sh
+$ chmod +x final_practice/*.sh
+
+# и зафиксировать права в git (режим 100755, а не 100644)
+$ git add script.sh
+$ git diff --cached --summary
+</code></pre></div>
+<h3 id="permission-denied-scriptsh">Ошибка «Permission denied» при запуске <code>./script.sh</code></h3>
+<ul>
+<li>Если скрипт запущен как <code>./script.sh</code>, а не <code>bash script.sh</code>, но у файла нет бита <code>x</code> — получите:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ ./deploy.sh
+./deploy.sh: line 6: ./final_practice/build.sh: Permission denied
+</code></pre></div>
+<ul>
+<li>Причина: вызывается сам исполняемый файл, а для этого нужен бит <code>x</code>. Решение: <code>chmod +x</code> или запуск через интерпретатор <code>bash script.sh</code>.</li>
+</ul>
+<h3 id="cd-dirname-0"><code>cd "$(dirname "$0")"</code> — сделать скрипт независимым от каталога запуска</h3>
+<ul>
+<li><code>$0</code> — путь, которым вызван скрипт. <code>dirname</code> выдаёт каталог файла. Вместе: «перейти в каталог, где лежит скрипт».</li>
+</ul>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+cd "$(dirname "$0")"   # неважно, откуда вызвали — работаем в папке скрипта
+</code></pre></div>
+<ul>
+<li>Без этой строки относительные пути ломаются, если запустить скрипт из другого места:</li>
+</ul>
+<div class="highlight"><pre><span></span><code># в каталоге скрипта — работает
+cd final_practice &amp;&amp; ./build.sh        # ./image-serve найден
+
+# из корня — ломается
+./final_practice/build.sh              # ищет ./image-serve в корне — не найдёт!
+</code></pre></div>
+<ul>
+<li>С <code>cd "$(dirname "$0")"</code> скрипт сам переходит в свою папку и пути работают откуда угодно.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ ./final_practice/build.sh   # внутри cd ./final_practice → docker build работает
+</code></pre></div>
+<blockquote>
+<p>Это одна из самых полезных строк для автоматизации. Добавляется в начало скрипта вместе с <code>set -euo pipefail</code>.</p>
+</blockquote>
+<h3 id="seq-1n"><code>seq</code> и <code>{1..N}</code> — генерация последовательностей чисел</h3>
+<ul>
+<li><code>seq</code> — последовательность чисел (внешняя утилита):</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ seq 5          # 1 2 3 4 5
+$ seq 2 5        # 2 3 4 5
+$ seq 1 2 10     # 1 3 5 7 9  (шаг 2)
+$ seq 100        # 1..100 — например, прогнать тест 100 раз
+</code></pre></div>
+<ul>
+<li><code>{1..N}</code> — фигурные скобки, встроено в bash (быстрее, не нужен внешний <code>seq</code>):</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ echo {1..5}
+1 2 3 4 5
+</code></pre></div>
+<ul>
+<li>Типичное применение — цикл <code>for</code>:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>for i in $(seq 1 30); do ... done    # до 30 итераций
+for i in {1..30}; do ... done        # то же самое, чище
+for i in $(seq 100); do bash test.sh; done   # прогнать тест 100 раз
+</code></pre></div>
+<h3 id="wait-for">Паттерн «ожидание готовности» (wait-for) — ждать, пока сервис поднимется</h3>
+<ul>
+<li>Классика для деплоя: контейнеры поднялись, но ещё отвечают. Проверяем в цикле, пока не будет готово.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+set -euo pipefail
+
+for i in $(seq 1 30); do          # до 30 попыток, шаг 1 сек
+    if &lt;условие готовности&gt;; then
+        echo "✅ Готово"
+        break                     # выходим из цикла досрочно
+    fi
+    echo "⏳ Жду... ($i/30)"
+    sleep 1
+done
+</code></pre></div>
+<ul>
+<li>Условие готовности может быть разным:</li>
+<li>DNS-резолв контейнеров: <code>docker exec proxy getent hosts app</code></li>
+<li>HTTP-ответ: <code>curl -sf http://localhost:8080/healthz</code></li>
+<li>Открыт TCP-порт.</li>
+</ul>
+<blockquote>
+<p>Логика: <code>curl -sf</code> вернёт 0 только при успешном HTTP; <code>getent</code> — при успешном DNS. Отсутствие <code>-f</code> даёт 400/404 как «успех» — аккуратно с флагами.</p>
+</blockquote>
+<h3 id="-e"><code>-e</code> и защищённые команды в <code>||</code> (важная тонкость)</h3>
+<ul>
+<li><code>set -e</code> НЕ останавливает скрипт, если команда стоит в условии <code>if</code>, в <code>||</code>, в <code>&amp;&amp;</code>:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+set -e
+
+docker network inspect images &gt;/dev/null 2&gt;&amp;1 || docker network create images
+#             ↑ ошибка здесь (сети нет) — это ОЖИДАЕМО, обработано через ||
+#             скрипт не остановится, а выполнит docker network create
+
+docker build -t app .   # стоит сам по себе → при ошибке set -e остановит скрипт
+</code></pre></div>
+<ul>
+<li>Именно поэтому паттерн «создать, если нет» пишется через <code>||</code>, а не голым вызовом.</li>
+</ul>
+<h3 id="devtcp-tcp-bash-nccurl"><code>/dev/tcp</code> — встроенная проверка TCP-порта в bash (без nc/curl)</h3>
+<ul>
+<li>Bash умеет открывать TCP-сокет через <code>exec 3&lt;&gt;/dev/tcp/host/port</code>. Проверка «порт открыт»:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>if (exec 3&lt;&gt;/dev/tcp/localhost/18080) 2&gt;/dev/null; then
+    echo "Порт 18080 открыт"
+fi
+</code></pre></div>
+<ul>
+<li>Полезно, когда не нужен HTTP-ответ, а достаточно факта прослушивания порта.</li>
+</ul>
+<h3 id="_11">Подпроцесс <code>( ... )</code> — временно сменить каталог только для одной команды</h3>
+<ul>
+<li>Круглые скобки запускают команду в подпроцессе — <code>cd</code> внутри влияет только на неё:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>(cd final_practice &amp;&amp; ./test.sh)   # test.sh видит ./testdata, а deploy.sh остаётся в корне
+</code></pre></div>
+<ul>
+<li>Пригодится, когда вызванный скрипт использует относительные пути и «рассчитывает» на свой каталог (например, заготовка преподавателя, которую нельзя менять).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3389 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://FunnyJesus.github.io/MkDocsPracticum/k8s/">
+      
+      
+        <link rel="prev" href="../load-balancing/">
+      
+      
+        <link rel="next" href="../k8s-commands/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Kubernetes - MkDocsPracticum</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kubernetes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MkDocsPracticum" class="md-header__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MkDocsPracticum
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Kubernetes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MkDocsPracticum" class="md-nav__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    MkDocsPracticum
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Git
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux & Command
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux & Command
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD (Continuous Delivery)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CD (Continuous Delivery)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Continuous Delivery / Deployment (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: стратегии деплоя (подробно)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: шпаргалка топ-20
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bash Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    IaC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaС
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: команды Terraform с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: шпаргалка топ-20 команд Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ansible
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker Compose
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-compose/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Шпаргалка: сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load-balancing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Балансировка нагрузки (Load Balancing)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kubernetes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 1. Системы оркестрации контейнеров
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 1. Системы оркестрации контейнеров">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что умеет оркестратор
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Кто есть на рынке
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 2. Получение доступа к Kubernetes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 2. Получение доступа к Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubectl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kubectl
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubeconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kubeconfig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Базовая проверка доступа
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 3. От контейнера к кластеру: первый деплой
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 3. От контейнера к кластеру: первый деплой">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Декларативный подход
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Применить манифест
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Промежуточные структуры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 4. Как работает Kubernetes: модель ответственности
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 4. Как работает Kubernetes: модель ответственности">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control-plane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Кто за что отвечает (control plane)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Как это работает (желаемое состояние -&gt; факт)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namespace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Namespace — изоляция внутри кластера
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 5. Решение типовых задач деплоя. Часть 1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 5. Решение типовых задач деплоя. Часть 1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Масштабирование
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rolling-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Обновление (rolling update) и откат
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configmap-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Конфигурация: ConfigMap и Secret
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Логи и отладка
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 6. Решение типовых задач деплоя. Часть 2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 6. Решение типовых задач деплоя. Часть 2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#http-ingress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP-доступ: Ingress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pvc-pv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Постоянное хранилище: PVC / PV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheck-probes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Healthcheck: пробы (probes)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job — одноразовые задачи
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cronjob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CronJob — задачи по расписанию
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statefulset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StatefulSet — приложения с состоянием
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#daemonset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DaemonSet — под на каждом узле
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#labels-selectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Метки и селекторы (labels / selectors)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 7. Надёжность и автоматизация в Kubernetes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 7. Надёжность и автоматизация в Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Самовосстановление
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requests-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ресурсы: requests / limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#horizontal-pod-autoscaler-hpa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Horizontal Pod Autoscaler (HPA)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gitops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ресурсы декларативно и GitOps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poddisruptionbudget-pdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PodDisruptionBudget (PDB)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ключевые понятия
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k9s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    k9s — быстрая навигация по кластеру
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-loadbalancer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoadBalancer в Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 1. Системы оркестрации контейнеров
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 1. Системы оркестрации контейнеров">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что умеет оркестратор
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Кто есть на рынке
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 2. Получение доступа к Kubernetes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 2. Получение доступа к Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubectl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kubectl
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubeconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kubeconfig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Базовая проверка доступа
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 3. От контейнера к кластеру: первый деплой
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 3. От контейнера к кластеру: первый деплой">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Декларативный подход
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Применить манифест
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Промежуточные структуры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 4. Как работает Kubernetes: модель ответственности
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 4. Как работает Kubernetes: модель ответственности">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control-plane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Кто за что отвечает (control plane)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Как это работает (желаемое состояние -&gt; факт)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namespace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Namespace — изоляция внутри кластера
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 5. Решение типовых задач деплоя. Часть 1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 5. Решение типовых задач деплоя. Часть 1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Масштабирование
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rolling-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Обновление (rolling update) и откат
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configmap-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Конфигурация: ConfigMap и Secret
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Логи и отладка
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 6. Решение типовых задач деплоя. Часть 2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 6. Решение типовых задач деплоя. Часть 2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#http-ingress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP-доступ: Ingress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pvc-pv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Постоянное хранилище: PVC / PV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheck-probes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Healthcheck: пробы (probes)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job — одноразовые задачи
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cronjob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CronJob — задачи по расписанию
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statefulset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StatefulSet — приложения с состоянием
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#daemonset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DaemonSet — под на каждом узле
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#labels-selectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Метки и селекторы (labels / selectors)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Урок 7. Надёжность и автоматизация в Kubernetes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Урок 7. Надёжность и автоматизация в Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Самовосстановление
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requests-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ресурсы: requests / limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#horizontal-pod-autoscaler-hpa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Horizontal Pod Autoscaler (HPA)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gitops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ресурсы декларативно и GitOps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poddisruptionbudget-pdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PodDisruptionBudget (PDB)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ключевые понятия
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="kubernetes">Kubernetes</h1>
+<p>Kubernetes (k8s) — платформа для оркестрации контейнеров. Автоматизирует развёртывание, масштабирование и управление контейнеризованными приложениями, позволяя описывать «желаемое состояние» кластера декларативно: вы говорите, что хотите, а Kubernetes приводит систему к этому состоянию.</p>
+<p><code>кластер</code> — набор машин (нод), на которых работает Kubernetes: control plane (плоскость управления) + рабочие ноды.</p>
+<p><code>нода (node)</code> — физическая или виртуальная машина в кластере.</p>
+<p><code>плоскость управления (control plane)</code> — компоненты, которые управляют кластером (kube-apiserver, etcd, scheduler, controller-manager).</p>
+<p><code>под (pod)</code> — минимальная неделимая единица Kubernetes: один или несколько контейнеров, которые делят сеть, IPC и том. Обычно под = один контейнер.</p>
+<p><code>манифест</code> — YAML-файл с декларативным описанием желаемого состояния ресурса.</p>
+<p><code>kubectl</code> — CLI для общения с API-сервером кластера.</p>
+<blockquote>
+<p>Этот конспект построен по курсу из 7 уроков:
+1. Системы оркестрации контейнеров
+2. Получение доступа к Kubernetes
+3. Первый деплой в Kubernetes
+4. Модель ответственности Kubernetes
+5. Типовые задачи деплоя. Часть 1
+6. Типовые задачи деплоя. Часть 2
+7. Надёжность и автоматизация</p>
+</blockquote>
+<hr />
+<h2 id="1">Урок 1. Системы оркестрации контейнеров</h2>
+<p>Зачем вообще нужна оркестрация? Docker управляет одним контейнером на одной машине. Когда приложений много, их нужно масштабировать, перезапускать при сбоях, распределять по машинам, обновлять без даунтайма — это и делает оркестратор.</p>
+<h3 id="_1">Что умеет оркестратор</h3>
+<ul>
+<li><strong>Деплой</strong>: запустить N реплик приложения раскидав их по нодам</li>
+<li><strong>Масштабирование</strong>: увеличить/уменьшить число реплик (вручную или автоматически)</li>
+<li><strong>Самовосстановление</strong>: перезапустить под, если он упал или нода вышла из строя</li>
+<li><strong>Обновление</strong>: выкатить новую версию без простоя (rolling update), с возможностью отката</li>
+<li><strong>Балансировка</strong>: распределять трафик между репликами и давать стабильную точку входа</li>
+<li><strong>Хранение</strong>: монтировать тома, привязывать их к подам</li>
+</ul>
+<h3 id="_2">Кто есть на рынке</h3>
+<table>
+<thead>
+<tr>
+<th>Система</th>
+<th>Кто развивает</th>
+<th>Особенности</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kubernetes</strong></td>
+<td>CNCF</td>
+<td>стандарт де-факто, огромная экосистема</td>
+</tr>
+<tr>
+<td><strong>Docker Swarm</strong></td>
+<td>Docker</td>
+<td>простой, встроен в Docker, но почти вымер</td>
+</tr>
+<tr>
+<td><strong>Nomad</strong></td>
+<td>HashiCorp</td>
+<td>простой и быстрый, поддерживает не только контейнеры</td>
+</tr>
+<tr>
+<td><strong>OpenShift</strong></td>
+<td>Red Hat</td>
+<td>Kubernetes + доп. инструменты для корпораций</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Kubernetes победил как стандарт: он не привязан к конкретному вендору, работает во всех облаках и on-premise, у него самая большая экосистема.</p>
+</blockquote>
+<hr />
+<h2 id="2-kubernetes">Урок 2. Получение доступа к Kubernetes</h2>
+<p>Чтобы работать с кластером, нужны:
+1. <strong>kubectl</strong> — клиент на вашей машине
+2. <strong>kubeconfig</strong> — файл с параметрами подключения (адрес API-сервера, контекст, учётные данные)</p>
+<h3 id="kubectl">kubectl</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># установка (macOS)</span>
+brew<span class="w"> </span>install<span class="w"> </span>kubectl
+
+<span class="c1"># проверить версию клиента и сервера</span>
+kubectl<span class="w"> </span>version<span class="w"> </span>--client
+kubectl<span class="w"> </span>version
+</code></pre></div>
+<h3 id="kubeconfig">kubeconfig</h3>
+<p>По умолчанию <code>kubectl</code> берёт конфиг из <code>~/.kube/config</code>. В нём описываются:
+- <strong>clusters</strong> — адреса API-серверов
+- <strong>contexts</strong> — связка «кластер + пользователь + namespace» (текущая рабочая точка)
+- <strong>users</strong> — учётные данные</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># посмотреть текущий контекст</span>
+kubectl<span class="w"> </span>config<span class="w"> </span>current-context
+
+<span class="c1"># переключение контекста</span>
+kubectl<span class="w"> </span>config<span class="w"> </span>use-context<span class="w"> </span>&lt;имя&gt;
+
+<span class="c1"># список всех контекстов</span>
+kubectl<span class="w"> </span>config<span class="w"> </span>get-contexts
+</code></pre></div>
+<blockquote>
+<p>На практике для облака (Yandex Cloud, Salt Cloud) kubeconfig часто скачивается готовым через CLI облака:
+<div class="highlight"><pre><span></span><code><span class="c1"># например для Yandex Cloud</span>
+yc<span class="w"> </span>managed-kubernetes<span class="w"> </span>cluster<span class="w"> </span>get-credentials<span class="w"> </span>&lt;cluster-id&gt;<span class="w"> </span>--external
+</code></pre></div>
+либо выгружается из интерфейса облака и кладётся в <code>~/.kube/config</code>.</p>
+</blockquote>
+<h3 id="_3">Базовая проверка доступа</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># какие ноды в кластере (главная проверка, что доступ работает)</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>nodes
+
+<span class="c1"># какой API-сервер отвечает</span>
+kubectl<span class="w"> </span>cluster-info
+</code></pre></div>
+<blockquote>
+<p><code>kubectl get nodes</code> видит ноды — значит, доступ настроен корректно и API-сервер отвечает.</p>
+</blockquote>
+<hr />
+<h2 id="3">Урок 3. От контейнера к кластеру: первый деплой</h2>
+<p>Первый деплой — это ключевой сценарий: вы берёте образ из Dockerfile и «поднимаете» его в кластере.</p>
+<h3 id="_4">Декларативный подход</h3>
+<p>Вместо длинной команды (как <code>docker run</code>) вы пишете <strong>манифест</strong> — YAML с описанием того, что должно быть. Kubernetes сам создаёт и поддерживает это состояние.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># manifest.yaml</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx:1.27</span>
+<span class="w">          </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+</code></pre></div>
+<p>Этот манифест говорит: «хочу, чтобы 3 реплики nginx работали, с меткой app:my-app».</p>
+<h3 id="_5">Применить манифест</h3>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>manifest.yaml
+kubectl<span class="w"> </span>get<span class="w"> </span>deployments
+kubectl<span class="w"> </span>get<span class="w"> </span>pods
+</code></pre></div>
+<blockquote>
+<p><code>kubectl apply</code> — декларативно: сравнивает желаемое состояние из манифеста с фактическим и приводит к желаемому. <code>kubectl create</code> — проще/императивно, применяет манифест как есть.</p>
+</blockquote>
+<h3 id="_6">Промежуточные структуры</h3>
+<p>Между манифестом и подом есть прослойки:
+- <strong>Deployment</strong> — управляет ReplicaSet
+- <strong>ReplicaSet</strong> — управляет количеством подов (реплик)
+- <strong>Pod</strong> — фактически запущенный контейнер(ы)</p>
+<div class="highlight"><pre><span></span><code>Deployment -&gt; ReplicaSet -&gt; Pod(s)
+</code></pre></div>
+<blockquote>
+<p>На практике вы работаете в основном с Deployment, а ReplicaSet и Pod управляются автоматически.</p>
+</blockquote>
+<h3 id="service">Service</h3>
+<p>Под — это «эфемерное существо»: его IP меняется при перезапуске. Для стабильной точки входа нужен <strong>Service</strong> — абстракция с постоянным адресом (ClusterIP/DNS), которая балансирует трафик по подам с нужной меткой.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>service.yaml
+kubectl<span class="w"> </span>get<span class="w"> </span>svc
+</code></pre></div>
+<blockquote>
+<p>Service «цепляется» к подам через <code>selector</code> (по меткам). У Service стабильное DNS-имя внутри кластера: <code>&lt;service&gt;.&lt;namespace&gt;.svc</code> .</p>
+</blockquote>
+<hr />
+<h2 id="4-kubernetes">Урок 4. Как работает Kubernetes: модель ответственности</h2>
+<p>Ключевая идея — <strong>декларативное желаемое состояние</strong> и <strong>control loop</strong> (петля управления).</p>
+<h3 id="control-plane">Кто за что отвечает (control plane)</h3>
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Ответственность</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>kube-apiserver</strong></td>
+<td>единственная точка входа в кластер, вся работа через него (kubectl = клиент apiserver)</td>
+</tr>
+<tr>
+<td><strong>etcd</strong></td>
+<td>хранилище состояния кластера (единый источник истины)</td>
+</tr>
+<tr>
+<td><strong>kube-scheduler</strong></td>
+<td>решает, на какую ноду поставить новый под</td>
+</tr>
+<tr>
+<td><strong>kube-controller-manager</strong></td>
+<td>запускает контроллеры, которые поддерживают желаемое состояние</td>
+</tr>
+<tr>
+<td><strong>kubelet</strong> (на нодах)</td>
+<td>агент на каждой ноде: запускает/останавливает контейнеры, докладывает о состоянии</td>
+</tr>
+<tr>
+<td><strong>kube-proxy</strong> (на нодах)</td>
+<td>сети/балансировка Service</td>
+</tr>
+</tbody>
+</table>
+<h3 id="-">Как это работает (желаемое состояние -&gt; факт)</h3>
+<ol>
+<li>Вы пишете манифест (<code>kubectl apply</code>).</li>
+<li>apiserver сохраняет желаемое состояние в etcd.</li>
+<li>Контроллеры (в controller-manager) видят разницу между желаемым и фактическим.</li>
+<li>Scheduler назначает поды на ноды.</li>
+<li>kubelet каждой ноды запускает контейнеры и сообщает статус обратно.</li>
+<li>Если под упал — контроллер создаёт новый (самовосстановление).</li>
+</ol>
+<div class="highlight"><pre><span></span><code>kubectl apply -&gt; apiserver -&gt; etcd -&gt; controllers -&gt; scheduler -&gt; kubelet -&gt; pod
+</code></pre></div>
+<blockquote>
+<p>Модель ответственности в том, что каждый компонент делает только свою работу. Вы описываете ЧТО должно быть, а Kubernetes сам решает КАК это обеспечить.</p>
+</blockquote>
+<h3 id="namespace">Namespace — изоляция внутри кластера</h3>
+<p>Namespace логически разделяют кластер на части (dev, prod, команды).</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>namespaces
+kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>dev
+kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dev
+</code></pre></div>
+<hr />
+<h2 id="5-1">Урок 5. Решение типовых задач деплоя. Часть 1</h2>
+<h3 id="_7">Масштабирование</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># изменить число реплик</span>
+kubectl<span class="w"> </span>scale<span class="w"> </span>deployment<span class="w"> </span>my-app<span class="w"> </span>--replicas<span class="o">=</span><span class="m">5</span>
+<span class="c1"># или отредактировать манифест (replicas: 5) и apply</span>
+</code></pre></div>
+<blockquote>
+<p>Предпочтительнее править манифест и делать <code>apply</code> — так желаемое состояние зафиксировано в коде (GitOps), а не только в рантайме.</p>
+</blockquote>
+<h3 id="rolling-update">Обновление (rolling update) и откат</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># сменить образ и сохранить историю (для отката)</span>
+kubectl<span class="w"> </span><span class="nb">set</span><span class="w"> </span>image<span class="w"> </span>deployment/my-app<span class="w"> </span><span class="nv">app</span><span class="o">=</span>nginx:1.28<span class="w"> </span>--record
+<span class="c1"># или через apply нового манифеста</span>
+
+<span class="c1"># следить за выкатом</span>
+kubectl<span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deployment/my-app
+
+<span class="c1"># история версий</span>
+kubectl<span class="w"> </span>rollout<span class="w"> </span><span class="nb">history</span><span class="w"> </span>deployment/my-app
+
+<span class="c1"># откат к предыдущей</span>
+kubectl<span class="w"> </span>rollout<span class="w"> </span>undo<span class="w"> </span>deployment/my-app
+</code></pre></div>
+<blockquote>
+<p>Rolling update обновляет поды постепенно, не останавливая сервис. <code>--record</code> сохраняет причину в истории.</p>
+</blockquote>
+<h3 id="configmap-secret">Конфигурация: ConfigMap и Secret</h3>
+<p>Настройки и секреты выносят из кода в отдельные ресурсы.</p>
+<p><div class="highlight"><pre><span></span><code><span class="c1"># configmap.yaml</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-config</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">APP_COLOR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">blue</span>
+<span class="w">  </span><span class="nt">LOG_LEVEL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">info</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>configmap.yaml
+</code></pre></div></p>
+<p><div class="highlight"><pre><span></span><code><span class="c1"># secret.yaml (значения в base64)</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-secret</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">DB_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cGFzc3dvcmQ=</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>secret.yaml
+</code></pre></div></p>
+<p>Подключаются в манифест через <code>env</code> или <code>volume</code>:
+<div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APP_COLOR</span>
+<span class="w">    </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">configMapKeyRef</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-config</span>
+<span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APP_COLOR</span>
+</code></pre></div></p>
+<blockquote>
+<p>Секреты хранятся в base64 — это не шифрование, просто кодирование. Для серьёзных секретов используй внешние хранилища или шифрование etcd.</p>
+</blockquote>
+<h3 id="_8">Логи и отладка</h3>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>deployment/my-app
+kubectl<span class="w"> </span>logs<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>my-app<span class="w"> </span>--tail<span class="o">=</span><span class="m">50</span><span class="w"> </span>-f
+kubectl<span class="w"> </span>describe<span class="w"> </span>pod<span class="w"> </span>&lt;pod&gt;
+kubectl<span class="w"> </span>get<span class="w"> </span>events
+</code></pre></div>
+<hr />
+<h2 id="6-2">Урок 6. Решение типовых задач деплоя. Часть 2</h2>
+<h3 id="http-ingress">HTTP-доступ: Ingress</h3>
+<p>Service работает внутри кластера. Чтобы во внешний мир отдавать HTTP-трафик по доменам/путям и с TLS — нужен <strong>Ingress</strong>.</p>
+<p><div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.k8s.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ingress</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app-ingress</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.example.com</span>
+<span class="w">      </span><span class="nt">http</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">            </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+<span class="w">            </span><span class="nt">backend</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">service</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<span class="w">                </span><span class="nt">port</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>ingress.yaml
+kubectl<span class="w"> </span>get<span class="w"> </span>ingress
+</code></pre></div></p>
+<blockquote>
+<p>Ingress требует установленного ingress-controller (nginx, traefik и т.п.). Это «внешний» роутер, который берёт правила из Ingress-объектов.</p>
+</blockquote>
+<h3 id="pvc-pv">Постоянное хранилище: PVC / PV</h3>
+<p>Для данных, которые должны пережить перезапуск пода, используют PersistentVolume (PV) и PersistentVolumeClaim (PVC).</p>
+<p><div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PersistentVolumeClaim</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-data</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">accessModes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>pvc.yaml
+</code></pre></div></p>
+<p>PVC подключается в под через <code>volumes</code>:
+<div class="highlight"><pre><span></span><code><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-data</span>
+</code></pre></div></p>
+<blockquote>
+<p>Pod -&gt; PVC -&gt; PV -&gt; реальное хранилище (диск облака, NFS). PVC — это «заявка» на диск.</p>
+</blockquote>
+<h3 id="healthcheck-probes">Healthcheck: пробы (probes)</h3>
+<p>Kubernetes проверяет здоровье подов тремя видами проб (probe):
+- <strong>livenessProbe</strong> — жив ли процесс; если нет, контейнер перезапускают
+- <strong>readinessProbe</strong> — готов ли принимать трафик; если нет, под убирают из Service
+- <strong>startupProbe</strong> — успешно ли запустился контейнер; нужен приложениям с долгим стартом</p>
+<div class="highlight"><pre><span></span><code><span class="nt">livenessProbe</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">httpGet</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/healthz</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="nt">readinessProbe</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">httpGet</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/ready</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="nt">startupProbe</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">httpGet</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="w">  </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+</code></pre></div>
+<blockquote>
+<p>Разница между пробами критична: под может быть <strong>жив</strong>, но ещё <strong>не готов</strong> (грузит данные) — тогда его не надо нагружать трафиком. <strong>startupProbe</strong> защищает медленно стартующие приложения: пока она не прошла, livenessProbe не активируется и не перезапускает контейнер по ошибке во время долгой загрузки.</p>
+</blockquote>
+<h3 id="job">Job — одноразовые задачи</h3>
+<p>Job (batch) — ресурс для задач, которые должны <strong>завершиться успешно</strong>, а не работать постоянно (в отличие от Deployment). Типичные примеры: миграции базы данных, пакетная обработка данных, запуск одноразового скрипта.</p>
+<p>Job создаёт поды по заданному шаблону, следит, как они отработали, и считается выполненным только когда нужное количество запусков завершилось успешно.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">batch/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Job</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-job</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">completions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">            </span><span class="c1"># сколько успешных подов нужно завершить</span>
+<span class="w">  </span><span class="nt">parallelism</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">            </span><span class="c1"># сколько подов можно запускать одновременно</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">job-container</span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">busybox</span>
+<span class="w">        </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"sh"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"-c"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"echo</span><span class="nv"> </span><span class="s">Hello;</span><span class="nv"> </span><span class="s">sleep</span><span class="nv"> </span><span class="s">5"</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Never</span><span class="w">   </span><span class="c1"># как вести себя при ошибке контейнера</span>
+</code></pre></div>
+<p>Как работает этот Job:
+1. Kubernetes создаёт один под по шаблону.
+2. Pod запускает контейнер busybox и выполняет команду: печатает <code>Hello</code>, ждёт пять секунд (<code>sleep 5</code>).
+3. Job отслеживает завершение пода: если под завершился успешно — Job выполнен; если под упал — Job может создать новый (в зависимости от restartPolicy и parallelism).
+4. Job завершится после того, как один под успешно завершился (<code>completions: 1</code>).</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>job.yaml
+kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-l<span class="w"> </span>job-name<span class="o">=</span>example-job
+kubectl<span class="w"> </span>logs<span class="w"> </span>&lt;pod&gt;<span class="w">    </span><span class="c1"># логи одноразовой задачи</span>
+</code></pre></div>
+<h3 id="cronjob">CronJob — задачи по расписанию</h3>
+<p>Job в Kubernetes используется для одноразовых задач, которые должны успешно завершиться определённым числом подов. Когда такую задачу нужно запускать регулярно по расписанию, вместо ручного создания новых Job используют <strong>CronJob</strong>.</p>
+<p>CronJob по сути создаёт Job по расписанию: каждый раз, когда наступает время запуска, Kubernetes автоматически создаёт новый Job. Так CronJob сочетает логику Job с возможностью автоматического планирования повторяющихся задач.</p>
+<p>Особенности CronJob:
+- расписание задаётся в стандартном cron-формате;
+- можно управлять тем, что делать, если предыдущий Job ещё не завершился;
+- каждый запуск CronJob — это отдельный Job, со своими подами и логами.</p>
+<p>CronJob часто применяют в резервном копировании, периодических отчётах, очистке данных, синхронизации.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">batch/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CronJob</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-cronjob</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">"0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span><span class="w">        </span><span class="c1"># каждая полная часовая отметка</span>
+<span class="w">  </span><span class="nt">concurrencyPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Allow</span><span class="w">     </span><span class="c1"># что делать, если предыдущий Job ещё не завершён</span>
+<span class="w">  </span><span class="nt">jobTemplate</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cron-container</span>
+<span class="w">            </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">busybox</span>
+<span class="w">            </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"sh"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"-c"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"echo</span><span class="nv"> </span><span class="s">Hello;</span><span class="nv"> </span><span class="s">sleep</span><span class="nv"> </span><span class="s">5"</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Never</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>cronjob.yaml
+kubectl<span class="w"> </span>get<span class="w"> </span>cronjobs
+kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-l<span class="w"> </span>cronjob-name<span class="o">=</span>example-cronjob
+</code></pre></div>
+<h3 id="statefulset">StatefulSet — приложения с состоянием</h3>
+<p><strong>StatefulSet</strong> — ресурс для подов, которым нужны уникальные стабильные имена и постоянные тома. В отличие от Deployment, поды стартуют/останавливаются в строгом порядке и сохраняют идентичность при перезапуске.</p>
+<p>Подходит для <strong>Stateful</strong>-приложений: базы данных, очереди сообщений, кластеры с мастером и репликами.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">StatefulSet</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">serviceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span><span class="w">          </span><span class="c1"># headless-сервис для стабильных DNS-имён подов</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:16</span>
+<span class="w">  </span><span class="nt">volumeClaimTemplates</span><span class="p">:</span><span class="w">    </span><span class="c1"># автоматически создаёт PVC для каждого пода</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"ReadWriteOnce"</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
+</code></pre></div>
+<blockquote>
+<p>Поды StatefulSet получают стабильные имена вида <code>&lt;name&gt;-0</code>, <code>&lt;name&gt;-1</code> и собственные тома. Порядок старта/остановки гарантирован. Обычный выбор для баз данных, когда нужна «запоминающая» идентичность подов.</p>
+</blockquote>
+<h3 id="daemonset">DaemonSet — под на каждом узле</h3>
+<p><strong>DaemonSet</strong> — ресурс, который гарантирует, что на каждом узле кластера (или на выбранных по селектору) работает <strong>по одному поду</strong>.</p>
+<p>Подходит для агентов уровня кластера: сбор логов, мониторинг (node-exporter), сетевые и системные агенты.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DaemonSet</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-exporter</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-exporter</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-exporter</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-exporter</span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/node-exporter:latest</span>
+<span class="w">      </span><span class="nt">hostNetwork</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">     </span><span class="c1"># под работает в сети узла</span>
+</code></pre></div>
+<blockquote>
+<p>При появлении нового узла DaemonSet автоматически запускает на нём под; при удалении узла — останавливает. Не стоит использовать для статeless-приложений с множеством реплик — для этого есть Deployment.</p>
+</blockquote>
+<h3 id="labels-selectors">Метки и селекторы (labels / selectors)</h3>
+<p>Метки — ключевой механизм группировки ресурсов. Service, ReplicaSet и другие «цепляются» к подам по меткам.</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>my-app
+kubectl<span class="w"> </span>label<span class="w"> </span>pod<span class="w"> </span>&lt;pod&gt;<span class="w"> </span><span class="nv">version</span><span class="o">=</span>v2
+kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>--show-labels
+</code></pre></div>
+<hr />
+<h2 id="7-kubernetes">Урок 7. Надёжность и автоматизация в Kubernetes</h2>
+<h3 id="_9">Самовосстановление</h3>
+<p>Kubernetes сам перезапускает упавшие поды, пересоздаёт их на живых нодах. Это встроенное самовосстановление из модели желаемого состояния.</p>
+<h3 id="requests-limits">Ресурсы: requests / limits</h3>
+<p>Квотирование ресурсов защищает кластер: под получает минимум (requests) и не может съесть больше лимита (limits).</p>
+<div class="highlight"><pre><span></span><code><span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128Mi</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512Mi</span>
+</code></pre></div>
+<blockquote>
+<p><code>cpu: 100m</code> = 0.1 ядра (milicpu). Requests — резервирование, limits — жёсткий потолок. Не задать limits при перегрузке — плохой сосед в кластере.</p>
+</blockquote>
+<h3 id="horizontal-pod-autoscaler-hpa">Horizontal Pod Autoscaler (HPA)</h3>
+<p>Автоматическое масштабирование по нагрузке CPU/памяти.</p>
+<p><div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">autoscaling/v2</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HorizontalPodAutoscaler</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app-hpa</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scaleTargetRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<span class="w">  </span><span class="nt">minReplicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">maxReplicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Resource</span>
+<span class="w">      </span><span class="nt">resource</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpu</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Utilization</span>
+<span class="w">          </span><span class="nt">averageUtilization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">70</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>hpa.yaml
+kubectl<span class="w"> </span>get<span class="w"> </span>hpa
+</code></pre></div></p>
+<h3 id="gitops">Ресурсы декларативно и GitOps</h3>
+<p>Главная практика надёжности — вся конфигурация хранится как код (манифесты), версионируется в git, выкатывается автоматически (Argo CD, Flux). Тогда состояние кластера воспроизводимо и отслеживаемо.</p>
+<h3 id="poddisruptionbudget-pdb">PodDisruptionBudget (PDB)</h3>
+<p>Ограничение: сколько подов может недоступно одновременно при плановых обслуживаниях (эвакуация нод).</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">policy/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PodDisruptionBudget</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app-pdb</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">minAvailable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+</code></pre></div>
+<hr />
+<h2 id="_10">Ключевые понятия</h2>
+<table>
+<thead>
+<tr>
+<th>Понятие</th>
+<th>Что это</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pod</td>
+<td>минимальная единица (контейнер + его окружение)</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>декларативное описание «сколько реплик и какой образ»</td>
+</tr>
+<tr>
+<td>ReplicaSet</td>
+<td>поддерживает число реплик</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>стабильная точка входа к подам (балансировка)</td>
+</tr>
+<tr>
+<td>Ingress</td>
+<td>внешний HTTP-доступ по доменам/путям + TLS</td>
+</tr>
+<tr>
+<td>ConfigMap / Secret</td>
+<td>конфигурация и секреты вне кода</td>
+</tr>
+<tr>
+<td>PV / PVC</td>
+<td>постоянное хранилище</td>
+</tr>
+<tr>
+<td>Namespace</td>
+<td>логическая изоляция кластера</td>
+</tr>
+<tr>
+<td>HPA</td>
+<td>автоскейлинг по нагрузке</td>
+</tr>
+<tr>
+<td>PDB</td>
+<td>гарантия доступности при обслуживании</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Команды <code>kubectl</code> — на странице <a href="../k8s-commands/">Kubernetes: команды с подробным описанием</a>.
+Мини-шпаргалка: <a href="../k8s-cheatsheet/">Kubernetes: шпаргалка топ-20 команд</a>.
+Удобный TUI-обозреватель кластера: <a href="../k9s/">k9s — быстрая навигация по кластеру</a>.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
