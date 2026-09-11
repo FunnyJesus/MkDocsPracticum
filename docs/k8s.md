@@ -360,10 +360,11 @@ volumes:
 
 > Pod -> PVC -> PV -> реальное хранилище (диск облака, NFS). PVC — это «заявка» на диск.
 
-### Healthcheck: liveness и readiness
-Kubernetes проверяет здоровье подов:
+### Healthcheck: пробы (probes)
+Kubernetes проверяет здоровье подов тремя видами проб (probe):
 - **livenessProbe** — жив ли процесс; если нет, контейнер перезапускают
 - **readinessProbe** — готов ли принимать трафик; если нет, под убирают из Service
+- **startupProbe** — успешно ли запустился контейнер; нужен приложениям с долгим стартом
 
 ```yaml
 livenessProbe:
@@ -374,9 +375,151 @@ readinessProbe:
   httpGet:
     path: /ready
     port: 8080
+startupProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 10
 ```
 
-> liveness — «жив ли», readiness — «готов ли принимать трафик». Разница критична: под может быть жив, но ещё не готов (грузит данные), тогда его не надо нагружать трафиком.
+> Разница между пробами критична: под может быть **жив**, но ещё **не готов** (грузит данные) — тогда его не надо нагружать трафиком. **startupProbe** защищает медленно стартующие приложения: пока она не прошла, livenessProbe не активируется и не перезапускает контейнер по ошибке во время долгой загрузки.
+
+### Job — одноразовые задачи
+Job (batch) — ресурс для задач, которые должны **завершиться успешно**, а не работать постоянно (в отличие от Deployment). Типичные примеры: миграции базы данных, пакетная обработка данных, запуск одноразового скрипта.
+
+Job создаёт поды по заданному шаблону, следит, как они отработали, и считается выполненным только когда нужное количество запусков завершилось успешно.
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: example-job
+spec:
+  completions: 1            # сколько успешных подов нужно завершить
+  parallelism: 1            # сколько подов можно запускать одновременно
+  template:
+    spec:
+      containers:
+      - name: job-container
+        image: busybox
+        command: ["sh", "-c", "echo Hello; sleep 5"]
+      restartPolicy: Never   # как вести себя при ошибке контейнера
+```
+
+Как работает этот Job:
+1. Kubernetes создаёт один под по шаблону.
+2. Pod запускает контейнер busybox и выполняет команду: печатает `Hello`, ждёт пять секунд (`sleep 5`).
+3. Job отслеживает завершение пода: если под завершился успешно — Job выполнен; если под упал — Job может создать новый (в зависимости от restartPolicy и parallelism).
+4. Job завершится после того, как один под успешно завершился (`completions: 1`).
+
+```bash
+kubectl apply -f job.yaml
+kubectl get jobs
+kubectl get pods -l job-name=example-job
+kubectl logs <pod>    # логи одноразовой задачи
+```
+
+### CronJob — задачи по расписанию
+Job в Kubernetes используется для одноразовых задач, которые должны успешно завершиться определённым числом подов. Когда такую задачу нужно запускать регулярно по расписанию, вместо ручного создания новых Job используют **CronJob**.
+
+CronJob по сути создаёт Job по расписанию: каждый раз, когда наступает время запуска, Kubernetes автоматически создаёт новый Job. Так CronJob сочетает логику Job с возможностью автоматического планирования повторяющихся задач.
+
+Особенности CronJob:
+- расписание задаётся в стандартном cron-формате;
+- можно управлять тем, что делать, если предыдущий Job ещё не завершился;
+- каждый запуск CronJob — это отдельный Job, со своими подами и логами.
+
+CronJob часто применяют в резервном копировании, периодических отчётах, очистке данных, синхронизации.
+
+```yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: example-cronjob
+spec:
+  schedule: "0 * * * *"        # каждая полная часовая отметка
+  concurrencyPolicy: Allow     # что делать, если предыдущий Job ещё не завершён
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cron-container
+            image: busybox
+            command: ["sh", "-c", "echo Hello; sleep 5"]
+          restartPolicy: Never
+```
+
+```bash
+kubectl apply -f cronjob.yaml
+kubectl get cronjobs
+kubectl get jobs -l cronjob-name=example-cronjob
+```
+
+
+### StatefulSet — приложения с состоянием
+**StatefulSet** — ресурс для подов, которым нужны уникальные стабильные имена и постоянные тома. В отличие от Deployment, поды стартуют/останавливаются в строгом порядке и сохраняют идентичность при перезапуске.
+
+Подходит для **Stateful**-приложений: базы данных, очереди сообщений, кластеры с мастером и репликами.
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db
+spec:
+  serviceName: db          # headless-сервис для стабильных DNS-имён подов
+  replicas: 2
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: db
+        image: postgres:16
+  volumeClaimTemplates:    # автоматически создаёт PVC для каждого пода
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
+```
+
+> Поды StatefulSet получают стабильные имена вида `<name>-0`, `<name>-1` и собственные тома. Порядок старта/остановки гарантирован. Обычный выбор для баз данных, когда нужна «запоминающая» идентичность подов.
+
+
+### DaemonSet — под на каждом узле
+**DaemonSet** — ресурс, который гарантирует, что на каждом узле кластера (или на выбранных по селектору) работает **по одному поду**.
+
+Подходит для агентов уровня кластера: сбор логов, мониторинг (node-exporter), сетевые и системные агенты.
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+spec:
+  selector:
+    matchLabels:
+      app: node-exporter
+  template:
+    metadata:
+      labels:
+        app: node-exporter
+    spec:
+      containers:
+      - name: node-exporter
+        image: prom/node-exporter:latest
+      hostNetwork: true     # под работает в сети узла
+```
+
+> При появлении нового узла DaemonSet автоматически запускает на нём под; при удалении узла — останавливает. Не стоит использовать для статeless-приложений с множеством реплик — для этого есть Deployment.
 
 ### Метки и селекторы (labels / selectors)
 Метки — ключевой механизм группировки ресурсов. Service, ReplicaSet и другие «цепляются» к подам по меткам.

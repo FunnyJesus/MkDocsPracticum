@@ -22,6 +22,9 @@ nav:
   - Bash Script:
       - bash-scripts.md
       - bash-cheatsheet.md
+  - Python Script:
+      - python-scripts.md
+      - python-cheatsheet.md
   - IaC:
       - iac.md
       - iac-commands.md
