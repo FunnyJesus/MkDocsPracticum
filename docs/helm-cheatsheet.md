@@ -90,3 +90,4 @@ helm template ./chart | head -60   # смотреть отрендеренный
 - **Зависимости**: `helm repo add/update`, `helm search repo`, `helm dependency update`
 
 > Подробный разбор шаблонов, values и жизненного цикла релиза — [Helm (теория)](helm.md).
+> Сквозной пример install → upgrade → rollback на `hashicorp/http-echo` — [там же](helm.md#hashicorphttp-echo).

@@ -285,6 +285,280 @@ helm uninstall my-app            # удалить релиз и все его р
 
 > `helm get values` + `helm get manifest` — то, чем разбирают инцидент «в кластере не то, что ожидали»: сначала смотрят, с какими values релиз собран, потом — что из них отрендерилось.
 
+## Пример: чарт для hashicorp/http-echo
+
+`hashicorp/http-echo` — крошечный сервис, который на любой HTTP-запрос отвечает заданным текстом. Для тренировки Helm он удобен тем, что **результат виден глазами**: меняешь текст в values — и по ответу сразу понятно, какая ревизия сейчас в кластере. Ни базы, ни зависимостей, ни долгого старта.
+
+```bash
+helm create http-echo     # каркас чарта со стандартными файлами
+```
+> `helm create` генерирует чарт с большим количеством «умолчаний» на все случаи жизни. Ниже — тот же чарт, но урезанный до минимума, чтобы каждая строка была понятна.
+
+### Структура
+
+```
+http-echo/
+├── Chart.yaml
+├── values.yaml
+├── values-prod.yaml
+└── templates/
+    ├── _helpers.tpl
+    ├── deployment.yaml
+    └── service.yaml
+```
+
+### Chart.yaml
+
+```yaml
+apiVersion: v2
+name: http-echo
+description: Демо-сервис, отвечающий заданным текстом
+type: application
+version: 0.1.0
+appVersion: "1.0"      # тег образа hashicorp/http-echo
+```
+
+### values.yaml
+
+```yaml
+replicaCount: 1
+
+image:
+  repository: hashicorp/http-echo
+  tag: ""                  # пусто → возьмётся appVersion ("1.0")
+  pullPolicy: IfNotPresent
+
+# то, что сервис будет отвечать на запросы
+echoText: "hello from dev"
+
+# порт, на котором слушает http-echo (флаг -listen)
+containerPort: 5678
+
+service:
+  type: ClusterIP
+  port: 80                 # внешний порт Service → targetPort 5678
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
+```
+
+### values-prod.yaml (только отличия)
+
+```yaml
+replicaCount: 3
+
+echoText: "hello from PROD"
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 32Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+```
+
+### templates/_helpers.tpl
+
+```yaml
+{{- define "http-echo.fullname" -}}
+{{ .Release.Name }}-{{ .Chart.Name }}
+{{- end }}
+```
+
+### templates/deployment.yaml
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "http-echo.fullname" . }}
+  labels:
+    app: {{ include "http-echo.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "http-echo.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "http-echo.fullname" . }}
+    spec:
+      containers:
+        - name: http-echo
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            # quote обязателен: в тексте есть пробелы
+            - "-text={{ .Values.echoText }}"
+            - "-listen=:{{ .Values.containerPort }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+```
+
+> `http-echo` отвечает 200 на **любой** путь, поэтому пробы настроены на `/`. Пробы здесь не декоративные: именно они дают работать флагу `--wait` — без готовых подов Helm не посчитает релиз успешным (см. [пробы в Kubernetes](k8s.md)).
+
+### templates/service.yaml
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "http-echo.fullname" . }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: {{ include "http-echo.fullname" . }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+```
+
+### 1. Проверка без кластера
+
+```bash
+helm lint ./http-echo
+helm template demo ./http-echo | head -40
+```
+
+Фрагмент того, что получится (значения уже подставлены):
+
+```yaml
+# Source: http-echo/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-http-echo
+spec:
+  replicas: 1
+  ...
+        - name: http-echo
+          image: "hashicorp/http-echo:1.0"
+          args:
+            - "-text=hello from dev"
+            - "-listen=:5678"
+```
+
+Тот же чарт с прод-значениями — отличается только содержимое, не шаблон:
+
+```bash
+helm template demo ./http-echo -f values-prod.yaml | grep -E "replicas|-text="
+```
+```
+  replicas: 3
+            - "-text=hello from PROD"
+```
+
+### 2. Установка (ревизия 1)
+
+```bash
+helm upgrade --install demo ./http-echo \
+  --namespace demo --create-namespace \
+  --wait --timeout 2m --atomic
+
+helm list -n demo
+kubectl get pods -n demo
+```
+
+Проверяем ответ сервиса:
+
+```bash
+kubectl port-forward -n demo svc/demo-http-echo 8080:80
+curl localhost:8080
+```
+```
+hello from dev
+```
+
+### 3. Обновление (ревизия 2)
+
+Меняем только values — шаблоны не трогаем:
+
+```bash
+helm upgrade --install demo ./http-echo -n demo \
+  --set echoText="hello from v2" \
+  --set replicaCount=3 \
+  --wait --timeout 2m --atomic
+
+curl localhost:8080      # port-forward нужно перезапустить после пересоздания подов
+```
+```
+hello from v2
+```
+
+```bash
+helm history demo -n demo
+```
+```
+REVISION  UPDATED       STATUS      CHART            APP VERSION  DESCRIPTION
+1         Tue Sep 16..  superseded  http-echo-0.1.0  1.0          Install complete
+2         Tue Sep 16..  deployed    http-echo-0.1.0  1.0          Upgrade complete
+```
+
+### 4. Откат (ревизия 3 = копия ревизии 1)
+
+```bash
+helm rollback demo 1 -n demo
+curl localhost:8080
+```
+```
+hello from dev
+```
+
+```bash
+helm history demo -n demo
+```
+```
+REVISION  UPDATED       STATUS      CHART            APP VERSION  DESCRIPTION
+1         Tue Sep 16..  superseded  http-echo-0.1.0  1.0          Install complete
+2         Tue Sep 16..  superseded  http-echo-0.1.0  1.0          Upgrade complete
+3         Tue Sep 16..  deployed    http-echo-0.1.0  1.0          Rollback to 1
+```
+
+> Наглядно видно главное правило: откат — это **новая ревизия** с содержимым старой, а не удаление истории. `helm get values demo -n demo` покажет, что после отката вернулись values первой ревизии.
+
+### 5. Проверка «что применено» и уборка
+
+```bash
+helm get values demo -n demo          # какие values сейчас активны
+helm get manifest demo -n demo        # какие манифесты в кластере
+helm status demo -n demo              # статус релиза
+
+helm uninstall demo -n demo           # удалить релиз со всеми ресурсами
+kubectl delete namespace demo
+```
+
+### Что ломается в этом примере чаще всего
+
+| Симптом | Причина | Решение |
+|---|---|---|
+| Под падает с `flag provided but not defined` | Аргументы переданы без `-text=`/`-listen=` (например, через `command`) | Передавать флаги в `args` именно в формате `-text=значение` |
+| Текст обрезался до первого слова | Нет кавычек вокруг аргумента с пробелами | `- "-text={{ .Values.echoText }}"` |
+| `--set echoText=hello from v2` ругается на синтаксис | Пробелы ломают разбор `--set` | Кавычить целиком: `--set echoText="hello from v2"` |
+| `curl` не отвечает после upgrade | При пересоздании подов старый `port-forward` отваливается | Перезапустить `kubectl port-forward` |
+| `--wait` висит и откатывается по таймауту | Порт в пробах не совпадает с `-listen` | Держать порт в одном месте — `.Values.containerPort` и там, и там |
+
 ## Helm в CI/CD
 
 Типовая схема: пайплайн собрал образ с уникальным тегом и передаёт этот тег Helm'у, всё остальное описано в чарте.
