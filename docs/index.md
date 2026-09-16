@@ -11,10 +11,15 @@
 - [**IaC (Terraform)**](iac.md) — инфраструктура как код: блоки (resource, provider, variable), команды terraform
 - [**Docker**](docker.md) — контейнеризация: команды, Dockerfile, тома, сети, встроенный DNS
 - [**Kubernetes**](k8s.md) — оркестрация контейнеров: кластер, pods, deployments, services, ingress, k9s
+- [**Helm**](helm.md) — пакетный менеджер K8s: чарты, шаблоны, values по окружениям, релизы и откаты
+- [**Сети**](networking.md) — OSI/TCP-IP, TCP vs UDP, DNS, HTTP/HTTPS, TLS, firewall, диагностика
+- [**Мониторинг и логи**](monitoring.md) — Prometheus, PromQL, Grafana, Alertmanager, ELK/Loki, SLI/SLO/SLA
+- [**Облака**](cloud.md) — IaaS/PaaS/SaaS, IAM, VPC, object storage, managed vs self-hosted
+- [**Безопасность**](security.md) — секреты, сканирование уязвимостей, SSH-хардening, RBAC, NetworkPolicy
 
 ## Подход
 
 - Пользуйтесь, но если хотите больше — создавайте и заполняйте свою
-- Конспекты растут по мере изучения новых тем (docker-compose, Kubernetes — впереди)
+- Конспекты растут по мере изучения новых тем
 
 Всем удачи ദ്ദി(｡•̀ᴗ-)✧

@@ -48,6 +48,19 @@ nav:
       - k8s-cheatsheet.md
       - k9s.md
       - k8s-loadbalancer.md
+  - Helm:
+      - helm.md
+      - helm-cheatsheet.md
+  - Сети:
+      - networking.md
+      - networking-cheatsheet.md
+  - Мониторинг и логи:
+      - monitoring.md
+      - monitoring-cheatsheet.md
+  - Облака:
+      - cloud.md
+  - Безопасность:
+      - security.md
 markdown_extensions:
   - admonition
   - pymdownx.details
