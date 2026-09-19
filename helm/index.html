@@ -1,0 +1,4029 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://FunnyJesus.github.io/MkDocsPracticum/helm/">
+      
+      
+        <link rel="prev" href="../k8s-loadbalancer/">
+      
+      
+        <link rel="next" href="../helm-podinfo/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Helm - MkDocsPracticum</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#helm" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MkDocsPracticum" class="md-header__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MkDocsPracticum
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Helm
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MkDocsPracticum" class="md-nav__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    MkDocsPracticum
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Git
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux & Command
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux & Command
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD (Continuous Delivery)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CD (Continuous Delivery)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Continuous Delivery / Deployment (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: стратегии деплоя (подробно)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: шпаргалка топ-20
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bash Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    IaC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaС
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: команды Terraform с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: шпаргалка топ-20 команд Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ansible
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker Compose
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-compose/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Шпаргалка: сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load-balancing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Балансировка нагрузки (Load Balancing)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kubernetes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k9s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    k9s — быстрая навигация по кластеру
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-loadbalancer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoadBalancer в Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Helm
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#helm_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Проблема, которую решает Helm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Структура чарта
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Структура чарта">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chartyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chart.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Шаблонизация
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Шаблонизация">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Основные объекты
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример шаблона
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Условия и циклы
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Полезные функции
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_helperstpl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Именованные шаблоны (_helpers.tpl)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Values и окружения
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Values и окружения">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#valuesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        values.yaml (значения по умолчанию)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values-prodyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        values-prod.yaml (только отличия)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Приоритет значений (от низшего к высшему)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Жизненный цикл релиза
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Жизненный цикл релиза">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Безопасный деплой
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Проверка до применения
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Просмотр установленного релиза
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hashicorphttp-echo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример: чарт для hashicorp/http-echo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Пример: чарт для hashicorp/http-echo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Структура
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chartyaml_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chart.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#valuesyaml_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        values.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values-prodyaml_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        values-prod.yaml (только отличия)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates_helperstpl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        templates/_helpers.tpl
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templatesdeploymentyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        templates/deployment.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templatesserviceyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        templates/service.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Проверка без кластера
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Установка (ревизия 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Обновление (ревизия 2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-3-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Откат (ревизия 3 = копия ревизии 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Проверка «что применено» и уборка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что ломается в этом примере чаще всего
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helm-cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Helm в CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Зависимости и репозитории чартов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helm-vs-kubectl-apply-vs-kustomize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Helm vs kubectl apply vs Kustomize
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Частые ошибки
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-podinfo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm: production-ready чарт (podinfo)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm: шпаргалка команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Сети
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг и логи
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Мониторинг и логи
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг и логирование
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Облака
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Облака
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Облака
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Безопасность
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Безопасность
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Безопасность (DevSecOps)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#helm_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Проблема, которую решает Helm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Структура чарта
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Структура чарта">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chartyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chart.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Шаблонизация
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Шаблонизация">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Основные объекты
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример шаблона
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Условия и циклы
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Полезные функции
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_helperstpl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Именованные шаблоны (_helpers.tpl)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Values и окружения
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Values и окружения">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#valuesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        values.yaml (значения по умолчанию)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values-prodyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        values-prod.yaml (только отличия)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Приоритет значений (от низшего к высшему)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Жизненный цикл релиза
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Жизненный цикл релиза">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Безопасный деплой
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Проверка до применения
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Просмотр установленного релиза
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hashicorphttp-echo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример: чарт для hashicorp/http-echo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Пример: чарт для hashicorp/http-echo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Структура
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chartyaml_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chart.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#valuesyaml_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        values.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values-prodyaml_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        values-prod.yaml (только отличия)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates_helperstpl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        templates/_helpers.tpl
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templatesdeploymentyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        templates/deployment.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templatesserviceyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        templates/service.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Проверка без кластера
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Установка (ревизия 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Обновление (ревизия 2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-3-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Откат (ревизия 3 = копия ревизии 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Проверка «что применено» и уборка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что ломается в этом примере чаще всего
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helm-cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Helm в CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Зависимости и репозитории чартов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helm-vs-kubectl-apply-vs-kustomize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Helm vs kubectl apply vs Kustomize
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Частые ошибки
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="helm">Helm</h1>
+<p><strong>Helm</strong> — пакетный менеджер для Kubernetes. Вместо набора отдельных YAML-манифестов, скопированных под каждое окружение, приложение описывается <strong>одним чартом</strong> с шаблонами, а различия между окружениями выносятся в <strong>values-файлы</strong>.</p>
+<p><code>чарт (chart)</code> — пакет приложения: шаблоны манифестов + значения по умолчанию + метаданные.</p>
+<p><code>шаблон (template)</code> — манифест Kubernetes с подстановками <code>{{ ... }}</code> вместо захардкоженных значений.</p>
+<p><code>values</code> — значения, которые подставляются в шаблоны (образ, число реплик, лимиты, домен).</p>
+<p><code>релиз (release)</code> — установленный в кластер экземпляр чарта с конкретными values и своим именем.</p>
+<p><code>ревизия (revision)</code> — версия релиза; каждый <code>install</code>/<code>upgrade</code> создаёт новую, к любой можно откатиться.</p>
+<h2 id="helm_1">Проблема, которую решает Helm</h2>
+<p>Без Helm конфигурация размножается копированием: <code>deployment-dev.yaml</code>, <code>deployment-stage.yaml</code>, <code>deployment-prod.yaml</code> — три почти одинаковых файла, отличающихся числом реплик, тегом образа и лимитами.</p>
+<table>
+<thead>
+<tr>
+<th>Проблема</th>
+<th>Что происходит без Helm</th>
+<th>Что даёт Helm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Дублирование YAML</td>
+<td>Три копии манифеста на три окружения</td>
+<td>Один шаблон + три values-файла</td>
+</tr>
+<tr>
+<td>Рассинхрон окружений</td>
+<td>Поправили в prod, забыли в stage</td>
+<td>Правка в одном шаблоне применяется ко всем</td>
+</tr>
+<tr>
+<td>Подстановка версии образа в CI</td>
+<td><code>sed</code>/<code>envsubst</code> по YAML</td>
+<td><code>--set image.tag=$CI_COMMIT_SHA</code></td>
+</tr>
+<tr>
+<td>Откат</td>
+<td>Вручную искать предыдущий манифест</td>
+<td><code>helm rollback</code> по номеру ревизии</td>
+</tr>
+<tr>
+<td>Установка чужого приложения</td>
+<td>Собирать манифесты вручную</td>
+<td><code>helm install</code> из публичного репозитория</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Ключевая идея: <strong>шаблон описывает форму, values описывают содержание</strong>. Один чарт покрывает все окружения, потому что различия вынесены наружу.</p>
+</blockquote>
+<h2 id="_1">Структура чарта</h2>
+<div class="highlight"><pre><span></span><code>my-app/
+├── Chart.yaml           # метаданные: имя, версия чарта, версия приложения
+├── values.yaml          # значения по умолчанию
+├── values-dev.yaml      # переопределения для dev (необязательное соглашение)
+├── values-prod.yaml     # переопределения для prod
+├── charts/              # зависимости (вложенные чарты)
+├── .helmignore          # что не паковать в чарт (аналог .dockerignore)
+└── templates/
+    ├── deployment.yaml
+    ├── service.yaml
+    ├── ingress.yaml
+    ├── configmap.yaml
+    ├── _helpers.tpl     # именованные шаблоны (переиспользуемые куски)
+    └── NOTES.txt        # текст, который выводится после install
+</code></pre></div>
+<h3 id="chartyaml">Chart.yaml</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v2</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Сервис заказов</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2.0</span><span class="w">          </span><span class="c1"># версия САМОГО ЧАРТА (меняется при правке шаблонов)</span>
+<span class="nt">appVersion</span><span class="p">:</span><span class="w"> </span><span class="s">"1.8.3"</span><span class="w">     </span><span class="c1"># версия ПРИЛОЖЕНИЯ внутри (тег образа)</span>
+</code></pre></div>
+<blockquote>
+<p>Две версии путают чаще всего: <code>version</code> — про чарт (изменили шаблон → подняли), <code>appVersion</code> — про приложение (выкатили новый билд → подняли). Они живут независимо.</p>
+</blockquote>
+<h2 id="_2">Шаблонизация</h2>
+<h3 id="_3">Основные объекты</h3>
+<table>
+<thead>
+<tr>
+<th>Объект</th>
+<th>Что содержит</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.Values</code></td>
+<td>значения из values.yaml и <code>--set</code></td>
+<td><code>{{ .Values.replicaCount }}</code></td>
+</tr>
+<tr>
+<td><code>.Release</code></td>
+<td>информация о релизе</td>
+<td><code>{{ .Release.Name }}</code>, <code>{{ .Release.Namespace }}</code>, <code>{{ .Release.Revision }}</code></td>
+</tr>
+<tr>
+<td><code>.Chart</code></td>
+<td>данные из Chart.yaml</td>
+<td><code>{{ .Chart.Name }}</code>, <code>{{ .Chart.AppVersion }}</code></td>
+</tr>
+<tr>
+<td><code>.Capabilities</code></td>
+<td>возможности кластера</td>
+<td><code>{{ .Capabilities.KubeVersion }}</code></td>
+</tr>
+<tr>
+<td><code>.Files</code></td>
+<td>файлы внутри чарта</td>
+<td><code>{{ .Files.Get "config.json" }}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">Пример шаблона</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># templates/deployment.yaml</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Release.Name</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-{{ .Chart.Name }}</span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Chart.Name</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.replicaCount</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Chart.Name</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Chart.Name</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Chart.Name</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">          </span><span class="c1"># default подставит appVersion, если tag не задан явно</span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">.Values.image.repository</span><span class="nv"> </span><span class="s">}}:{{</span><span class="nv"> </span><span class="s">.Values.image.tag</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">default</span><span class="nv"> </span><span class="s">.Chart.AppVersion</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">          </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.service.port</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">          </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOG_LEVEL</span>
+<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.logLevel | quote</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w">     </span><span class="c1"># quote добавит кавычки</span>
+<span class="w">          </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">{{</span><span class="nv">- toYaml .Values.resources | nindent 12</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w"> </span><span class="c1"># вставить целый блок YAML с отступом</span>
+</code></pre></div>
+<h3 id="_5">Условия и циклы</h3>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">{{</span><span class="nv">- if .Values.ingress.enabled</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.k8s.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ingress</span>
+<span class="c1"># ...</span>
+<span class="p p-Indicator">{{</span><span class="nv">- end</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+
+<span class="c1"># перебор списка</span>
+<span class="nt">env</span><span class="p">:</span>
+<span class="p p-Indicator">{{</span><span class="nv">- range .Values.extraEnv</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.name</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.value | quote</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="p p-Indicator">{{</span><span class="nv">- end</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</code></pre></div>
+<blockquote>
+<p><code>{{-</code> и <code>-}}</code> съедают пробелы и перевод строки — без них в отрендеренном YAML остаются пустые строки и ломается отступ. Ошибки отступа в Helm ловятся именно через <code>helm template</code>.</p>
+</blockquote>
+<h3 id="_6">Полезные функции</h3>
+<table>
+<thead>
+<tr>
+<th>Функция</th>
+<th>Что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default "значение"</code></td>
+<td>подставить значение, если переменная пустая</td>
+</tr>
+<tr>
+<td><code>quote</code></td>
+<td>обернуть в кавычки (важно для чисел-строк, например <code>"8080"</code>)</td>
+</tr>
+<tr>
+<td><code>nindent N</code></td>
+<td>перевод строки + отступ N пробелов</td>
+</tr>
+<tr>
+<td><code>toYaml</code></td>
+<td>превратить структуру values в YAML-блок</td>
+</tr>
+<tr>
+<td><code>required "сообщение" .Values.x</code></td>
+<td>упасть с понятной ошибкой, если значение не задано</td>
+</tr>
+<tr>
+<td><code>include "имя" .</code></td>
+<td>вставить именованный шаблон из <code>_helpers.tpl</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_helperstpl">Именованные шаблоны (_helpers.tpl)</h3>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">{{</span><span class="nv">- define "my-app.fullname" -</span><span class="p p-Indicator">}}</span>
+<span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Release.Name</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-{{ .Chart.Name }}</span>
+<span class="l l-Scalar l-Scalar-Plain">{{- end }}</span>
+</code></pre></div>
+<p>Использование: <code>name: {{ include "my-app.fullname" . }}</code> — имя формируется в одном месте, а не копируется по всем манифестам.</p>
+<h2 id="values">Values и окружения</h2>
+<h3 id="valuesyaml">values.yaml (значения по умолчанию)</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">image</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.example.com/my-app</span>
+<span class="w">  </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="w">          </span><span class="c1"># пусто → возьмётся appVersion из Chart.yaml</span>
+<span class="w">  </span><span class="nt">pullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span>
+
+<span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIP</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+
+<span class="nt">logLevel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">info</span>
+
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128Mi</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512Mi</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+<h3 id="values-prodyaml">values-prod.yaml (только отличия)</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+
+<span class="nt">logLevel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warn</span>
+
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512Mi</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"2"</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">api.example.com</span>
+</code></pre></div>
+<blockquote>
+<p>В values для окружения держат <strong>только различия</strong>, а не полную копию — иначе возвращается та же проблема дублирования, ради которой брали Helm.</p>
+</blockquote>
+<h3 id="_7">Приоритет значений (от низшего к высшему)</h3>
+<div class="highlight"><pre><span></span><code>values.yaml чарта
+  ↓ перекрывается
+-f values-prod.yaml         (несколько -f применяются слева направо)
+  ↓ перекрывается
+--set key=value             (самый высокий приоритет)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>my-app<span class="w"> </span>./my-app<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-f<span class="w"> </span>values-prod.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>image.tag<span class="o">=</span><span class="m">1</span>.8.4<span class="w">        </span><span class="c1"># перекроет и values.yaml, и values-prod.yaml</span>
+</code></pre></div>
+<h2 id="_8">Жизненный цикл релиза</h2>
+<p>Каждый <code>install</code>/<code>upgrade</code> создаёт <strong>новую ревизию</strong>. Helm хранит историю релиза в кластере (в Secret в том же namespace) — поэтому откат не требует ни git, ни сохранённых локально манифестов.</p>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>my-app<span class="w"> </span>./my-app<span class="w">                 </span><span class="c1"># ревизия 1</span>
+helm<span class="w"> </span>upgrade<span class="w"> </span>my-app<span class="w"> </span>./my-app<span class="w"> </span>--set<span class="w"> </span>image.tag<span class="o">=</span><span class="m">1</span>.8.4<span class="w">   </span><span class="c1"># ревизия 2</span>
+helm<span class="w"> </span>upgrade<span class="w"> </span>my-app<span class="w"> </span>./my-app<span class="w"> </span>--set<span class="w"> </span><span class="nv">replicaCount</span><span class="o">=</span><span class="m">6</span><span class="w">    </span><span class="c1"># ревизия 3</span>
+helm<span class="w"> </span>rollback<span class="w"> </span>my-app<span class="w"> </span><span class="m">2</span><span class="w">                        </span><span class="c1"># откат к ревизии 2 → создаёт ревизию 4</span>
+</code></pre></div>
+<blockquote>
+<p>Откат не «удаляет» ревизию 3 — он создаёт <strong>новую</strong> ревизию с содержимым второй. История линейна и ничего не теряется.</p>
+</blockquote>
+<p><div class="highlight"><pre><span></span><code>helm<span class="w"> </span><span class="nb">history</span><span class="w"> </span>my-app
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>REVISION  UPDATED       STATUS      CHART        APP VERSION  DESCRIPTION
+1         Mon Sep 14..  superseded  my-app-0.2.0 1.8.3        Install complete
+2         Mon Sep 14..  superseded  my-app-0.2.0 1.8.4        Upgrade complete
+3         Mon Sep 14..  superseded  my-app-0.2.0 1.8.4        Upgrade complete
+4         Mon Sep 14..  deployed    my-app-0.2.0 1.8.4        Rollback to 2
+</code></pre></div></p>
+<h3 id="_9">Безопасный деплой</h3>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>my-app<span class="w"> </span>./my-app<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-f<span class="w"> </span>values-prod.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>image.tag<span class="o">=</span><span class="nv">$CI_COMMIT_SHA</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>production<span class="w"> </span>--create-namespace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--wait<span class="w"> </span>--timeout<span class="w"> </span>5m<span class="w"> </span>--atomic
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Флаг</th>
+<th>Что делает</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--install</code></td>
+<td>установить, если релиза ещё нет</td>
+<td>одна команда и для первого деплоя, и для обновления — удобно в CI</td>
+</tr>
+<tr>
+<td><code>--wait</code></td>
+<td>ждать, пока поды станут Ready</td>
+<td>без него команда завершается успехом сразу после отправки манифестов</td>
+</tr>
+<tr>
+<td><code>--timeout 5m</code></td>
+<td>максимум ожидания</td>
+<td>чтобы пайплайн не висел вечно</td>
+</tr>
+<tr>
+<td><code>--atomic</code></td>
+<td>при неудаче автоматически откатить релиз</td>
+<td>кластер не остаётся в полусломанном состоянии</td>
+</tr>
+<tr>
+<td><code>--create-namespace</code></td>
+<td>создать namespace, если его нет</td>
+<td>первый деплой в новое окружение</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>--atomic</code> включает <code>--wait</code> автоматически. Связка <code>--wait --timeout --atomic</code> — это «деплой либо полностью успешен, либо откачен»: ровно то поведение, которое нужно в CD (см. <a href="../cd/">CD</a>).</p>
+</blockquote>
+<h2 id="_10">Проверка до применения</h2>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>lint<span class="w"> </span>./my-app<span class="w">                         </span><span class="c1"># структура чарта и типовые ошибки</span>
+helm<span class="w"> </span>template<span class="w"> </span>my-app<span class="w"> </span>./my-app<span class="w"> </span>-f<span class="w"> </span>values-prod.yaml<span class="w">   </span><span class="c1"># отрендерить YAML локально, БЕЗ кластера</span>
+helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>my-app<span class="w"> </span>./my-app<span class="w"> </span>--dry-run<span class="w"> </span>--debug<span class="w">  </span><span class="c1"># рендер + проверка на API-сервере</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Нужен кластер?</th>
+<th>Что проверяет</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>helm lint</code></td>
+<td>нет</td>
+<td>структуру чарта, синтаксис шаблонов</td>
+</tr>
+<tr>
+<td><code>helm template</code></td>
+<td>нет</td>
+<td>что именно получится в итоговых манифестах</td>
+</tr>
+<tr>
+<td><code>--dry-run --debug</code></td>
+<td>да</td>
+<td>дополнительно валидацию манифестов API-сервером</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>helm template</code> — главный инструмент отладки: почти все проблемы (отступы, пустые значения, неверный тип) видны в отрендеренном YAML ещё до похода в кластер.</p>
+</blockquote>
+<h2 id="_11">Просмотр установленного релиза</h2>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>list<span class="w">                        </span><span class="c1"># релизы в текущем namespace</span>
+helm<span class="w"> </span>list<span class="w"> </span>-A<span class="w">                     </span><span class="c1"># во всех namespace</span>
+helm<span class="w"> </span>status<span class="w"> </span>my-app<span class="w">               </span><span class="c1"># состояние релиза и NOTES.txt</span>
+helm<span class="w"> </span>get<span class="w"> </span>values<span class="w"> </span>my-app<span class="w">           </span><span class="c1"># какие values реально применены</span>
+helm<span class="w"> </span>get<span class="w"> </span>values<span class="w"> </span>my-app<span class="w"> </span>--all<span class="w">     </span><span class="c1"># включая значения по умолчанию</span>
+helm<span class="w"> </span>get<span class="w"> </span>manifest<span class="w"> </span>my-app<span class="w">         </span><span class="c1"># какие манифесты Helm применил в кластер</span>
+helm<span class="w"> </span>uninstall<span class="w"> </span>my-app<span class="w">            </span><span class="c1"># удалить релиз и все его ресурсы</span>
+</code></pre></div>
+<blockquote>
+<p><code>helm get values</code> + <code>helm get manifest</code> — то, чем разбирают инцидент «в кластере не то, что ожидали»: сначала смотрят, с какими values релиз собран, потом — что из них отрендерилось.</p>
+</blockquote>
+<h2 id="hashicorphttp-echo">Пример: чарт для hashicorp/http-echo</h2>
+<p><code>hashicorp/http-echo</code> — крошечный сервис, который на любой HTTP-запрос отвечает заданным текстом. Для тренировки Helm он удобен тем, что <strong>результат виден глазами</strong>: меняешь текст в values — и по ответу сразу понятно, какая ревизия сейчас в кластере. Ни базы, ни зависимостей, ни долгого старта.</p>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>create<span class="w"> </span>http-echo<span class="w">     </span><span class="c1"># каркас чарта со стандартными файлами</span>
+</code></pre></div>
+<blockquote>
+<p><code>helm create</code> генерирует чарт с большим количеством «умолчаний» на все случаи жизни. Ниже — тот же чарт, но урезанный до минимума, чтобы каждая строка была понятна.</p>
+</blockquote>
+<h3 id="_12">Структура</h3>
+<div class="highlight"><pre><span></span><code>http-echo/
+├── Chart.yaml
+├── values.yaml
+├── values-prod.yaml
+└── templates/
+    ├── _helpers.tpl
+    ├── deployment.yaml
+    └── service.yaml
+</code></pre></div>
+<h3 id="chartyaml_1">Chart.yaml</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v2</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-echo</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Демо-сервис, отвечающий заданным текстом</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1.0</span>
+<span class="nt">appVersion</span><span class="p">:</span><span class="w"> </span><span class="s">"1.0"</span><span class="w">      </span><span class="c1"># тег образа hashicorp/http-echo</span>
+</code></pre></div>
+<h3 id="valuesyaml_1">values.yaml</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">image</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hashicorp/http-echo</span>
+<span class="w">  </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="w">                  </span><span class="c1"># пусто → возьмётся appVersion ("1.0")</span>
+<span class="w">  </span><span class="nt">pullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span>
+
+<span class="c1"># то, что сервис будет отвечать на запросы</span>
+<span class="nt">echoText</span><span class="p">:</span><span class="w"> </span><span class="s">"hello</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">dev"</span>
+
+<span class="c1"># порт, на котором слушает http-echo (флаг -listen)</span>
+<span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5678</span>
+
+<span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIP</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span><span class="w">                 </span><span class="c1"># внешний порт Service → targetPort 5678</span>
+
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16Mi</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64Mi</span>
+</code></pre></div>
+<h3 id="values-prodyaml_1">values-prod.yaml (только отличия)</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+
+<span class="nt">echoText</span><span class="p">:</span><span class="w"> </span><span class="s">"hello</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">PROD"</span>
+
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32Mi</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128Mi</span>
+</code></pre></div>
+<h3 id="templates_helperstpl">templates/_helpers.tpl</h3>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">{{</span><span class="nv">- define "http-echo.fullname" -</span><span class="p p-Indicator">}}</span>
+<span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Release.Name</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-{{ .Chart.Name }}</span>
+<span class="l l-Scalar l-Scalar-Plain">{{- end }}</span>
+</code></pre></div>
+<h3 id="templatesdeploymentyaml">templates/deployment.yaml</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "http-echo.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "http-echo.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.replicaCount</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "http-echo.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "http-echo.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-echo</span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">.Values.image.repository</span><span class="nv"> </span><span class="s">}}:{{</span><span class="nv"> </span><span class="s">.Values.image.tag</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">default</span><span class="nv"> </span><span class="s">.Chart.AppVersion</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.image.pullPolicy</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">            </span><span class="c1"># quote обязателен: в тексте есть пробелы</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-text={{</span><span class="nv"> </span><span class="s">.Values.echoText</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-listen=:{{</span><span class="nv"> </span><span class="s">.Values.containerPort</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">          </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.containerPort</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">          </span><span class="nt">readinessProbe</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">          </span><span class="nt">livenessProbe</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">          </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">{{</span><span class="nv">- toYaml .Values.resources | nindent 12</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</code></pre></div>
+<blockquote>
+<p><code>http-echo</code> отвечает 200 на <strong>любой</strong> путь, поэтому пробы настроены на <code>/</code>. Пробы здесь не декоративные: именно они дают работать флагу <code>--wait</code> — без готовых подов Helm не посчитает релиз успешным (см. <a href="../k8s/">пробы в Kubernetes</a>).</p>
+</blockquote>
+<h3 id="templatesserviceyaml">templates/service.yaml</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "http-echo.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.service.type</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "http-echo.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.service.port</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">      </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+</code></pre></div>
+<h3 id="1">1. Проверка без кластера</h3>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>lint<span class="w"> </span>./http-echo
+helm<span class="w"> </span>template<span class="w"> </span>demo<span class="w"> </span>./http-echo<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-40
+</code></pre></div>
+<p>Фрагмент того, что получится (значения уже подставлены):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Source: http-echo/templates/deployment.yaml</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-http-echo</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">- name</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-echo</span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">"hashicorp/http-echo:1.0"</span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-text=hello</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">dev"</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-listen=:5678"</span>
+</code></pre></div>
+<p>Тот же чарт с прод-значениями — отличается только содержимое, не шаблон:</p>
+<p><div class="highlight"><pre><span></span><code>helm<span class="w"> </span>template<span class="w"> </span>demo<span class="w"> </span>./http-echo<span class="w"> </span>-f<span class="w"> </span>values-prod.yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"replicas|-text="</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>  replicas: 3
+            - "-text=hello from PROD"
+</code></pre></div></p>
+<h3 id="2-1">2. Установка (ревизия 1)</h3>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>demo<span class="w"> </span>./http-echo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>demo<span class="w"> </span>--create-namespace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--wait<span class="w"> </span>--timeout<span class="w"> </span>2m<span class="w"> </span>--atomic
+
+helm<span class="w"> </span>list<span class="w"> </span>-n<span class="w"> </span>demo
+kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>demo
+</code></pre></div>
+<p>Проверяем ответ сервиса:</p>
+<p><div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>port-forward<span class="w"> </span>-n<span class="w"> </span>demo<span class="w"> </span>svc/demo-http-echo<span class="w"> </span><span class="m">8080</span>:80
+curl<span class="w"> </span>localhost:8080
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>hello from dev
+</code></pre></div></p>
+<h3 id="3-2">3. Обновление (ревизия 2)</h3>
+<p>Меняем только values — шаблоны не трогаем:</p>
+<p><div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>demo<span class="w"> </span>./http-echo<span class="w"> </span>-n<span class="w"> </span>demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="nv">echoText</span><span class="o">=</span><span class="s2">"hello from v2"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="nv">replicaCount</span><span class="o">=</span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--wait<span class="w"> </span>--timeout<span class="w"> </span>2m<span class="w"> </span>--atomic
+
+curl<span class="w"> </span>localhost:8080<span class="w">      </span><span class="c1"># port-forward нужно перезапустить после пересоздания подов</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>hello from v2
+</code></pre></div></p>
+<p><div class="highlight"><pre><span></span><code>helm<span class="w"> </span><span class="nb">history</span><span class="w"> </span>demo<span class="w"> </span>-n<span class="w"> </span>demo
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>REVISION  UPDATED       STATUS      CHART            APP VERSION  DESCRIPTION
+1         Tue Sep 16..  superseded  http-echo-0.1.0  1.0          Install complete
+2         Tue Sep 16..  deployed    http-echo-0.1.0  1.0          Upgrade complete
+</code></pre></div></p>
+<h3 id="4-3-1">4. Откат (ревизия 3 = копия ревизии 1)</h3>
+<p><div class="highlight"><pre><span></span><code>helm<span class="w"> </span>rollback<span class="w"> </span>demo<span class="w"> </span><span class="m">1</span><span class="w"> </span>-n<span class="w"> </span>demo
+curl<span class="w"> </span>localhost:8080
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>hello from dev
+</code></pre></div></p>
+<p><div class="highlight"><pre><span></span><code>helm<span class="w"> </span><span class="nb">history</span><span class="w"> </span>demo<span class="w"> </span>-n<span class="w"> </span>demo
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>REVISION  UPDATED       STATUS      CHART            APP VERSION  DESCRIPTION
+1         Tue Sep 16..  superseded  http-echo-0.1.0  1.0          Install complete
+2         Tue Sep 16..  superseded  http-echo-0.1.0  1.0          Upgrade complete
+3         Tue Sep 16..  deployed    http-echo-0.1.0  1.0          Rollback to 1
+</code></pre></div></p>
+<blockquote>
+<p>Наглядно видно главное правило: откат — это <strong>новая ревизия</strong> с содержимым старой, а не удаление истории. <code>helm get values demo -n demo</code> покажет, что после отката вернулись values первой ревизии.</p>
+</blockquote>
+<h3 id="5">5. Проверка «что применено» и уборка</h3>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>get<span class="w"> </span>values<span class="w"> </span>demo<span class="w"> </span>-n<span class="w"> </span>demo<span class="w">          </span><span class="c1"># какие values сейчас активны</span>
+helm<span class="w"> </span>get<span class="w"> </span>manifest<span class="w"> </span>demo<span class="w"> </span>-n<span class="w"> </span>demo<span class="w">        </span><span class="c1"># какие манифесты в кластере</span>
+helm<span class="w"> </span>status<span class="w"> </span>demo<span class="w"> </span>-n<span class="w"> </span>demo<span class="w">              </span><span class="c1"># статус релиза</span>
+
+helm<span class="w"> </span>uninstall<span class="w"> </span>demo<span class="w"> </span>-n<span class="w"> </span>demo<span class="w">           </span><span class="c1"># удалить релиз со всеми ресурсами</span>
+kubectl<span class="w"> </span>delete<span class="w"> </span>namespace<span class="w"> </span>demo
+</code></pre></div>
+<h3 id="_13">Что ломается в этом примере чаще всего</h3>
+<table>
+<thead>
+<tr>
+<th>Симптом</th>
+<th>Причина</th>
+<th>Решение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Под падает с <code>flag provided but not defined</code></td>
+<td>Аргументы переданы без <code>-text=</code>/<code>-listen=</code> (например, через <code>command</code>)</td>
+<td>Передавать флаги в <code>args</code> именно в формате <code>-text=значение</code></td>
+</tr>
+<tr>
+<td>Текст обрезался до первого слова</td>
+<td>Нет кавычек вокруг аргумента с пробелами</td>
+<td><code>- "-text={{ .Values.echoText }}"</code></td>
+</tr>
+<tr>
+<td><code>--set echoText=hello from v2</code> ругается на синтаксис</td>
+<td>Пробелы ломают разбор <code>--set</code></td>
+<td>Кавычить целиком: <code>--set echoText="hello from v2"</code></td>
+</tr>
+<tr>
+<td><code>curl</code> не отвечает после upgrade</td>
+<td>При пересоздании подов старый <code>port-forward</code> отваливается</td>
+<td>Перезапустить <code>kubectl port-forward</code></td>
+</tr>
+<tr>
+<td><code>--wait</code> висит и откатывается по таймауту</td>
+<td>Порт в пробах не совпадает с <code>-listen</code></td>
+<td>Держать порт в одном месте — <code>.Values.containerPort</code> и там, и там</td>
+</tr>
+</tbody>
+</table>
+<h2 id="helm-cicd">Helm в CI/CD</h2>
+<p>Типовая схема: пайплайн собрал образ с уникальным тегом и передаёт этот тег Helm'у, всё остальное описано в чарте.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># .gitlab-ci.yml</span>
+<span class="nt">deploy</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm lint ./charts/my-app</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm upgrade --install my-app ./charts/my-app</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">--namespace production --create-namespace</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">-f ./charts/my-app/values-prod.yaml</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">--set image.tag=$CI_COMMIT_SHA</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">--wait --timeout 5m --atomic</span>
+<span class="w">  </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="w">  </span><span class="nt">only</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+</code></pre></div>
+<ul>
+<li><strong>Immutable-тег образа</strong> (<code>$CI_COMMIT_SHA</code>, а не <code>latest</code>) — обязателен: только так понятно, какая версия сейчас в кластере, и только так работает откат (см. <a href="../cd/">CD</a>).</li>
+<li><strong>Секреты не кладут в values-файлы в git</strong> — они приходят из защищённых переменных CI (<code>--set</code>) или из внешнего секрет-менеджера (см. <a href="../security/">Безопасность</a>).</li>
+<li><strong><code>--atomic</code> в пайплайне</strong> заменяет ручной откат: неуспешный деплой сам возвращает предыдущее состояние.</li>
+</ul>
+<h2 id="_14">Зависимости и репозитории чартов</h2>
+<p>Чарт может подключать другие чарты как зависимости (например, приложение + redis):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Chart.yaml</span>
+<span class="nt">dependencies</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"18.19.2"</span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="s">"https://charts.bitnami.com/bitnami"</span>
+<span class="w">    </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis.enabled</span><span class="w">      </span><span class="c1"># ставить, только если redis.enabled=true</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>dependency<span class="w"> </span>update<span class="w"> </span>./my-app<span class="w">       </span><span class="c1"># скачать зависимости в charts/</span>
+helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>bitnami<span class="w"> </span>https://charts.bitnami.com/bitnami
+helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>search<span class="w"> </span>repo<span class="w"> </span>redis<span class="w">                 </span><span class="c1"># найти чарт в подключённых репозиториях</span>
+helm<span class="w"> </span>install<span class="w"> </span>my-redis<span class="w"> </span>bitnami/redis<span class="w">    </span><span class="c1"># установить готовый чужой чарт</span>
+</code></pre></div>
+<blockquote>
+<p>Готовые чарты — вторая сильная сторона Helm: Prometheus, Grafana, ingress-nginx, cert-manager обычно ставят именно так, а не собирая десятки манифестов руками (см. <a href="../monitoring/">Мониторинг</a>).</p>
+<p>Альтернатива dependency — <strong>внутренний компонент</strong>: шаблоны Redis лежат прямо в <code>templates/redis/</code> вашего чарта под флагом <code>redis.enabled</code>. Больше кода, зато полный контроль над именами, метками и перезапуском. Разбор — <a href="../helm-podinfo/#redis">production-ready чарт podinfo</a>.</p>
+</blockquote>
+<h2 id="helm-vs-kubectl-apply-vs-kustomize">Helm vs kubectl apply vs Kustomize</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>kubectl apply</code></th>
+<th>Kustomize</th>
+<th>Helm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Подход</td>
+<td>голые YAML</td>
+<td>наложение патчей на базовые YAML</td>
+<td>шаблонизация + пакет</td>
+</tr>
+<tr>
+<td>Окружения</td>
+<td>копии файлов</td>
+<td>overlays (base + патчи)</td>
+<td>values-файлы</td>
+</tr>
+<tr>
+<td>Логика (if/range)</td>
+<td>нет</td>
+<td>нет</td>
+<td>есть</td>
+</tr>
+<tr>
+<td>История и откат</td>
+<td>только через <code>kubectl rollout undo</code> (на уровне Deployment)</td>
+<td>нет своей</td>
+<td>ревизии релиза целиком</td>
+</tr>
+<tr>
+<td>Готовые пакеты</td>
+<td>нет</td>
+<td>нет</td>
+<td>публичные репозитории чартов</td>
+</tr>
+<tr>
+<td>Сложность</td>
+<td>минимальная</td>
+<td>средняя</td>
+<td>выше, легко «перешаблонить»</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Kustomize хорош, когда различия окружений — это пара патчей. Helm выигрывает, когда нужны условная логика, переиспользование чарта между командами, установка стороннего софта и откат релиза как единого целого.</p>
+</blockquote>
+<h2 id="_15">Частые ошибки</h2>
+<table>
+<thead>
+<tr>
+<th>Симптом</th>
+<th>Причина</th>
+<th>Решение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>helm upgrade</code> прошёл успешно, но приложение не работает</td>
+<td>Без <code>--wait</code> команда не ждёт готовности подов</td>
+<td><code>--wait --timeout 5m --atomic</code></td>
+</tr>
+<tr>
+<td>Ошибка «error converting YAML» при рендере</td>
+<td>Сломан отступ после <code>toYaml</code> или <code>range</code></td>
+<td><code>helm template</code> и <code>nindent</code> вместо <code>indent</code></td>
+</tr>
+<tr>
+<td>Значение <code>8080</code> стало числом, а manifest требует строку</td>
+<td>Нет <code>quote</code></td>
+<td><code>{{ .Values.port | quote }}</code></td>
+</tr>
+<tr>
+<td>Релиз завис в статусе <code>pending-upgrade</code></td>
+<td>Предыдущий upgrade прервали (Ctrl+C, таймаут CI)</td>
+<td><code>helm rollback &lt;release&gt; &lt;последняя рабочая ревизия&gt;</code></td>
+</tr>
+<tr>
+<td><code>--set</code> не применился</td>
+<td>Путь к ключу не совпадает с values.yaml</td>
+<td><code>helm get values &lt;release&gt;</code> и проверить структуру</td>
+</tr>
+<tr>
+<td>В values-prod продублирован весь values.yaml</td>
+<td>Скопировали файл целиком</td>
+<td>Оставить только отличия</td>
+</tr>
+<tr>
+<td>Секрет виден в <code>helm get values</code></td>
+<td>Секрет передан через values/<code>--set</code> и сохранён в истории релиза</td>
+<td>Держать секреты в K8s Secret/Vault, ссылаться из шаблона</td>
+</tr>
+</tbody>
+</table>
+<h2 id="best-practices">Best Practices</h2>
+<ul>
+<li><strong>Шаблон один, values много</strong> — различия окружений живут только в values-файлах.</li>
+<li><strong><code>helm lint</code> + <code>helm template</code> в CI до деплоя</strong> — дешёвая проверка, ловит большинство ошибок без кластера.</li>
+<li><strong><code>--atomic --wait --timeout</code> для любого автоматического деплоя</strong> — либо успех, либо откат, без промежуточных состояний.</li>
+<li><strong>Immutable-теги образов</strong> (<code>$CI_COMMIT_SHA</code>), никогда <code>latest</code> — иначе <code>rollback</code> возвращает тот же самый образ.</li>
+<li><strong>Версионируй чарт</strong> (<code>version</code> в Chart.yaml) при каждом изменении шаблонов.</li>
+<li><strong><code>required</code> для критичных значений</strong> — лучше упасть при рендере с понятным сообщением, чем задеплоить пустое поле.</li>
+<li><strong>Не храни секреты в values в git</strong> — только CI-переменные или внешний секрет-менеджер.</li>
+</ul>
+<blockquote>
+<p>Мини-шпаргалка: <a href="../helm-cheatsheet/">Helm: шпаргалка команд</a>.
+Продакшн-чарт с <code>_helpers.tpl</code>, HPA, PDB, Redis, хуками и тестами — <a href="../helm-podinfo/">Helm: production-ready чарт (podinfo)</a>.
+Объекты Kubernetes, которые Helm разворачивает: <a href="../k8s/">Kubernetes (теория)</a>.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
