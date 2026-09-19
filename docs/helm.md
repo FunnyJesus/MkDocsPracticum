@@ -607,6 +607,8 @@ helm install my-redis bitnami/redis    # установить готовый ч�
 
 > Готовые чарты — вторая сильная сторона Helm: Prometheus, Grafana, ingress-nginx, cert-manager обычно ставят именно так, а не собирая десятки манифестов руками (см. [Мониторинг](monitoring.md)).
 
+> Альтернатива dependency — **внутренний компонент**: шаблоны Redis лежат прямо в `templates/redis/` вашего чарта под флагом `redis.enabled`. Больше кода, зато полный контроль над именами, метками и перезапуском. Разбор — [production-ready чарт podinfo](helm-podinfo.md#redis).
+
 ## Helm vs kubectl apply vs Kustomize
 
 | | `kubectl apply` | Kustomize | Helm |
@@ -643,4 +645,5 @@ helm install my-redis bitnami/redis    # установить готовый ч�
 * **Не храни секреты в values в git** — только CI-переменные или внешний секрет-менеджер.
 
 > Мини-шпаргалка: [Helm: шпаргалка команд](helm-cheatsheet.md).
+> Продакшн-чарт с `_helpers.tpl`, HPA, PDB, Redis, хуками и тестами — [Helm: production-ready чарт (podinfo)](helm-podinfo.md).
 > Объекты Kubernetes, которые Helm разворачивает: [Kubernetes (теория)](k8s.md).

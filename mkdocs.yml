@@ -50,6 +50,7 @@ nav:
       - k8s-loadbalancer.md
   - Helm:
       - helm.md
+      - helm-podinfo.md
       - helm-cheatsheet.md
   - Сети:
       - networking.md

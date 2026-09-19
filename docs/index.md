@@ -11,7 +11,7 @@
 - [**IaC (Terraform)**](iac.md) — инфраструктура как код: блоки (resource, provider, variable), команды terraform
 - [**Docker**](docker.md) — контейнеризация: команды, Dockerfile, тома, сети, встроенный DNS
 - [**Kubernetes**](k8s.md) — оркестрация контейнеров: кластер, pods, deployments, services, ingress, k9s
-- [**Helm**](helm.md) — пакетный менеджер K8s: чарты, шаблоны, values по окружениям, релизы и откаты
+- [**Helm**](helm.md) — пакетный менеджер K8s: чарты, шаблоны, values по окружениям, релизы и откаты; [production-ready чарт podinfo](helm-podinfo.md) — helpers, HPA, PDB, Redis, хуки и тесты
 - [**Сети**](networking.md) — OSI/TCP-IP, TCP vs UDP, DNS, HTTP/HTTPS, TLS, firewall, диагностика
 - [**Мониторинг и логи**](monitoring.md) — Prometheus, PromQL, Grafana, Alertmanager, ELK/Loki, SLI/SLO/SLA
 - [**Облака**](cloud.md) — IaaS/PaaS/SaaS, IAM, VPC, object storage, managed vs self-hosted

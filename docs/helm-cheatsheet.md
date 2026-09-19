@@ -64,6 +64,26 @@ helm rollback my-app 3 -n production
 helm status my-app -n production
 ```
 
+## Хуки и тесты
+
+```bash
+helm get hooks <release>                          # манифесты хуков и тестов релиза
+kubectl get jobs -n <ns> -w                       # смотреть, как Job-хуки создаются и удаляются
+helm test <release> --logs                        # прогнать тесты (helm.sh/hook: test) и показать логи
+helm test <release> --filter name=<pod>           # только один тест
+helm test <release> --timeout 30s                 # тест дольше таймаута = провал
+kubectl delete pod -n <ns> -l app.kubernetes.io/component=test   # прибрать тестовые поды
+```
+
+## Upgrade без сюрпризов
+
+```bash
+helm upgrade <release> ./chart -f values-prod.yaml --set redis.enabled=false  # всегда передавать -f
+helm upgrade <release> ./chart --reuse-values --set x=y   # взять values прошлой ревизии + изменение
+helm template <release> ./chart -s templates/deployment.yaml   # отрендерить один шаблон
+helm lint ./chart --strict -f values-prod.yaml               # линтер с values окружения
+```
+
 ## Разбор проблем
 
 ```bash
@@ -88,6 +108,8 @@ helm template ./chart | head -60   # смотреть отрендеренный
 - **История и откат**: `helm history`, `helm rollback`, `helm status`
 - **Разбор**: `helm get values`, `helm get manifest`, `helm list -A`
 - **Зависимости**: `helm repo add/update`, `helm search repo`, `helm dependency update`
+- **Хуки и тесты**: `helm get hooks`, `helm test --logs`, `--filter`, `--timeout`
 
 > Подробный разбор шаблонов, values и жизненного цикла релиза — [Helm (теория)](helm.md).
 > Сквозной пример install → upgrade → rollback на `hashicorp/http-echo` — [там же](helm.md#hashicorphttp-echo).
+> Продакшн-чарт podinfo: helpers, HPA, PDB, Redis, хуки, тесты — [Helm: production-ready чарт](helm-podinfo.md).
