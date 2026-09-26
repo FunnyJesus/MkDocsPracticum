@@ -4,6 +4,7 @@ theme:
   name: material
 nav:
   - Главная: index.md
+  - Что такое DevOps: devops.md
   - Git:
       - git.md
       - git-commands.md
@@ -12,6 +13,11 @@ nav:
       - linux.md
       - linux-commands.md
       - linux-cheatsheet.md
+      - linux-troubleshooting.md
+      - text-processing.md
+      - text-processing-cheatsheet.md
+      - ssh.md
+      - tmux-vim.md
   - CI:
       - ci.md
       - ci-cheatsheet.md
@@ -25,10 +31,14 @@ nav:
   - Python Script:
       - python-scripts.md
       - python-cheatsheet.md
+  - Makefile:
+      - makefile.md
+      - makefile-cheatsheet.md
   - IaC:
       - iac.md
       - iac-commands.md
       - iac-cheatsheet.md
+      - terraform-advanced.md
   - Ansible:
       - ansible.md
       - ansible-commands.md
@@ -37,6 +47,7 @@ nav:
       - docker.md
       - docker-commands.md
       - docker-cheatsheet.md
+      - registry.md
   - Docker Compose:
       - docker-compose.md
       - compose-networks.md
@@ -48,21 +59,44 @@ nav:
       - k8s-cheatsheet.md
       - k9s.md
       - k8s-loadbalancer.md
+      - gateway-api.md
+      - kustomize.md
   - Helm:
       - helm.md
       - helm-podinfo.md
       - helm-cheatsheet.md
+  - GitOps (Argo CD):
+      - gitops.md
+      - argocd-cheatsheet.md
+  - Nginx:
+      - nginx.md
+      - nginx-cheatsheet.md
   - Сети:
       - networking.md
       - networking-cheatsheet.md
+  - Базы данных и очереди:
+      - databases.md
+      - postgres-cheatsheet.md
+      - message-queues.md
   - Мониторинг и логи:
       - monitoring.md
       - monitoring-cheatsheet.md
+      - tracing.md
+  - SRE и надёжность:
+      - sre.md
+      - backup-dr.md
+      - incidents-practice.md
   - Облака:
       - cloud.md
   - Безопасность:
       - security.md
+      - secrets.md
+  - Практика:
+      - project-e2e.md
+      - interview.md
 markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true

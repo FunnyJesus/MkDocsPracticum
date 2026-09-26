@@ -13,7 +13,7 @@
 | 3 | `ansible all -i hosts.ini --list-hosts` | какие хосты в группе all |
 | 4 | `ansible all -i hosts.ini -m ping` | проверить SSH-подключение (не ICMP) |
 | 5 | `ansible all -m command -a "uptime"` | выполнить команду |
-| 6 | `ansible all -m shell -a "cmd \| grep x"` | команда с пайпами/переменными |
+| 6 | `ansible all -m shell -a "cmd | grep x"` | команда с пайпами/переменными |
 | 7 | `ansible all --become -m apt -a "name=nginx state=present"` | установить пакет (Ubuntu) |
 | 8 | `ansible all --become -m yum -a "name=nginx state=present"` | установить пакет (RHEL) |
 | 9 | `ansible all --become -m service -a "name=nginx state=started"` | запустить сервис |

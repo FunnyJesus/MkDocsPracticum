@@ -16,14 +16,14 @@
 | 6 | HTTP | `curl -v <url>` | полный HTTP-обмен: заголовки, статус |
 | 7 | HTTP | `curl -I <url>` | только заголовки ответа (HEAD) |
 | 8 | HTTP | `curl -o /dev/null -s -w '%{http_code} %{time_total}\n' <url>` | код ответа + время без тела |
-| 9 | HTTP retry | `curl -sf <url> \|\| echo fail` | завершить с ошибкой на не-2xx (для скриптов/healthcheck) |
+| 9 | HTTP retry | `curl -sf <url> || echo fail` | завершить с ошибкой на не-2xx (для скриптов/healthcheck) |
 | 10 | DNS | `dig <host>` | A-запись домена |
 | 11 | DNS | `dig +short <host>` | только IP, без служебной информации |
 | 12 | DNS | `dig <host> MX` | запись конкретного типа |
 | 13 | DNS (альт.) | `nslookup <host>` | альтернатива dig |
 | 14 | DNS путь | `dig +trace <host>` | путь резолвинга от корневых серверов |
 | 15 | TLS | `openssl s_client -connect host:443 -servername host` | проверить TLS-хендшейк и сертификат |
-| 16 | TLS | `echo \| openssl s_client -connect host:443 2>/dev/null \| openssl x509 -noout -dates` | срок действия сертификата |
+| 16 | TLS | `echo | openssl s_client -connect host:443 2>/dev/null | openssl x509 -noout -dates` | срок действия сертификата |
 | 17 | firewall | `sudo ufw status` | текущие правила firewall |
 | 18 | firewall | `sudo ufw allow 443/tcp` | открыть порт |
 | 19 | iptables | `iptables -L -n -v` | правила фильтрации пакетов |

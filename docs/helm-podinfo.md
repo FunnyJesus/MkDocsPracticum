@@ -318,7 +318,7 @@ app.kubernetes.io/component: redis
 
 | Приём | Зачем |
 |---|---|
-| `trunc 63 \| trimSuffix "-"` | имя ресурса и DNS-метка в K8s — максимум 63 символа; после обрезки не должен остаться `-` на конце |
+| `trunc 63 | trimSuffix "-"` | имя ресурса и DNS-метка в K8s — максимум 63 символа; после обрезки не должен остаться `-` на конце |
 | `contains $name .Release.Name` | релиз `podinfo` даст `podinfo`, а не `podinfo-podinfo` |
 | `nameOverride` / `fullnameOverride` | можно поставить два релиза чарта рядом или подстроиться под чужие имена без правки шаблонов |
 | `trunc 57` в `redis.fullname` | 57 + `-redis` (6 символов) = 63 — суффикс не отрежется |
@@ -340,12 +340,12 @@ app.kubernetes.io/component: redis
 
 | Конструкция | Что делает | Пример применения |
 |---|---|---|
-| `include "x" . \| nindent N` | вставить именованный шаблон с отступом | метки, selector |
+| `include "x" . | nindent N` | вставить именованный шаблон с отступом | метки, selector |
 | `with .Values.x` | блок выводится, только если значение непустое; внутри `.` = это значение | `imagePullSecrets`, `resources`, `annotations` |
 | `if` / `if not` / `and` / `or` | условный вывод | `replicas`, `--cache-server`, ресурсы по `enabled` |
 | `range` | цикл по списку | хосты Ingress, события хуков, `extraArgs` |
 | `$` | корневой контекст внутри `range`/`with`, где `.` переопределён | `include "podinfo.fullname" $` в хуках |
-| `toYaml . \| nindent N` | вставить структуру из values как YAML-блок | `strategy`, `tls`, `resources` |
+| `toYaml . | nindent N` | вставить структуру из values как YAML-блок | `strategy`, `tls`, `resources` |
 | `required "msg" .Values.x` | упасть при рендере, если значения нет | `image.repository` |
 | `fail "msg"` | упасть при рендере с объяснением | несовместимые настройки |
 | `default` | значение по умолчанию | тег образа = `appVersion` |

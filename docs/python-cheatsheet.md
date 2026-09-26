@@ -12,13 +12,13 @@
 | `$1`, `$@` | `sys.argv[1]`, `sys.argv[1:]` или `argparse` |
 | `echo`, `printf` | `print()` |
 | `$(command)` | `subprocess.run([...], capture_output=True, text=True)` |
-| `command \| grep \| sort` | `subprocess` + методы строк, `sorted()` |
+| `command | grep | sort` | `subprocess` + методы строк, `sorted()` |
 | `VAR=value`, `export VAR` | `os.environ.get("VAR")` |
 | `if [ -f f ]; then` | `Path(f).exists()`, `Path(f).is_file()` |
 | `for i in list; do` | `for i in list:` |
 | `ls`, `cp`, `mkdir -p` | `pathlib.Path` (`.glob`, `.read_text`, `.mkdir`) |
 | `curl` | `requests.get/post` |
-| `cat file \| grep` | `Path(file).read_text()` + `.splitlines()` |
+| `cat file | grep` | `Path(file).read_text()` + `.splitlines()` |
 | `$?` (код возврата) | `SystemExit(code)`, `subprocess.returncode` |
 | `echo "$x" > file` | `Path(file).write_text(...)` |
 | комментарии `#` | `#` или docstring `"""..."""` |
