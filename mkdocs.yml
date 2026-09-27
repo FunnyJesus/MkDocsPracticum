@@ -80,8 +80,11 @@ nav:
       - message-queues.md
   - Мониторинг и логи:
       - monitoring.md
-      - monitoring-cheatsheet.md
+      - prometheus.md
+      - grafana.md
+      - vector.md
       - tracing.md
+      - monitoring-cheatsheet.md
   - SRE и надёжность:
       - sre.md
       - backup-dr.md

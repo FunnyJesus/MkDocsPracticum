@@ -2,7 +2,7 @@
 
 Быстрые запросы и команды для Prometheus, Grafana, логов.
 
-> Теория — [Мониторинг и логирование](monitoring.md).
+> Теория — [Мониторинг и логирование](monitoring.md). Настройка — [Prometheus](prometheus.md), [Grafana](grafana.md), [Vector](vector.md).
 
 ## PromQL
 
@@ -32,12 +32,46 @@ curl -s http://localhost:9090/api/v1/targets | jq '.data.activeTargets[] | {job:
 curl -s 'http://localhost:9090/api/v1/query?query=up' | jq
 ```
 
+## Проверка конфигов (promtool / amtool)
+
+```bash
+promtool check config prometheus.yml             # синтаксис prometheus.yml и правил
+promtool check rules rules/*.yml                 # только правила
+promtool test rules tests/*.yml                  # unit-тесты алертов
+curl -X POST http://localhost:9090/-/reload      # перечитать конфиг (--web.enable-lifecycle)
+amtool check-config alertmanager.yml             # конфиг Alertmanager
+amtool config routes test severity=critical      # в какой receiver попадёт алерт с такими лейблами
+```
+
 ## Alertmanager (amtool)
 
 ```bash
 amtool alert query                     # текущие активные алерты
 amtool silence add alertname=HighCPU   # заглушить алерт
 amtool silence query                   # список заглушек
+```
+
+## LogQL (Loki)
+
+| # | Запрос | Что делает |
+|---|---|---|
+| 1 | `{service="shop"}` | все логи сервиса |
+| 2 | `{service="shop", level="error"}` | фильтр по лейблам |
+| 3 | `{service="shop"} |= "timeout"` | строки, содержащие текст |
+| 4 | `{service="shop"} != "health"` | исключить строки |
+| 5 | `{service="shop"} |~ "5\\d\\d"` | фильтр по regex |
+| 6 | `{service="shop"} | json | status >= 500` | разобрать JSON и фильтровать по полю |
+| 7 | `sum by (service) (rate({env="prod"} |= "error" [5m]))` | ошибок в секунду по сервисам |
+| 8 | `topk(5, sum by (service) (count_over_time({env="prod"}[1h])))` | самые «шумные» сервисы за час |
+
+## Vector
+
+```bash
+vector validate /etc/vector/vector.yaml          # проверить конфиг
+vector validate --no-environment vector.yaml     # только синтаксис (в CI)
+vector test vector.yaml                          # unit-тесты transforms
+vector top                                       # статистика по компонентам (нужен api)
+vector tap <component>                           # события на выходе компонента
 ```
 
 ## Логи

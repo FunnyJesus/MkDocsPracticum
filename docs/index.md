@@ -18,7 +18,7 @@
 - [**Nginx**](nginx.md) — веб-сервер и reverse proxy: location, upstream, HTTPS и certbot, лимиты, разбор 502/504
 - [**Сети**](networking.md) — OSI/TCP-IP, TCP vs UDP, DNS, HTTP/HTTPS, TLS, firewall, диагностика
 - [**Базы данных**](databases.md) — PostgreSQL для DevOps: доступы, бэкапы и PITR, репликация, PgBouncer, диагностика, миграции; [очереди сообщений: Kafka и RabbitMQ](message-queues.md)
-- [**Мониторинг и логи**](monitoring.md) — Prometheus, PromQL, Grafana, Alertmanager, ELK/Loki, SLI/SLO/SLA; [трейсинг и OpenTelemetry](tracing.md)
+- [**Мониторинг и логи**](monitoring.md) — обзор стека, ELK/Loki, SLI/SLO/SLA, учебный стенд в Docker Compose; настройка: [Prometheus и Alertmanager](prometheus.md), [Grafana](grafana.md), [Vector](vector.md), [трейсинг и OpenTelemetry](tracing.md)
 - [**SRE и надёжность**](sre.md) — error budget, burn rate, инциденты, on-call, runbook, blameless postmortem; [бэкапы и DR](backup-dr.md); [10 типовых инцидентов](incidents-practice.md)
 - [**Облака**](cloud.md) — IaaS/PaaS/SaaS, IAM, VPC, object storage, managed vs self-hosted
 - [**Безопасность**](security.md) — секреты, сканирование уязвимостей, SSH-хардening, RBAC, NetworkPolicy; [секреты: Vault, External Secrets, Sealed Secrets, SOPS](secrets.md)
