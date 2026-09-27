@@ -5,6 +5,7 @@
 ## Разделы
 
 - [**Что такое DevOps**](devops.md) — зачем нужен DevOps, CALMS, жизненный цикл, метрики DORA, роли DevOps/SRE/Platform, карта навыков и порядок изучения
+- [**Собеседование**](interview-mantra.md) — мантра на каждый день: 160+ вопросов с короткими ответами; [подробные ответы со ссылками](interview.md)
 - [**Linux**](linux.md) — основы ОС: компоненты, процессы, базовые команды (`ls`, `cat`, `grep`, `find`, `ps`, `systemctl`, `tar`, сеть и др.); [диагностика и производительность](linux-troubleshooting.md), [обработка текста: grep, sed, awk, jq, yq](text-processing.md), [SSH: config, бастион, туннели](ssh.md), [tmux и vim](tmux-vim.md)
 - [**Bash Script**](bash-scripts.md) — написание скриптов: переменные, массивы, операторы `|`, `||`, `&&`, циклы, функции, if-else, case
 - [**Makefile**](makefile.md) — автоматизация команд проекта: цели, зависимости, `.PHONY`, переменные, `make help`, Makefile для Docker/Terraform/Helm
@@ -22,7 +23,7 @@
 - [**SRE и надёжность**](sre.md) — error budget, burn rate, инциденты, on-call, runbook, blameless postmortem; [бэкапы и DR](backup-dr.md); [10 типовых инцидентов](incidents-practice.md)
 - [**Облака**](cloud.md) — IaaS/PaaS/SaaS, IAM, VPC, object storage, managed vs self-hosted
 - [**Безопасность**](security.md) — секреты, сканирование уязвимостей, SSH-хардening, RBAC, NetworkPolicy; [секреты: Vault, External Secrets, Sealed Secrets, SOPS](secrets.md)
-- [**Практика**](project-e2e.md) — сквозной проект для портфолио через весь стек; [вопросы к собеседованию](interview.md)
+- [**Практика**](project-e2e.md) — сквозной проект для портфолио через весь стек
 
 ## Подход
 

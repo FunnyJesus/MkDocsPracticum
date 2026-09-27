@@ -5,6 +5,9 @@ theme:
 nav:
   - Главная: index.md
   - Что такое DevOps: devops.md
+  - Собеседование:
+      - interview-mantra.md
+      - interview.md
   - Git:
       - git.md
       - git-commands.md
@@ -96,7 +99,6 @@ nav:
       - secrets.md
   - Практика:
       - project-e2e.md
-      - interview.md
 markdown_extensions:
   - admonition
   - pymdownx.details
