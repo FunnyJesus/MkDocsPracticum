@@ -94,6 +94,7 @@ nav:
       - incidents-practice.md
   - Облака:
       - cloud.md
+      - cloud-init.md
   - Безопасность:
       - security.md
       - secrets.md
