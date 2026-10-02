@@ -14,7 +14,7 @@
 - [**IaC (Terraform)**](iac.md) — инфраструктура как код: блоки (resource, provider, variable), команды terraform; [продвинутый Terraform](terraform-advanced.md) — remote state, модули, for_each, импорт, CI
 - [**Docker**](docker.md) — контейнеризация: команды, Dockerfile, тома, сети, встроенный DNS; [Container Registry](registry.md) — теги, retention, доступ из K8s, подпись образов
 - [**Kubernetes**](k8s.md) — оркестрация контейнеров: кластер, pods, deployments, services, ingress, k9s; [Gateway API](gateway-api.md) — замена Ingress и ingress-nginx; [Kustomize](kustomize.md) — base/overlays без шаблонов
-- [**Helm**](helm.md) — пакетный менеджер K8s: чарты, шаблоны, values по окружениям, релизы и откаты; [production-ready чарт podinfo](helm-podinfo.md) — helpers, HPA, PDB, Redis, хуки и тесты
+- [**Helm**](helm.md) — пакетный менеджер K8s: чарты, шаблоны, values по окружениям, релизы и откаты; [production-ready чарт podinfo](helm-podinfo.md) — helpers, HPA, PDB, Redis, хуки и тесты; [карта: где какой параметр в манифесте и в Helm](k8s-yaml-map.md); [практикум на своём чарте](helm-practice.md)
 - [**GitOps / Argo CD**](gitops.md) — pull-деплой из git, Application, drift и selfHeal, app-of-apps, ApplicationSet
 - [**Nginx**](nginx.md) — веб-сервер и reverse proxy: location, upstream, HTTPS и certbot, лимиты, разбор 502/504
 - [**Сети**](networking.md) — OSI/TCP-IP, TCP vs UDP, DNS, HTTP/HTTPS, TLS, firewall, диагностика

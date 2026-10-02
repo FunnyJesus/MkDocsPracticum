@@ -69,6 +69,8 @@ nav:
       - helm.md
       - helm-podinfo.md
       - helm-cheatsheet.md
+      - k8s-yaml-map.md
+      - helm-practice.md
   - GitOps (Argo CD):
       - gitops.md
       - argocd-cheatsheet.md
