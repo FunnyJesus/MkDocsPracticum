@@ -1,0 +1,4956 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://FunnyJesus.github.io/MkDocsPracticum/k8s-yaml-map/">
+      
+      
+        <link rel="prev" href="../helm-cheatsheet/">
+      
+      
+        <link rel="next" href="../helm-practice/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Карта: где какой параметр в манифесте и в Helm - MkDocsPracticum</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#helm" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MkDocsPracticum" class="md-header__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MkDocsPracticum
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Карта: где какой параметр в манифесте и в Helm
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MkDocsPracticum" class="md-nav__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    MkDocsPracticum
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Что такое DevOps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Собеседование
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Собеседование
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interview-mantra/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мантра: вопросы на каждый день
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Вопросы к собеседованию DevOps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Git
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux & Command
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux & Command
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-filesystem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: структура каталогов и куда что класть
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: диагностика и производительность
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text-processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обработка текста: grep, regex, sed, awk, jq, yq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text-processing-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обработка текста: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSH глубже: config, бастион, туннели, agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tmux-vim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmux и vim: минимум для работы на серверах
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD (Continuous Delivery)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CD (Continuous Delivery)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Continuous Delivery / Deployment (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: стратегии деплоя (подробно)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: шпаргалка топ-20
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bash Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makefile
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Makefile
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../makefile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makefile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../makefile-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makefile: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    IaC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaС
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: команды Terraform с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: шпаргалка топ-20 команд Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terraform-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terraform: продвинутый уровень
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ansible
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Container Registry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker Compose
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-compose/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Шпаргалка: сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load-balancing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Балансировка нагрузки (Load Balancing)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kubernetes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k9s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    k9s — быстрая навигация по кластеру
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-loadbalancer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoadBalancer в Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gateway-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway API — замена Ingress (и ingress-nginx)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kustomize/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kustomize
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Helm
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-podinfo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm: production-ready чарт (podinfo)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm: шпаргалка команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Карта: где какой параметр в манифесте и в Helm
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Карта: где какой параметр в манифесте и в Helm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Любой манифест: четыре поля верхнего уровня
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Где взять правильную структуру, а не вспоминать
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Карта 1. Вложенность Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Карта 1. Вложенность Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Правило уровней
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Парные параметры — два уровня
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Метки: три места
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Остальные объекты чарта
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Остальные объекты чарта">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hpa-pdb-configmap-secret-serviceaccount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HPA, PDB, ConfigMap, Secret, ServiceAccount
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Карта 2. Кто на кого ссылается
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-helm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Карта 3. Путь значения в Helm
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Карта 3. Путь значения в Helm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nindent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Как считать nindent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toyaml-quote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        toYaml, простое значение и quote
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Управляющие конструкции
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Как сливаются values
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Точки расширения
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Алгоритм: добавляю новый параметр
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Инструменты, чтобы не угадывать
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Частые ошибки
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-practice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практикум: Helm на k8s-platform-lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitOps (Argo CD)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GitOps (Argo CD)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitOps и Argo CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../argocd-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Argo CD: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Nginx
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nginx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nginx-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Сети
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_20" >
+        
+          
+          <label class="md-nav__link" for="__nav_20" id="__nav_20_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Базы данных и очереди
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_20_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_20">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Базы данных и очереди
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../databases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Базы данных для DevOps (PostgreSQL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postgres-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PostgreSQL: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../message-queues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Очереди сообщений: Kafka и RabbitMQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_21" >
+        
+          
+          <label class="md-nav__link" for="__nav_21" id="__nav_21_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг и логи
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_21_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_21">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Мониторинг и логи
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг и логирование
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prometheus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus и Alertmanager: настройка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../grafana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grafana: настройка и provisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector: сбор и обработка логов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Трейсинг и OpenTelemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22" >
+        
+          
+          <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SRE и надёжность
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_22">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SRE и надёжность
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SRE: инциденты, on-call, postmortem, error budget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backup-dr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Бэкапы и Disaster Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../incidents-practice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практика: 10 типовых инцидентов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Облака
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Облака
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Облака
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud-init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cloud-init: первичная настройка виртуальных машин
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openstack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenStack: работа через UI (Horizon) и CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openstack-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenStack: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Безопасность
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Безопасность
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Безопасность (DevSecOps)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../secrets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Секреты: Vault, External Secrets, Sealed Secrets, SOPS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практика
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Практика
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-e2e/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сквозной проект: от кода до мониторинга
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Любой манифест: четыре поля верхнего уровня
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Где взять правильную структуру, а не вспоминать
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Карта 1. Вложенность Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Карта 1. Вложенность Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Правило уровней
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Парные параметры — два уровня
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Метки: три места
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Остальные объекты чарта
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Остальные объекты чарта">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hpa-pdb-configmap-secret-serviceaccount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HPA, PDB, ConfigMap, Secret, ServiceAccount
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Карта 2. Кто на кого ссылается
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-helm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Карта 3. Путь значения в Helm
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Карта 3. Путь значения в Helm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nindent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Как считать nindent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toyaml-quote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        toYaml, простое значение и quote
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Управляющие конструкции
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Как сливаются values
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Точки расширения
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Алгоритм: добавляю новый параметр
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Инструменты, чтобы не угадывать
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Частые ошибки
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="helm">Карта: где какой параметр в манифесте и в Helm</h1>
+<blockquote>
+<p>Практика на своём чарте — <a href="../helm-practice/">Практикум: Helm на k8s-platform-lab</a>. Объекты Kubernetes — <a href="../k8s/">K8s</a>. Основы Helm — <a href="../helm/">Helm</a>, <a href="../helm-podinfo/">production-ready чарт</a>.</p>
+</blockquote>
+<p>Чтобы не гадать, куда вписать параметр, нужно держать в голове три карты:</p>
+<ol>
+<li><strong>Вложенность объекта</strong> — на каком уровне живёт поле (Deployment → под → контейнер).</li>
+<li><strong>Связи между объектами</strong> — кто на кого ссылается по имени, метке или порту.</li>
+<li><strong>Путь значения в Helm</strong> — <code>values.yaml</code> → строка шаблона → место в итоговом манифесте.</li>
+</ol>
+<p>Ниже — все три, с примерами из чарта <code>k8s-platform-lab/charts/app</code>.</p>
+<h2 id="_1">Любой манифест: четыре поля верхнего уровня</h2>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span><span class="w">        </span><span class="c1"># группа/версия API — из документации или kubectl explain</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span><span class="w">           </span><span class="c1"># тип объекта</span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w">                  </span><span class="c1"># кто это: name, namespace, labels, annotations</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="nt">spec</span><span class="p">:</span><span class="w">                      </span><span class="c1"># что хотим получить — у каждого kind своё</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="c1"># status: ...              # заполняет Kubernetes, сами не пишем</span>
+</code></pre></div>
+<p><code>metadata</code> устроен одинаково у всех объектов. <code>spec</code> — у каждого свой, его и нужно знать.</p>
+<h2 id="_2">Где взять правильную структуру, а не вспоминать</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. сгенерировать скелет — kubectl сам расставит уровни</span>
+kubectl<span class="w"> </span>create<span class="w"> </span>deployment<span class="w"> </span>app<span class="w"> </span>--image<span class="o">=</span>nginx<span class="w"> </span>--port<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span>-o<span class="w"> </span>yaml
+kubectl<span class="w"> </span>create<span class="w"> </span>service<span class="w"> </span>clusterip<span class="w"> </span>app<span class="w"> </span>--tcp<span class="o">=</span><span class="m">80</span>:8000<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span>-o<span class="w"> </span>yaml
+kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>app<span class="w"> </span>--from-literal<span class="o">=</span><span class="nv">LOG_LEVEL</span><span class="o">=</span>INFO<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span>-o<span class="w"> </span>yaml
+kubectl<span class="w"> </span>create<span class="w"> </span>ingress<span class="w"> </span>app<span class="w"> </span>--rule<span class="o">=</span><span class="s2">"app.localhost/*=app:80"</span><span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span>-o<span class="w"> </span>yaml
+
+<span class="c1"># 2. посмотреть, какие поля бывают на уровне (нужен запущенный кластер — kind подойдёт)</span>
+kubectl<span class="w"> </span>explain<span class="w"> </span>deployment.spec
+kubectl<span class="w"> </span>explain<span class="w"> </span>deployment.spec.template.spec<span class="w">              </span><span class="c1"># уровень пода</span>
+kubectl<span class="w"> </span>explain<span class="w"> </span>deployment.spec.template.spec.containers<span class="w">   </span><span class="c1"># уровень контейнера</span>
+kubectl<span class="w"> </span>explain<span class="w"> </span>pod.spec.containers.resources<span class="w"> </span>--recursive<span class="w">  </span><span class="c1"># всё дерево поля</span>
+
+<span class="c1"># 3. подсмотреть у работающего объекта</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>deployment<span class="w"> </span>app<span class="w"> </span>-n<span class="w"> </span>app<span class="w"> </span>-o<span class="w"> </span>yaml
+</code></pre></div>
+<blockquote>
+<p><code>kubectl explain</code> — главный инструмент. Не знаешь, где <code>tolerations</code>? <code>kubectl explain pod.spec.tolerations</code> — значит, на уровне пода (<code>template.spec</code>), а не контейнера.</p>
+</blockquote>
+<h2 id="1-deployment">Карта 1. Вложенность Deployment</h2>
+<div class="highlight"><pre><span></span><code>Deployment
+├── metadata                         ← САМ Deployment: name, labels, annotations
+└── spec                             ← уровень Deployment
+    ├── replicas                       сколько подов (не пишем, если есть HPA)
+    ├── selector.matchLabels           каких подов «мои» — НЕИЗМЕНЯЕМ после создания
+    ├── strategy                       RollingUpdate: maxSurge / maxUnavailable
+    ├── revisionHistoryLimit
+    └── template                     ← ШАБЛОН ПОДА
+        ├── metadata                 ← метки и аннотации ПОДА
+        │   ├── labels                 должны включать selector.matchLabels
+        │   └── annotations            checksum/config, prometheus.io/scrape
+        └── spec                     ← уровень ПОДА (общее для всех контейнеров, планирование)
+            ├── serviceAccountName
+            ├── imagePullSecrets
+            ├── securityContext        podSecurityContext: runAsUser, fsGroup, seccompProfile
+            ├── terminationGracePeriodSeconds
+            ├── nodeSelector / affinity / tolerations / topologySpreadConstraints
+            ├── priorityClassName
+            ├── volumes                ОБЪЯВЛЕНИЕ томов (emptyDir, configMap, secret, PVC)
+            ├── initContainers[]       выполняются до основных
+            └── containers[]         ← уровень КОНТЕЙНЕРА (один процесс)
+                ├── name, image, imagePullPolicy
+                ├── command / args
+                ├── ports[]            containerPort + name
+                ├── env[] / envFrom[]
+                ├── resources          requests / limits
+                ├── startupProbe / livenessProbe / readinessProbe
+                ├── lifecycle          preStop / postStart
+                ├── securityContext    readOnlyRootFilesystem, capabilities, allowPrivilegeEscalation
+                └── volumeMounts[]     МОНТИРОВАНИЕ объявленных томов
+</code></pre></div>
+<h3 id="_3">Правило уровней</h3>
+<table>
+<thead>
+<tr>
+<th>Вопрос</th>
+<th>Уровень</th>
+<th>Примеры</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Касается <strong>всего Deployment</strong> (сколько, как обновлять)?</td>
+<td><code>spec</code></td>
+<td><code>replicas</code>, <code>strategy</code>, <code>selector</code></td>
+</tr>
+<tr>
+<td>Касается <strong>пода целиком</strong>: где запускать, от чьего имени, общие тома?</td>
+<td><code>spec.template.spec</code></td>
+<td><code>nodeSelector</code>, <code>tolerations</code>, <code>affinity</code>, <code>serviceAccountName</code>, <code>volumes</code>, <code>imagePullSecrets</code>, <code>terminationGracePeriodSeconds</code></td>
+</tr>
+<tr>
+<td>Касается <strong>одного процесса</strong>: образ, ресурсы, проверки, переменные?</td>
+<td><code>containers[]</code></td>
+<td><code>image</code>, <code>resources</code>, <code>env</code>, пробы, <code>ports</code>, <code>volumeMounts</code>, <code>lifecycle</code></td>
+</tr>
+<tr>
+<td>Это <strong>метка или аннотация</strong> пода (для Service, Prometheus, перезапуска)?</td>
+<td><code>spec.template.metadata</code></td>
+<td><code>labels</code>, <code>annotations</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">Парные параметры — два уровня</h3>
+<p>Самые частые ошибки — с параметрами, у которых есть «половинки» на разных уровнях:</p>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Уровень пода (<code>template.spec</code>)</th>
+<th>Уровень контейнера (<code>containers[]</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Тома</td>
+<td><code>volumes:</code> — <strong>что</strong> за том</td>
+<td><code>volumeMounts:</code> — <strong>куда</strong> смонтировать</td>
+</tr>
+<tr>
+<td>securityContext</td>
+<td><code>runAsUser</code>, <code>runAsGroup</code>, <code>fsGroup</code>, <code>seccompProfile</code>, <code>runAsNonRoot</code></td>
+<td><code>readOnlyRootFilesystem</code>, <code>capabilities</code>, <code>allowPrivilegeEscalation</code> (и может переопределить <code>runAsUser</code>)</td>
+</tr>
+<tr>
+<td>Секреты</td>
+<td><code>imagePullSecrets</code> — чтобы скачать образ</td>
+<td><code>env.valueFrom.secretKeyRef</code> / <code>envFrom.secretRef</code> — чтобы передать процессу</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">                     </span><span class="c1"># уровень пода: объявили</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tmp</span>
+<span class="w">          </span><span class="nt">emptyDir</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">          </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">            </span><span class="c1"># уровень контейнера: смонтировали</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tmp</span><span class="w">            </span><span class="c1"># имя совпадает с volumes[].name</span>
+<span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp</span>
+</code></pre></div>
+<h3 id="_5">Метки: три места</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">                          </span><span class="c1"># 1. метки Deployment — для людей и поиска (kubectl get deploy -l ...)</span>
+<span class="w">    </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">                   </span><span class="c1"># 2. каких подов Deployment считает своими</span>
+<span class="w">      </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">      </span><span class="nt">app.kubernetes.io/instance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">                      </span><span class="c1"># 3. метки пода — ДОЛЖНЫ содержать всё из selector.matchLabels</span>
+<span class="w">        </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">        </span><span class="nt">app.kubernetes.io/instance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">        </span><span class="nt">app.kubernetes.io/version</span><span class="p">:</span><span class="w"> </span><span class="s">"0.1.0"</span><span class="w">   </span><span class="c1"># можно больше, чем в selector</span>
+</code></pre></div>
+<blockquote>
+<p>В selector кладут только <strong>стабильные</strong> метки (<code>name</code>, <code>instance</code>). Версию — нельзя: selector нельзя изменить у существующего Deployment, и при смене версии <code>helm upgrade</code> упадёт с <code>field is immutable</code>. Поэтому в чарте два хелпера: <code>app.selectorLabels</code> (только стабильные) и <code>app.labels</code> (все).</p>
+</blockquote>
+<h2 id="_6">Остальные объекты чарта</h2>
+<h3 id="service">Service</h3>
+<div class="highlight"><pre><span></span><code>Service
+├── metadata
+└── spec
+    ├── type                 ClusterIP / NodePort / LoadBalancer
+    ├── selector             метки ПОДОВ (не Deployment!)
+    └── ports[]
+        ├── name             http — на него ссылаются ServiceMonitor, Ingress (по номеру/имени)
+        ├── port             порт Service (80) — на него ходят клиенты
+        └── targetPort       порт контейнера: число (8000) или ИМЯ (http)
+</code></pre></div>
+<h3 id="ingress">Ingress</h3>
+<div class="highlight"><pre><span></span><code>Ingress
+├── metadata.annotations     настройки контроллера (nginx.ingress.kubernetes.io/...)
+└── spec
+    ├── ingressClassName     какой контроллер обрабатывает (nginx)
+    ├── tls[]                hosts + secretName
+    └── rules[]
+        ├── host
+        └── http.paths[]
+            ├── path, pathType
+            └── backend.service
+                ├── name     имя Service
+                └── port.number / port.name   порт SERVICE (80), не контейнера
+</code></pre></div>
+<h3 id="hpa-pdb-configmap-secret-serviceaccount">HPA, PDB, ConfigMap, Secret, ServiceAccount</h3>
+<div class="highlight"><pre><span></span><code>HorizontalPodAutoscaler (autoscaling/v2)
+└── spec
+    ├── scaleTargetRef       apiVersion + kind + name Deployment
+    ├── minReplicas / maxReplicas
+    └── metrics[]            type: Resource → resource.name: cpu → target.averageUtilization: 70
+
+PodDisruptionBudget (policy/v1)
+└── spec
+    ├── minAvailable / maxUnavailable   (одно из двух)
+    └── selector.matchLabels            метки подов
+
+ConfigMap                    Secret                       ServiceAccount
+└── data:                    ├── type: Opaque             └── automountServiceAccountToken
+    KEY: "строка"            └── stringData:                  (на верхнем уровне, не в spec!)
+                                 KEY: "строка"
+</code></pre></div>
+<blockquote>
+<p>У ConfigMap, Secret и ServiceAccount <strong>нет</strong> <code>spec</code> — данные лежат прямо на верхнем уровне (<code>data</code>, <code>stringData</code>, <code>automountServiceAccountToken</code>). Частая ошибка — написать <code>spec: data: ...</code>.</p>
+</blockquote>
+<h2 id="2">Карта 2. Кто на кого ссылается</h2>
+<div class="highlight"><pre><span></span><code>                    ┌────────────────────────── Ingress ──────────────────────────┐
+                    │ backend.service.name: app       backend.service.port: 80    │
+                    └──────────────┬──────────────────────────────┬───────────────┘
+                                   │ имя                          │ номер
+                    ┌──────────────▼──────────────────────────────▼───────────────┐
+ ServiceMonitor ───►│ Service  metadata.name: app     ports: port 80, name http   │
+ selector → метки   │          selector: {name, instance}       targetPort: http  │
+ Service, port: http└──────────────┬──────────────────────────────┬───────────────┘
+                                   │ метки                        │ имя порта
+                    ┌──────────────▼──────────────────────────────▼───────────────┐
+ PDB selector ─────►│ Pod  labels: {name, instance, ...}   ports: name http, 8000 │
+ (метки)            │      envFrom.configMapRef.name: app ──────► ConfigMap app   │
+                    │      secretKeyRef.name: app ──────────────► Secret app      │
+                    │      serviceAccountName: app ─────────────► ServiceAccount  │
+                    └──────────────▲──────────────────────────────────────────────┘
+                                   │ template
+ HPA scaleTargetRef.name: app ───► Deployment app (selector = метки пода)
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Связь</th>
+<th>Чем связаны</th>
+<th>Что будет, если не совпало</th>
+<th>Как проверить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Service → поды</td>
+<td><code>selector</code> = метки пода</td>
+<td>Service без endpoints → 503 от Ingress</td>
+<td><code>kubectl get endpoints app -n app</code> — пусто?</td>
+</tr>
+<tr>
+<td>Service → порт контейнера</td>
+<td><code>targetPort: http</code> = <code>ports[].name</code></td>
+<td>endpoints пустые / connection refused</td>
+<td><code>kubectl describe svc app</code> → Endpoints</td>
+</tr>
+<tr>
+<td>Ingress → Service</td>
+<td><code>backend.service.name</code> + <code>port.number</code> = <code>metadata.name</code> + <code>ports[].port</code></td>
+<td>503 / <code>service not found</code> в логах контроллера</td>
+<td><code>kubectl describe ingress app</code></td>
+</tr>
+<tr>
+<td>Deployment → поды</td>
+<td><code>selector.matchLabels</code> ⊂ <code>template.metadata.labels</code></td>
+<td>ошибка при создании: <code>selector does not match template labels</code></td>
+<td><code>helm template</code> + <code>kubectl apply --dry-run=server</code></td>
+</tr>
+<tr>
+<td>HPA → Deployment</td>
+<td><code>scaleTargetRef.name</code></td>
+<td>HPA <code>unknown</code>, не масштабирует</td>
+<td><code>kubectl describe hpa</code></td>
+</tr>
+<tr>
+<td>PDB → поды</td>
+<td><code>selector</code> = метки пода</td>
+<td>PDB не защищает ничего (<code>ALLOWED DISRUPTIONS</code> странный)</td>
+<td><code>kubectl get pdb</code></td>
+</tr>
+<tr>
+<td>Под → ConfigMap/Secret</td>
+<td><code>configMapRef.name</code> / <code>secretKeyRef.name</code> + <code>key</code></td>
+<td>под в <code>CreateContainerConfigError</code></td>
+<td><code>kubectl describe pod</code> → Events</td>
+</tr>
+<tr>
+<td>ServiceMonitor → Service</td>
+<td><code>selector</code> = метки <strong>Service</strong>, <code>endpoints.port</code> = <strong>имя</strong> порта Service</td>
+<td>Prometheus не видит цель</td>
+<td>Prometheus → Status → Targets</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Helm и <code>helm lint</code> эти связи <strong>не проверяют</strong> — шаблон с <code>targetPort: web</code> при порте <code>http</code> отрендерится без ошибок. Поэтому все имена и метки в чарте берутся из хелперов (<code>include "app.fullname"</code>, <code>include "app.selectorLabels"</code>), а не пишутся руками в нескольких местах.</p>
+</blockquote>
+<h2 id="3-helm">Карта 3. Путь значения в Helm</h2>
+<p>У каждого параметра три точки. Пример — <code>resources</code> из твоего чарта:</p>
+<div class="highlight"><pre><span></span><code>① values.yaml                        ② templates/deployment.yaml               ③ итоговый манифест (helm template)
+resources:                           {{- with .Values.resources }}            spec:
+  requests:                          resources:                                 template:
+    cpu: 100m        ──────────────►   {{- toYaml . | nindent 12 }}  ────────►    spec:
+    memory: 128Mi                    {{- end }}                                     containers:
+                                                                                    - resources:
+                                                                                        requests:
+                                                                                          cpu: 100m
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Значение в values</th>
+<th>Строка шаблона</th>
+<th>Путь в итоговом манифесте</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image.repository</code>, <code>image.tag</code></td>
+<td><code>image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"</code></td>
+<td><code>spec.template.spec.containers[0].image</code></td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td><code>toYaml . | nindent 12</code> под <code>resources:</code></td>
+<td><code>...containers[0].resources</code></td>
+</tr>
+<tr>
+<td><code>readinessProbe</code></td>
+<td><code>toYaml . | nindent 12</code> под <code>readinessProbe:</code></td>
+<td><code>...containers[0].readinessProbe</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext</code></td>
+<td><code>toYaml . | nindent 8</code> под <code>securityContext:</code> на уровне пода</td>
+<td><code>spec.template.spec.securityContext</code></td>
+</tr>
+<tr>
+<td><code>securityContext</code></td>
+<td><code>toYaml . | nindent 12</code> под контейнерным <code>securityContext:</code></td>
+<td><code>...containers[0].securityContext</code></td>
+</tr>
+<tr>
+<td><code>config.LOG_LEVEL</code></td>
+<td><code>range $k, $v := .Values.config</code> в configmap.yaml</td>
+<td>ConfigMap <code>data.LOG_LEVEL</code> → в под через <code>envFrom</code></td>
+</tr>
+<tr>
+<td><code>replicaCount</code></td>
+<td><code>{{- if not .Values.autoscaling.enabled }} replicas: ...</code></td>
+<td><code>spec.replicas</code> — <strong>только если HPA выключен</strong></td>
+</tr>
+<tr>
+<td><code>podAnnotations</code></td>
+<td><code>toYaml . | nindent 8</code> под <code>template.metadata.annotations</code></td>
+<td><code>spec.template.metadata.annotations</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Имена ключей в <code>values.yaml</code> — <strong>любые</strong>, их придумывает автор чарта. Kubernetes их никогда не видит. Значение начинает что-то значить только тогда, когда шаблон поставит его на нужный уровень манифеста. Поэтому сначала решаешь, <strong>где в манифесте</strong> должно оказаться поле (карта 1), а потом — как назвать ключ в values и какой строкой шаблона его туда перенести.</p>
+</blockquote>
+<h3 id="nindent">Как считать nindent</h3>
+<p><code>nindent N</code> — перевести строку и сдвинуть каждую строку вставки на <code>N</code> пробелов. Правило:</p>
+<blockquote>
+<p><strong>N = отступ строки с ключом + 2.</strong></p>
+</blockquote>
+<p>Линейка по твоему <code>deployment.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code>0   apiVersion / kind / metadata / spec
+2     name / labels: ............................... labels → nindent 4
+2     replicas / selector / template
+4       matchLabels: ............................... → nindent 6
+4       metadata / spec (пода)
+6         annotations: / labels: ................... → nindent 8
+6         securityContext: / volumes: / nodeSelector: (уровень пода) → nindent 8
+6         containers:
+8           - name: app ............................ элемент списка контейнеров (extraContainers → nindent 8)
+10            resources: / securityContext: / readinessProbe: / env: → nindent 12
+12              requests: / - name: APP_VERSION
+</code></pre></div>
+<p>Проверка: отрендерь только один файл и посмотри глазами.</p>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>template<span class="w"> </span>app<span class="w"> </span>charts/app<span class="w"> </span>--show-only<span class="w"> </span>templates/deployment.yaml
+</code></pre></div>
+<h3 id="toyaml-quote">toYaml, простое значение и quote</h3>
+<table>
+<thead>
+<tr>
+<th>Что вставляем</th>
+<th>Как</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Словарь или список целиком</td>
+<td><code>toYaml . | nindent N</code></td>
+<td><code>resources</code>, пробы, <code>tolerations</code>, <code>nodeSelector</code></td>
+</tr>
+<tr>
+<td>Одно число</td>
+<td>как есть</td>
+<td><code>replicas: {{ .Values.replicaCount }}</code></td>
+</tr>
+<tr>
+<td>Одна строка</td>
+<td><strong><code>| quote</code></strong></td>
+<td><code>value: {{ .Values.logLevel | quote }}</code></td>
+</tr>
+<tr>
+<td>Строка внутри строки</td>
+<td>в кавычках в шаблоне</td>
+<td><code>image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Почему <code>quote</code> важен.</strong> YAML сам угадывает тип: <code>on</code>, <code>off</code>, <code>yes</code>, <code>true</code> становятся булевыми, <code>1.10</code> — числом <code>1.1</code>, <code>0123</code> — числом. Поля Kubernetes вроде <code>env[].value</code>, <code>ConfigMap.data</code>, аннотации — <strong>только строки</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># values.yaml: featureFlag: "on"       ← в values это строка</span>
+<span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.featureFlag</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w">       </span><span class="c1"># отрендерится: value: on   → Kubernetes увидит bool → ошибка</span>
+<span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.featureFlag | quote</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w">   </span><span class="c1"># value: "on"  → правильно</span>
+</code></pre></div>
+<h3 id="_7">Управляющие конструкции</h3>
+<table>
+<thead>
+<tr>
+<th>Конструкция</th>
+<th>Что делает</th>
+<th>Пример из чарта</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{- if .Values.x.enabled }} ... {{- end }}</code></td>
+<td>включить блок или целый объект</td>
+<td><code>hpa.yaml</code>, <code>pdb.yaml</code>, <code>ingress.yaml</code></td>
+</tr>
+<tr>
+<td><code>{{- with .Values.x }} ... {{- end }}</code></td>
+<td>если значение не пустое — вставить и <strong>сменить <code>.</code> на это значение</strong></td>
+<td><code>with .Values.resources</code> → внутри <code>.</code> = resources</td>
+</tr>
+<tr>
+<td><code>{{- range .Values.list }} ... {{- end }}</code></td>
+<td>цикл; внутри <code>.</code> = текущий элемент</td>
+<td><code>range .Values.ingress.hosts</code></td>
+</tr>
+<tr>
+<td><code>{{- range $k, $v := .Values.map }}</code></td>
+<td>цикл по словарю</td>
+<td>ConfigMap из <code>config</code></td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>корень контекста — доступен <strong>всегда</strong>, даже внутри <code>with</code>/<code>range</code></td>
+<td><code>include "app.fullname" $</code> внутри <code>range</code> в ingress.yaml</td>
+</tr>
+<tr>
+<td><code>{{ include "app.labels" . }}</code></td>
+<td>вставить хелпер из <code>_helpers.tpl</code></td>
+<td>метки, имена</td>
+</tr>
+<tr>
+<td><code>default "x" .Values.y</code></td>
+<td>значение по умолчанию</td>
+<td><code>image.tag | default .Chart.AppVersion</code></td>
+</tr>
+<tr>
+<td><code>required "msg" .Values.y</code></td>
+<td>упасть с понятной ошибкой, если не задано</td>
+<td><code>{{ required "image.repository обязателен" .Values.image.repository }}</code></td>
+</tr>
+<tr>
+<td><code>{{-</code> / <code>-}}</code></td>
+<td>удалить пробелы и перевод строки слева / справа</td>
+<td>почти всегда <code>{{-</code> в начале строки</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Главная ловушка — смена <code>.</code> внутри <code>with</code> и <code>range</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">{{</span><span class="nv">- with .Values.ingress</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="nt">ingressClassName</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.className</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w">            </span><span class="c1"># ✓ . = .Values.ingress</span>
+<span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.service.port</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w">              </span><span class="c1"># ✗ внутри with нет .Values</span>
+<span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">$.Values.service.port</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w">             </span><span class="c1"># ✓ $ — корень</span>
+<span class="p p-Indicator">{{</span><span class="nv">- end</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</code></pre></div>
+<p>Ошибка в первом случае (настоящая, из <code>helm template</code>):</p>
+<div class="highlight"><pre><span></span><code>Error: app/templates/ingress.yaml:14:47
+  executing "app/templates/ingress.yaml" at &lt;.Values.service.port&gt;:
+    nil pointer evaluating interface {}.service
+</code></pre></div>
+<h3 id="values">Как сливаются values</h3>
+<p>Порядок приоритета (последний побеждает):</p>
+<div class="highlight"><pre><span></span><code>values.yaml чарта  &lt;  -f values-prod.yaml  &lt;  -f values-local.yaml  &lt;  --set key=value
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Тип</th>
+<th>Как сливается</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Словарь (map)</strong></td>
+<td><strong>рекурсивно</strong>, по ключам</td>
+<td>в prod задал только <code>resources.limits.memory</code> — <code>limits.cpu</code> останется из values.yaml</td>
+</tr>
+<tr>
+<td><strong>Список</strong></td>
+<td><strong>заменяется целиком</strong></td>
+<td><code>ingress.hosts</code> в prod полностью заменяет список из values.yaml</td>
+</tr>
+<tr>
+<td><code>null</code></td>
+<td><strong>удаляет</strong> ключ</td>
+<td><code>resources: {limits: {cpu: null}}</code> — убрать лимит CPU</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>template<span class="w"> </span>app<span class="w"> </span>charts/app<span class="w"> </span>-f<span class="w"> </span>values-prod.yaml<span class="w"> </span>--show-only<span class="w"> </span>templates/deployment.yaml<span class="w">   </span><span class="c1"># посмотреть итог</span>
+helm<span class="w"> </span>get<span class="w"> </span>values<span class="w"> </span>app<span class="w"> </span>-n<span class="w"> </span>app<span class="w">            </span><span class="c1"># что передали в установленный релиз</span>
+helm<span class="w"> </span>get<span class="w"> </span>values<span class="w"> </span>app<span class="w"> </span>-n<span class="w"> </span>app<span class="w"> </span>--all<span class="w">      </span><span class="c1"># вместе со значениями по умолчанию</span>
+</code></pre></div>
+<h3 id="_8">Точки расширения</h3>
+<p>Хороший чарт заранее даёт «пустые» ключи для типовых настроек — тогда для новой настройки не нужно править шаблон:</p>
+<table>
+<thead>
+<tr>
+<th>Ключ в values</th>
+<th>Куда попадает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>podAnnotations</code>, <code>podLabels</code></td>
+<td><code>spec.template.metadata</code></td>
+</tr>
+<tr>
+<td><code>nodeSelector</code>, <code>tolerations</code>, <code>affinity</code></td>
+<td><code>spec.template.spec</code></td>
+</tr>
+<tr>
+<td><code>extraEnv</code></td>
+<td><code>containers[0].env</code></td>
+</tr>
+<tr>
+<td><code>extraVolumes</code> / <code>extraVolumeMounts</code></td>
+<td><code>template.spec.volumes</code> / <code>containers[0].volumeMounts</code></td>
+</tr>
+<tr>
+<td><code>extraContainers</code>, <code>initContainers</code></td>
+<td><code>template.spec.containers</code> / <code>initContainers</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.annotations</code></td>
+<td>ServiceAccount <code>metadata.annotations</code></td>
+</tr>
+<tr>
+<td><code>ingress.annotations</code></td>
+<td>Ingress <code>metadata.annotations</code></td>
+</tr>
+</tbody>
+</table>
+<p>Прежде чем менять шаблон, проверь, нет ли уже такой точки: многие задачи решаются <strong>только правкой values</strong>.</p>
+<h2 id="_9">Алгоритм: добавляю новый параметр</h2>
+<ol>
+<li><strong>Где в манифесте?</strong> <code>kubectl explain &lt;путь&gt;</code> — найти уровень (Deployment / под / контейнер / другой объект).</li>
+<li><strong>Есть ли точка расширения?</strong> Если есть — только values, шаг 4.</li>
+<li><strong>Шаблон:</strong> найти в шаблоне соседнее поле того же уровня, вставить рядом. Словарь/список — <code>with</code> + <code>toYaml | nindent (отступ+2)</code>, строка — <code>quote</code>, опциональное — <code>if</code>/<code>with</code>.</li>
+<li><strong>Values:</strong> добавить ключ со значением по умолчанию (пустое <code>{}</code> / <code>[]</code> или безопасное) и комментарием.</li>
+<li><strong>Проверить:</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>lint<span class="w"> </span>charts/app
+helm<span class="w"> </span>template<span class="w"> </span>app<span class="w"> </span>charts/app<span class="w"> </span>--show-only<span class="w"> </span>templates/deployment.yaml<span class="w">     </span><span class="c1"># глазами: тот ли уровень</span>
+helm<span class="w"> </span>template<span class="w"> </span>app<span class="w"> </span>charts/app<span class="w"> </span>--set<span class="w"> </span><span class="nv">key</span><span class="o">=</span>value<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>--dry-run<span class="o">=</span>server<span class="w"> </span>-f<span class="w"> </span>-<span class="w">   </span><span class="c1"># валидация API-сервером (нужен кластер)</span>
+helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>app<span class="w"> </span>charts/app<span class="w"> </span>-n<span class="w"> </span>app<span class="w"> </span>--wait<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>helm<span class="w"> </span><span class="nb">test</span><span class="w"> </span>app<span class="w"> </span>-n<span class="w"> </span>app
+kubectl<span class="w"> </span>get<span class="w"> </span>deploy<span class="w"> </span>app<span class="w"> </span>-n<span class="w"> </span>app<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>yq<span class="w"> </span><span class="s1">'.spec.template.spec'</span><span class="w">        </span><span class="c1"># что реально в кластере</span>
+</code></pre></div>
+<h2 id="_10">Инструменты, чтобы не угадывать</h2>
+<table>
+<thead>
+<tr>
+<th>Инструмент</th>
+<th>Что даёт</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kubectl explain</code></td>
+<td>документация по любому полю, показывает уровень и тип</td>
+</tr>
+<tr>
+<td><code>kubectl create ... --dry-run=client -o yaml</code></td>
+<td>правильный скелет объекта</td>
+</tr>
+<tr>
+<td><code>helm template --show-only</code></td>
+<td>итог одного шаблона</td>
+</tr>
+<tr>
+<td><code>helm template --debug</code></td>
+<td>показать даже невалидный YAML, чтобы найти строку с ошибкой</td>
+</tr>
+<tr>
+<td><code>kubectl apply --dry-run=server</code></td>
+<td>API-сервер проверит манифест, ничего не создавая</td>
+</tr>
+<tr>
+<td><code>kubectl diff -f -</code></td>
+<td>что изменится в кластере</td>
+</tr>
+<tr>
+<td><code>kubeconform</code></td>
+<td>валидация по схемам без кластера (удобно в CI): <code>helm template ... | kubeconform -strict -summary</code></td>
+</tr>
+<tr>
+<td>VS Code + расширение <strong>YAML</strong> (Red Hat)</td>
+<td>автодополнение и подсветка ошибок по схеме Kubernetes прямо в редакторе</td>
+</tr>
+<tr>
+<td><code>values.schema.json</code> в чарте</td>
+<td>Helm сам проверит типы и обязательные поля values</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="c1">// .vscode/settings.json — подсказки по схеме Kubernetes для манифестов (не для шаблонов Helm)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">"yaml.schemas"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"kubernetes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"k8s/**/*.yaml"</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+<p>Для файлов в <code>templates/</code> схема не помогает: внутри <code>{{ }}</code> это не YAML. Там основной инструмент — <code>helm template</code> + глаза + <code>kubectl apply --dry-run=server</code>.</p>
+</blockquote>
+<h2 id="_11">Частые ошибки</h2>
+<table>
+<thead>
+<tr>
+<th>Симптом</th>
+<th>Причина</th>
+<th>Решение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>YAML parse error ... mapping values are not allowed in this context</code></td>
+<td><code>toYaml</code> вставлен без <code>nindent</code> в одну строку с ключом</td>
+<td><code>key:</code> на отдельной строке, ниже <code>{{- toYaml . | nindent N }}</code></td>
+</tr>
+<tr>
+<td><code>helm template</code> прошёл, kubectl ругается <code>unknown field "spec.template.spec.containers[0].limits"</code></td>
+<td>неверный <code>nindent</code>: содержимое <code>resources</code> уехало на уровень выше</td>
+<td>N = отступ ключа + 2, проверить <code>--show-only</code></td>
+</tr>
+<tr>
+<td><code>nil pointer evaluating interface {}.service</code></td>
+<td><code>.Values</code> внутри <code>with</code>/<code>range</code></td>
+<td><code>$.Values...</code></td>
+</tr>
+<tr>
+<td><code>cannot unmarshal bool into ... of type string</code></td>
+<td>строка <code>on</code>/<code>true</code>/<code>yes</code> без <code>quote</code></td>
+<td><code>| quote</code></td>
+</tr>
+<tr>
+<td><code>selector does not match template labels</code></td>
+<td>метки пода не содержат все метки selector</td>
+<td>одни хелперы для обоих мест</td>
+</tr>
+<tr>
+<td><code>field is immutable</code> при <code>helm upgrade</code></td>
+<td>изменились метки в <code>selector</code></td>
+<td>в selector только стабильные метки</td>
+</tr>
+<tr>
+<td>Под есть, Service без endpoints</td>
+<td>не совпали метки или имя порта</td>
+<td><code>kubectl get endpoints</code>, сверить <code>selector</code> и <code>targetPort</code></td>
+</tr>
+<tr>
+<td>Параметр «не применился»</td>
+<td>вписан не на тот уровень (например, <code>tolerations</code> в контейнер)</td>
+<td><code>kubectl explain</code>, затем <code>kubectl get ... -o yaml</code></td>
+</tr>
+<tr>
+<td><code>CreateContainerConfigError</code></td>
+<td>ConfigMap/Secret/ключ с таким именем не существует</td>
+<td><code>kubectl describe pod</code>, имена через <code>include "app.fullname"</code></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,5603 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://FunnyJesus.github.io/MkDocsPracticum/openstack/">
+      
+      
+        <link rel="prev" href="../cloud-init/">
+      
+      
+        <link rel="next" href="../openstack-cheatsheet/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>OpenStack: работа через UI (Horizon) и CLI - MkDocsPracticum</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#openstack-ui-horizon-cli" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MkDocsPracticum" class="md-header__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MkDocsPracticum
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              OpenStack: работа через UI (Horizon) и CLI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MkDocsPracticum" class="md-nav__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    MkDocsPracticum
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Что такое DevOps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Собеседование
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Собеседование
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interview-mantra/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мантра: вопросы на каждый день
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Вопросы к собеседованию DevOps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Git
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux & Command
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux & Command
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-filesystem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: структура каталогов и куда что класть
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: диагностика и производительность
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text-processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обработка текста: grep, regex, sed, awk, jq, yq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text-processing-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обработка текста: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSH глубже: config, бастион, туннели, agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tmux-vim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmux и vim: минимум для работы на серверах
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD (Continuous Delivery)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CD (Continuous Delivery)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Continuous Delivery / Deployment (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: стратегии деплоя (подробно)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: шпаргалка топ-20
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bash Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makefile
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Makefile
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../makefile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makefile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../makefile-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makefile: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    IaC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaС
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: команды Terraform с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: шпаргалка топ-20 команд Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terraform-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terraform: продвинутый уровень
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ansible
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Container Registry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker Compose
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-compose/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Шпаргалка: сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load-balancing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Балансировка нагрузки (Load Balancing)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kubernetes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k9s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    k9s — быстрая навигация по кластеру
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-loadbalancer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoadBalancer в Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gateway-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway API — замена Ingress (и ingress-nginx)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kustomize/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kustomize
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Helm
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-podinfo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm: production-ready чарт (podinfo)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm: шпаргалка команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-yaml-map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Карта: где какой параметр в манифесте и в Helm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-practice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практикум: Helm на k8s-platform-lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitOps (Argo CD)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GitOps (Argo CD)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitOps и Argo CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../argocd-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Argo CD: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Nginx
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nginx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nginx-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Сети
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_20" >
+        
+          
+          <label class="md-nav__link" for="__nav_20" id="__nav_20_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Базы данных и очереди
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_20_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_20">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Базы данных и очереди
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../databases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Базы данных для DevOps (PostgreSQL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postgres-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PostgreSQL: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../message-queues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Очереди сообщений: Kafka и RabbitMQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_21" >
+        
+          
+          <label class="md-nav__link" for="__nav_21" id="__nav_21_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг и логи
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_21_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_21">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Мониторинг и логи
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг и логирование
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prometheus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus и Alertmanager: настройка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../grafana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grafana: настройка и provisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector: сбор и обработка логов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Трейсинг и OpenTelemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22" >
+        
+          
+          <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SRE и надёжность
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_22">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SRE и надёжность
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SRE: инциденты, on-call, postmortem, error budget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backup-dr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Бэкапы и Disaster Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../incidents-practice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практика: 10 типовых инцидентов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Облака
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Облака
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Облака
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud-init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cloud-init: первичная настройка виртуальных машин
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenStack: работа через UI (Horizon) и CLI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenStack: работа через UI (Horizon) и CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#openstack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Сервисы OpenStack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Основные понятия
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Основные понятия">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Как устроена сеть
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#horizon-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Horizon: веб-интерфейс
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Horizon: веб-интерфейс">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Вход
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Карта меню
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-launch-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Создать VM: мастер Launch Instance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Дать доступ из интернета
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Действия с VM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Получить доступ для CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-python-openstackclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI: python-openstackclient
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CLI: python-openstackclient">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-rc-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Аутентификация: вариант 1 — RC-файл
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-cloudsyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Аутентификация: вариант 2 — clouds.yaml (удобнее)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Формат вывода
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что есть в облаке
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vm_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Сценарий: от пустого проекта до VM в интернете
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Сценарий: от пустого проекта до VM в интернете">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Сеть, подсеть, роутер
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-security-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Security group
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ssh-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. SSH-ключ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-vm-cloud-init" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. VM с cloud-init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-floating-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Floating IP и вход
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-cloud-init" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Проверить, что cloud-init отработал
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vm_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Управление VM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Управление VM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vm_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Статусы VM
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Диски (Cinder)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Образы (Glance)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#octavia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Балансировщик (Octavia)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swift-s3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Объектное хранилище (Swift / S3)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-affinity-vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-affinity: разнести VM по хостам
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Уборка
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terraform-ansible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terraform и Ansible
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Terraform и Ansible">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#terraform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terraform
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ansible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ansible
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Диагностика
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Частые ошибки
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openstack-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenStack: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Безопасность
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Безопасность
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Безопасность (DevSecOps)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../secrets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Секреты: Vault, External Secrets, Sealed Secrets, SOPS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практика
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Практика
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-e2e/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сквозной проект: от кода до мониторинга
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#openstack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Сервисы OpenStack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Основные понятия
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Основные понятия">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Как устроена сеть
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#horizon-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Horizon: веб-интерфейс
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Horizon: веб-интерфейс">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Вход
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Карта меню
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-launch-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Создать VM: мастер Launch Instance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Дать доступ из интернета
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Действия с VM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Получить доступ для CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-python-openstackclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI: python-openstackclient
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CLI: python-openstackclient">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-rc-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Аутентификация: вариант 1 — RC-файл
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-cloudsyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Аутентификация: вариант 2 — clouds.yaml (удобнее)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Формат вывода
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что есть в облаке
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vm_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Сценарий: от пустого проекта до VM в интернете
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Сценарий: от пустого проекта до VM в интернете">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Сеть, подсеть, роутер
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-security-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Security group
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ssh-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. SSH-ключ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-vm-cloud-init" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. VM с cloud-init
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-floating-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Floating IP и вход
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-cloud-init" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Проверить, что cloud-init отработал
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vm_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Управление VM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Управление VM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vm_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Статусы VM
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Диски (Cinder)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Образы (Glance)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#octavia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Балансировщик (Octavia)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swift-s3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Объектное хранилище (Swift / S3)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-affinity-vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-affinity: разнести VM по хостам
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Уборка
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terraform-ansible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terraform и Ansible
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Terraform и Ansible">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#terraform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terraform
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ansible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ansible
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Диагностика
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Частые ошибки
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="openstack-ui-horizon-cli">OpenStack: работа через UI (Horizon) и CLI</h1>
+<blockquote>
+<p>Шпаргалка — <a href="../openstack-cheatsheet/">OpenStack: шпаргалка</a>. Облака в целом — <a href="../cloud/">Облака</a>. Первичная настройка VM — <a href="../cloud-init/">cloud-init</a>. Инфраструктура кодом — <a href="../iac/">IaC</a>.</p>
+</blockquote>
+<p><strong>OpenStack</strong> — open-source платформа для построения своего облака (IaaS): виртуальные машины, сети, диски, балансировщики, объектное хранилище. На нём работают частные облака компаний и многие публичные облака (VK Cloud, Selectel, OVHcloud и др.). У провайдера интерфейс может быть «перекрашен», но API и CLI — те же самые.</p>
+<h2 id="openstack">Сервисы OpenStack</h2>
+<p>Каждая функция — отдельный сервис со своим API и кодовым именем. Знать имена нужно: они встречаются в ошибках, логах и документации.</p>
+<table>
+<thead>
+<tr>
+<th>Сервис</th>
+<th>Кодовое имя</th>
+<th>Что делает</th>
+<th>Аналог в AWS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td><strong>Keystone</strong></td>
+<td>аутентификация, проекты, пользователи, роли, каталог API</td>
+<td>IAM</td>
+</tr>
+<tr>
+<td>Compute</td>
+<td><strong>Nova</strong></td>
+<td>виртуальные машины</td>
+<td>EC2</td>
+</tr>
+<tr>
+<td>Networking</td>
+<td><strong>Neutron</strong></td>
+<td>сети, подсети, роутеры, floating IP, security groups</td>
+<td>VPC</td>
+</tr>
+<tr>
+<td>Block Storage</td>
+<td><strong>Cinder</strong></td>
+<td>диски (volumes) и их снапшоты</td>
+<td>EBS</td>
+</tr>
+<tr>
+<td>Image</td>
+<td><strong>Glance</strong></td>
+<td>образы ОС</td>
+<td>AMI</td>
+</tr>
+<tr>
+<td>Object Storage</td>
+<td><strong>Swift</strong> (или Ceph RGW)</td>
+<td>объектное хранилище</td>
+<td>S3</td>
+</tr>
+<tr>
+<td>Load Balancer</td>
+<td><strong>Octavia</strong></td>
+<td>балансировщики нагрузки</td>
+<td>ELB</td>
+</tr>
+<tr>
+<td>Orchestration</td>
+<td><strong>Heat</strong></td>
+<td>шаблоны инфраструктуры</td>
+<td>CloudFormation</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td><strong>Horizon</strong></td>
+<td>веб-интерфейс</td>
+<td>Console</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td><strong>Designate</strong></td>
+<td>DNS-зоны и записи</td>
+<td>Route 53</td>
+</tr>
+<tr>
+<td>Key Manager</td>
+<td><strong>Barbican</strong></td>
+<td>секреты и сертификаты</td>
+<td>KMS / Secrets Manager</td>
+</tr>
+<tr>
+<td>Containers</td>
+<td><strong>Magnum</strong></td>
+<td>Kubernetes-кластеры</td>
+<td>EKS</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_1">Основные понятия</h2>
+<table>
+<thead>
+<tr>
+<th>Понятие</th>
+<th>Что это</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Domain</strong></td>
+<td>верхний уровень: группа проектов и пользователей (часто <code>Default</code>)</td>
+</tr>
+<tr>
+<td><strong>Project</strong> (раньше <strong>tenant</strong>)</td>
+<td>«папка» ресурсов со своими квотами и правами. Всё создаётся внутри проекта</td>
+</tr>
+<tr>
+<td><strong>Region</strong></td>
+<td>отдельная площадка облака (свои эндпоинты API)</td>
+</tr>
+<tr>
+<td><strong>Availability Zone</strong></td>
+<td>часть региона с независимым железом/питанием</td>
+</tr>
+<tr>
+<td><strong>Flavor</strong></td>
+<td>«размер» VM: vCPU, RAM, диск (<code>m1.small</code>, <code>standard.2-4</code>)</td>
+</tr>
+<tr>
+<td><strong>Image</strong></td>
+<td>образ ОС в Glance (<code>Ubuntu 24.04</code>, <code>Rocky 9</code>)</td>
+</tr>
+<tr>
+<td><strong>Instance / Server</strong></td>
+<td>виртуальная машина</td>
+</tr>
+<tr>
+<td><strong>Key pair</strong></td>
+<td>публичный SSH-ключ, который попадёт в VM</td>
+</tr>
+<tr>
+<td><strong>Network / Subnet</strong></td>
+<td>виртуальная сеть и диапазон адресов в ней</td>
+</tr>
+<tr>
+<td><strong>Router</strong></td>
+<td>связывает подсети между собой и с внешней сетью</td>
+</tr>
+<tr>
+<td><strong>External network</strong></td>
+<td>сеть провайдера (<code>public</code>, <code>ext-net</code>) — выход в интернет</td>
+</tr>
+<tr>
+<td><strong>Floating IP</strong></td>
+<td>публичный адрес из внешней сети, привязывается к VM (NAT 1:1)</td>
+</tr>
+<tr>
+<td><strong>Port</strong></td>
+<td>«сетевая карта» VM в подсети: IP, MAC, security groups</td>
+</tr>
+<tr>
+<td><strong>Security group</strong></td>
+<td>firewall на уровне порта VM, правила «что разрешено»</td>
+</tr>
+<tr>
+<td><strong>Volume</strong></td>
+<td>диск Cinder, живёт отдельно от VM, можно переподключить</td>
+</tr>
+<tr>
+<td><strong>Quota</strong></td>
+<td>лимиты проекта: число VM, vCPU, RAM, floating IP, дисков</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">Как устроена сеть</h3>
+<div class="highlight"><pre><span></span><code>                     интернет
+                        │
+            ┌───────────┴───────────┐
+            │  external network     │  (public / ext-net — выдаёт провайдер)
+            └───────────┬───────────┘
+                        │ gateway
+                  ┌─────┴─────┐
+                  │  router   │
+                  └─────┬─────┘
+                        │ interface 10.10.0.1
+        ┌───────────────┴────────────────┐
+        │  network app-net               │
+        │  subnet  10.10.0.0/24          │
+        │   ├─ port 10.10.0.11 → web-1 ◄─┼── floating IP 203.0.113.25
+        │   └─ port 10.10.0.12 → web-2   │
+        └────────────────────────────────┘
+</code></pre></div>
+<p>Чтобы VM была доступна из интернета, нужны <strong>все</strong> звенья: подсеть → роутер с внешним шлюзом → floating IP на порту VM → разрешающее правило в security group.</p>
+<blockquote>
+<p>Во многих публичных облаках на базе OpenStack есть готовая сеть с доступом в интернет — тогда роутер создавать не нужно. Уточняй в документации провайдера.</p>
+</blockquote>
+<h2 id="horizon-">Horizon: веб-интерфейс</h2>
+<h3 id="_3">Вход</h3>
+<p>Адрес выдаёт администратор или провайдер (например <code>https://dashboard.example.com</code>). Поля: <strong>Domain</strong> (если облако с несколькими доменами, часто <code>Default</code>), <strong>User Name</strong>, <strong>Password</strong>. После входа сверху слева — <strong>выбор проекта</strong> и региона: ресурсы показываются только для выбранного проекта.</p>
+<h3 id="_4">Карта меню</h3>
+<table>
+<thead>
+<tr>
+<th>Раздел</th>
+<th>Что там</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Project → Compute → Overview</strong></td>
+<td>использование квот проекта — смотреть первым, если «не создаётся»</td>
+</tr>
+<tr>
+<td><strong>Compute → Instances</strong></td>
+<td>виртуальные машины и действия над ними</td>
+</tr>
+<tr>
+<td><strong>Compute → Images</strong></td>
+<td>образы; можно загрузить свой</td>
+</tr>
+<tr>
+<td><strong>Compute → Key Pairs</strong></td>
+<td>SSH-ключи: создать или импортировать публичный</td>
+</tr>
+<tr>
+<td><strong>Compute → Server Groups</strong></td>
+<td>группы affinity / anti-affinity</td>
+</tr>
+<tr>
+<td><strong>Volumes → Volumes / Snapshots</strong></td>
+<td>диски и снапшоты</td>
+</tr>
+<tr>
+<td><strong>Network → Network Topology</strong></td>
+<td><strong>схема сети</strong> — лучший способ понять, что к чему подключено</td>
+</tr>
+<tr>
+<td><strong>Network → Networks / Routers</strong></td>
+<td>сети, подсети, роутеры</td>
+</tr>
+<tr>
+<td><strong>Network → Security Groups</strong></td>
+<td>правила firewall</td>
+</tr>
+<tr>
+<td><strong>Network → Floating IPs</strong></td>
+<td>публичные адреса</td>
+</tr>
+<tr>
+<td><strong>Network → Load Balancers</strong></td>
+<td>Octavia</td>
+</tr>
+<tr>
+<td><strong>Object Store → Containers</strong></td>
+<td>объектное хранилище</td>
+</tr>
+<tr>
+<td><strong>Orchestration → Stacks</strong></td>
+<td>шаблоны Heat</td>
+</tr>
+<tr>
+<td><strong>Project → API Access</strong></td>
+<td>эндпоинты API и <strong>скачивание RC-файла / clouds.yaml</strong> для CLI</td>
+</tr>
+<tr>
+<td><strong>Identity</strong></td>
+<td>проекты, пользователи (обычному пользователю — только просмотр)</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>только для администраторов облака</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vm-launch-instance">Создать VM: мастер Launch Instance</h3>
+<p><strong>Compute → Instances → Launch Instance</strong>. Шаги мастера (обязательные отмечены <code>*</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Шаг</th>
+<th>Что указать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Details</strong> *</td>
+<td>имя, availability zone, количество</td>
+</tr>
+<tr>
+<td><strong>Source</strong> *</td>
+<td>загрузка из: Image / Volume / Snapshot. <strong>Create New Volume: Yes</strong> — корневой диск будет volume-ом (переживёт удаление VM, если снять «Delete Volume on Instance Delete»)</td>
+</tr>
+<tr>
+<td><strong>Flavor</strong> *</td>
+<td>размер VM; серым показаны flavor-ы, которые не влезают в квоту или меньше требований образа</td>
+</tr>
+<tr>
+<td><strong>Networks</strong> *</td>
+<td>сеть (или несколько) — стрелкой вверх перенести в Allocated</td>
+</tr>
+<tr>
+<td><strong>Network Ports</strong></td>
+<td>заранее созданный порт с фиксированным IP (необязательно)</td>
+</tr>
+<tr>
+<td><strong>Security Groups</strong></td>
+<td>группы правил; <code>default</code> разрешает только исходящий трафик и трафик внутри группы</td>
+</tr>
+<tr>
+<td><strong>Key Pair</strong></td>
+<td>SSH-ключ — <strong>без него по SSH не войти</strong> в большинство облачных образов</td>
+</tr>
+<tr>
+<td><strong>Configuration</strong></td>
+<td><strong>Customization Script</strong> — сюда вставляется <a href="../cloud-init/">cloud-init</a> (<code>#cloud-config</code> …); <strong>Configuration Drive</strong> — передать метаданные диском</td>
+</tr>
+<tr>
+<td><strong>Server Groups</strong></td>
+<td>anti-affinity — разнести VM по разным хостам</td>
+</tr>
+<tr>
+<td><strong>Metadata</strong></td>
+<td>произвольные метаданные</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Launch Instance</strong> → статус <code>Build</code> → <code>Active</code>, power state <code>Running</code>.</p>
+<h3 id="_5">Дать доступ из интернета</h3>
+<ol>
+<li><strong>Network → Security Groups → Create Security Group</strong> → <strong>Manage Rules → Add Rule</strong>: <code>SSH</code> (Remote: CIDR своего IP, например <code>203.0.113.10/32</code>), <code>ALL ICMP</code>, <code>HTTP</code>/<code>HTTPS</code> при необходимости.</li>
+<li><strong>Instances → меню действий VM → Edit Security Groups</strong> — добавить группу.</li>
+<li><strong>Instances → Associate Floating IP</strong> → «+» (выделить адрес из внешней сети) → Associate.</li>
+<li><code>ssh -i ~/.ssh/key ubuntu@&lt;floating-ip&gt;</code> — пользователь зависит от образа (см. «Частые ошибки»).</li>
+</ol>
+<h3 id="vm">Действия с VM</h3>
+<p>Меню справа от VM в списке <strong>Instances</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Действие</th>
+<th>Что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Associate / Disassociate Floating IP</td>
+<td>привязать / отвязать публичный адрес</td>
+</tr>
+<tr>
+<td>Attach / Detach Volume</td>
+<td>подключить / отключить диск</td>
+</tr>
+<tr>
+<td>Attach / Detach Interface</td>
+<td>добавить сетевой интерфейс</td>
+</tr>
+<tr>
+<td>Edit Security Groups</td>
+<td>изменить firewall</td>
+</tr>
+<tr>
+<td><strong>Console</strong></td>
+<td>VNC-консоль в браузере — если SSH не работает</td>
+</tr>
+<tr>
+<td><strong>View Log</strong></td>
+<td><strong>лог консоли</strong> — здесь видно загрузку и вывод cloud-init</td>
+</tr>
+<tr>
+<td>Create Snapshot</td>
+<td>образ из VM (в Images)</td>
+</tr>
+<tr>
+<td>Resize Instance</td>
+<td>сменить flavor (потом <strong>Confirm Resize</strong>)</td>
+</tr>
+<tr>
+<td>Soft / Hard Reboot</td>
+<td>перезагрузка ОС / «кнопкой питания»</td>
+</tr>
+<tr>
+<td>Shut Off / Start</td>
+<td>выключить / включить</td>
+</tr>
+<tr>
+<td>Rebuild Instance</td>
+<td>переустановить с образа (диск стирается, IP остаётся)</td>
+</tr>
+<tr>
+<td>Lock / Unlock</td>
+<td>защита от случайных действий</td>
+</tr>
+<tr>
+<td>Delete Instance</td>
+<td>удалить</td>
+</tr>
+</tbody>
+</table>
+<p>На странице VM (клик по имени) вкладки: <strong>Overview</strong> (ID, IP, flavor, образ, ошибка при <code>Error</code>), <strong>Interfaces</strong>, <strong>Log</strong>, <strong>Console</strong>, <strong>Action Log</strong> (история действий).</p>
+<h3 id="cli">Получить доступ для CLI</h3>
+<p><strong>Project → API Access</strong>:</p>
+<ul>
+<li><strong>Download OpenStack RC File</strong> — shell-скрипт с переменными окружения;</li>
+<li><strong>Download clouds.yaml</strong> (в новых версиях) — конфиг для CLI, Terraform, Ansible;</li>
+<li><strong>View Credentials</strong> — эндпоинт Keystone и ID проекта.</li>
+</ul>
+<p>Для CI и Terraform — <strong>Identity → Application Credentials → Create</strong> (если включено у провайдера): отдельный ключ с ограниченными ролями и сроком жизни вместо личного пароля.</p>
+<h2 id="cli-python-openstackclient">CLI: python-openstackclient</h2>
+<p>Одна утилита <code>openstack</code> для всех сервисов.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># в venv, чтобы не ломать системный Python</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/.venvs/openstack<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>~/.venvs/openstack/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>python-openstackclient
+pip<span class="w"> </span>install<span class="w"> </span>python-octaviaclient<span class="w"> </span>python-heatclient<span class="w"> </span>python-designateclient<span class="w">   </span><span class="c1"># плагины (по необходимости)</span>
+
+openstack<span class="w"> </span>--version
+openstack<span class="w"> </span><span class="nb">help</span><span class="w"> </span>server<span class="w"> </span>create
+</code></pre></div>
+<h3 id="1-rc-">Аутентификация: вариант 1 — RC-файл</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># devops-lab-openrc.sh (скачан из Horizon, упрощённо)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OS_AUTH_URL</span><span class="o">=</span>https://keystone.example.com:5000/v3
+<span class="nb">export</span><span class="w"> </span><span class="nv">OS_PROJECT_NAME</span><span class="o">=</span><span class="s2">"devops-lab"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OS_PROJECT_DOMAIN_NAME</span><span class="o">=</span><span class="s2">"Default"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OS_USER_DOMAIN_NAME</span><span class="o">=</span><span class="s2">"Default"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OS_USERNAME</span><span class="o">=</span><span class="s2">"alex"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OS_REGION_NAME</span><span class="o">=</span><span class="s2">"RegionOne"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OS_INTERFACE</span><span class="o">=</span>public
+<span class="nb">export</span><span class="w"> </span><span class="nv">OS_IDENTITY_API_VERSION</span><span class="o">=</span><span class="m">3</span>
+<span class="nb">read</span><span class="w"> </span>-sr<span class="w"> </span>-p<span class="w"> </span><span class="s2">"Password: "</span><span class="w"> </span>OS_PASSWORD<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span>OS_PASSWORD<span class="w">   </span><span class="c1"># пароль спрашивается, не хранится в файле</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>devops-lab-openrc.sh
+openstack<span class="w"> </span>token<span class="w"> </span>issue<span class="w">          </span><span class="c1"># проверка: выдан токен — значит, аутентификация работает</span>
+</code></pre></div>
+<h3 id="2-cloudsyaml">Аутентификация: вариант 2 — clouds.yaml (удобнее)</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># ~/.config/openstack/clouds.yaml</span>
+<span class="nt">clouds</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">lab</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">auth_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://keystone.example.com:5000/v3</span>
+<span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alex</span>
+<span class="w">      </span><span class="nt">project_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">devops-lab</span>
+<span class="w">      </span><span class="nt">user_domain_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Default</span>
+<span class="w">      </span><span class="nt">project_domain_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Default</span>
+<span class="w">    </span><span class="nt">region_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RegionOne</span>
+<span class="w">    </span><span class="nt">interface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">public</span>
+<span class="w">    </span><span class="nt">identity_api_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+
+<span class="w">  </span><span class="nt">ci</span><span class="p">:</span><span class="w">                                        </span><span class="c1"># application credential для Terraform/CI</span>
+<span class="w">    </span><span class="nt">auth_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v3applicationcredential</span>
+<span class="w">    </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">auth_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://keystone.example.com:5000/v3</span>
+<span class="w">      </span><span class="nt">application_credential_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1b2c3d...</span>
+<span class="w">      </span><span class="nt">application_credential_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3cr3t...</span>
+<span class="w">    </span><span class="nt">region_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RegionOne</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># ~/.config/openstack/secure.yaml — пароли отдельно (chmod 600, не в git)</span>
+<span class="nt">clouds</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">lab</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"my-password"</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">OS_CLOUD</span><span class="o">=</span>lab<span class="w">              </span><span class="c1"># или --os-cloud lab в каждой команде</span>
+openstack<span class="w"> </span>token<span class="w"> </span>issue
+openstack<span class="w"> </span>--os-cloud<span class="w"> </span>ci<span class="w"> </span>server<span class="w"> </span>list
+</code></pre></div>
+<p>Где CLI ищет <code>clouds.yaml</code>: текущая папка → <code>~/.config/openstack/</code> → <code>/etc/openstack/</code>.</p>
+<p>Создать application credential из CLI:</p>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>application<span class="w"> </span>credential<span class="w"> </span>create<span class="w"> </span>terraform-ci<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--role<span class="w"> </span>member<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--expiration<span class="w"> </span><span class="m">2027</span>-01-01T00:00:00<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--description<span class="w"> </span><span class="s2">"Terraform в GitLab CI"</span>
+<span class="c1"># показывает id и secret ОДИН раз — сразу сохрани в секреты CI</span>
+</code></pre></div>
+<h3 id="_6">Формат вывода</h3>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>server<span class="w"> </span>list<span class="w">                                  </span><span class="c1"># таблица</span>
+openstack<span class="w"> </span>server<span class="w"> </span>list<span class="w"> </span>--long<span class="w">                           </span><span class="c1"># больше колонок</span>
+openstack<span class="w"> </span>server<span class="w"> </span>list<span class="w"> </span>-f<span class="w"> </span>json<span class="w">                          </span><span class="c1"># JSON — для jq</span>
+openstack<span class="w"> </span>server<span class="w"> </span>list<span class="w"> </span>-f<span class="w"> </span>value<span class="w"> </span>-c<span class="w"> </span>Name<span class="w"> </span>-c<span class="w"> </span>Status<span class="w">       </span><span class="c1"># только значения, без рамок — для скриптов</span>
+openstack<span class="w"> </span>server<span class="w"> </span>show<span class="w"> </span>web-1<span class="w"> </span>-f<span class="w"> </span>value<span class="w"> </span>-c<span class="w"> </span>addresses
+openstack<span class="w"> </span>server<span class="w"> </span>show<span class="w"> </span>web-1<span class="w"> </span>-f<span class="w"> </span>yaml
+openstack<span class="w"> </span>server<span class="w"> </span>list<span class="w"> </span>--fit-width<span class="w">                      </span><span class="c1"># таблица по ширине терминала</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># ID сервера по имени — в переменную</span>
+<span class="nv">SERVER_ID</span><span class="o">=</span><span class="k">$(</span>openstack<span class="w"> </span>server<span class="w"> </span>show<span class="w"> </span>web-1<span class="w"> </span>-f<span class="w"> </span>value<span class="w"> </span>-c<span class="w"> </span>id<span class="k">)</span>
+
+<span class="c1"># все VM в статусе ERROR</span>
+openstack<span class="w"> </span>server<span class="w"> </span>list<span class="w"> </span>--status<span class="w"> </span>ERROR<span class="w"> </span>-f<span class="w"> </span>value<span class="w"> </span>-c<span class="w"> </span>ID<span class="w"> </span>-c<span class="w"> </span>Name
+</code></pre></div>
+<h3 id="_7">Что есть в облаке</h3>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>catalog<span class="w"> </span>list<span class="w">                 </span><span class="c1"># доступные сервисы и их эндпоинты</span>
+openstack<span class="w"> </span>project<span class="w"> </span>list<span class="w">                 </span><span class="c1"># мои проекты</span>
+openstack<span class="w"> </span>flavor<span class="w"> </span>list<span class="w">                  </span><span class="c1"># размеры VM</span>
+openstack<span class="w"> </span>image<span class="w"> </span>list<span class="w">                   </span><span class="c1"># образы</span>
+openstack<span class="w"> </span>network<span class="w"> </span>list<span class="w"> </span>--external<span class="w">      </span><span class="c1"># внешние сети (для роутера и floating IP)</span>
+openstack<span class="w"> </span>availability<span class="w"> </span>zone<span class="w"> </span>list
+openstack<span class="w"> </span>quota<span class="w"> </span>show<span class="w">                   </span><span class="c1"># квоты проекта</span>
+openstack<span class="w"> </span>limits<span class="w"> </span>show<span class="w"> </span>--absolute<span class="w">       </span><span class="c1"># сколько использовано из квот</span>
+</code></pre></div>
+<h2 id="vm_1">Сценарий: от пустого проекта до VM в интернете</h2>
+<h3 id="1">1. Сеть, подсеть, роутер</h3>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>app-net
+
+openstack<span class="w"> </span>subnet<span class="w"> </span>create<span class="w"> </span>app-subnet<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--network<span class="w"> </span>app-net<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--subnet-range<span class="w"> </span><span class="m">10</span>.10.0.0/24<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--gateway<span class="w"> </span><span class="m">10</span>.10.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dns-nameserver<span class="w"> </span><span class="m">8</span>.8.8.8
+
+openstack<span class="w"> </span>router<span class="w"> </span>create<span class="w"> </span>app-router
+openstack<span class="w"> </span>router<span class="w"> </span><span class="nb">set</span><span class="w"> </span>app-router<span class="w"> </span>--external-gateway<span class="w"> </span>public<span class="w">      </span><span class="c1"># имя внешней сети — из `network list --external`</span>
+openstack<span class="w"> </span>router<span class="w"> </span>add<span class="w"> </span>subnet<span class="w"> </span>app-router<span class="w"> </span>app-subnet
+</code></pre></div>
+<h3 id="2-security-group">2. Security group</h3>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>security<span class="w"> </span>group<span class="w"> </span>create<span class="w"> </span>web-sg<span class="w"> </span>--description<span class="w"> </span><span class="s2">"SSH + HTTP"</span>
+
+openstack<span class="w"> </span>security<span class="w"> </span>group<span class="w"> </span>rule<span class="w"> </span>create<span class="w"> </span>web-sg<span class="w"> </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--dst-port<span class="w"> </span><span class="m">22</span><span class="w">  </span>--remote-ip<span class="w"> </span><span class="m">203</span>.0.113.10/32<span class="w">   </span><span class="c1"># SSH только со своего IP</span>
+openstack<span class="w"> </span>security<span class="w"> </span>group<span class="w"> </span>rule<span class="w"> </span>create<span class="w"> </span>web-sg<span class="w"> </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--dst-port<span class="w"> </span><span class="m">80</span><span class="w">  </span>--remote-ip<span class="w"> </span><span class="m">0</span>.0.0.0/0
+openstack<span class="w"> </span>security<span class="w"> </span>group<span class="w"> </span>rule<span class="w"> </span>create<span class="w"> </span>web-sg<span class="w"> </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--dst-port<span class="w"> </span><span class="m">443</span><span class="w"> </span>--remote-ip<span class="w"> </span><span class="m">0</span>.0.0.0/0
+openstack<span class="w"> </span>security<span class="w"> </span>group<span class="w"> </span>rule<span class="w"> </span>create<span class="w"> </span>web-sg<span class="w"> </span>--protocol<span class="w"> </span>icmp
+
+openstack<span class="w"> </span>security<span class="w"> </span>group<span class="w"> </span>rule<span class="w"> </span>list<span class="w"> </span>web-sg
+</code></pre></div>
+<blockquote>
+<p>По умолчанию правило — входящее (<code>--ingress</code>). Исходящий трафик в новой группе разрешён автоматически.</p>
+</blockquote>
+<h3 id="3-ssh-">3. SSH-ключ</h3>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>keypair<span class="w"> </span>create<span class="w"> </span>--public-key<span class="w"> </span>~/.ssh/id_ed25519.pub<span class="w"> </span>alex-key
+openstack<span class="w"> </span>keypair<span class="w"> </span>list
+</code></pre></div>
+<h3 id="4-vm-cloud-init">4. VM с cloud-init</h3>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>server<span class="w"> </span>create<span class="w"> </span>web-1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--flavor<span class="w"> </span>m1.small<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--image<span class="w"> </span><span class="s2">"Ubuntu 24.04"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--network<span class="w"> </span>app-net<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--security-group<span class="w"> </span>web-sg<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--key-name<span class="w"> </span>alex-key<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--user-data<span class="w"> </span>cloud-init.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--wait<span class="w">                               </span><span class="c1"># ждать статуса ACTIVE</span>
+
+openstack<span class="w"> </span>server<span class="w"> </span>show<span class="w"> </span>web-1<span class="w"> </span>-c<span class="w"> </span>status<span class="w"> </span>-c<span class="w"> </span>addresses<span class="w"> </span>-c<span class="w"> </span>flavor<span class="w"> </span>-c<span class="w"> </span>image
+</code></pre></div>
+<p><code>cloud-init.yaml</code> — любой пример из раздела <a href="../cloud-init/">cloud-init</a>. Дополнительно:</p>
+<table>
+<thead>
+<tr>
+<th>Флаг</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--boot-from-volume 20</code></td>
+<td>корневой диск — volume на 20 ГБ, созданный из образа (поведение при удалении VM зависит от версии клиента — проверь <code>openstack help server create</code>)</td>
+</tr>
+<tr>
+<td><code>--config-drive true</code></td>
+<td>метаданные через диск, а не metadata service (если сеть к 169.254.169.254 не работает)</td>
+</tr>
+<tr>
+<td><code>--availability-zone nova</code></td>
+<td>конкретная зона</td>
+</tr>
+<tr>
+<td><code>--hint group=&lt;server-group-id&gt;</code></td>
+<td>поместить в server group (anti-affinity)</td>
+</tr>
+<tr>
+<td><code>--property role=web</code></td>
+<td>метаданные VM</td>
+</tr>
+<tr>
+<td><code>--min 3 --max 3</code></td>
+<td>создать сразу 3 одинаковых VM</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-floating-ip">5. Floating IP и вход</h3>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>floating<span class="w"> </span>ip<span class="w"> </span>create<span class="w"> </span>public<span class="w">                       </span><span class="c1"># выделить адрес из внешней сети</span>
+openstack<span class="w"> </span>floating<span class="w"> </span>ip<span class="w"> </span>list
+openstack<span class="w"> </span>server<span class="w"> </span>add<span class="w"> </span>floating<span class="w"> </span>ip<span class="w"> </span>web-1<span class="w"> </span><span class="m">203</span>.0.113.25
+
+ssh<span class="w"> </span>ubuntu@203.0.113.25
+</code></pre></div>
+<h3 id="6-cloud-init">6. Проверить, что cloud-init отработал</h3>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>console<span class="w"> </span>log<span class="w"> </span>show<span class="w"> </span>web-1<span class="w"> </span>--lines<span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>cloud-init<span class="w">    </span><span class="c1"># без SSH, из консоли VM</span>
+ssh<span class="w"> </span>ubuntu@203.0.113.25<span class="w"> </span><span class="s1">'cloud-init status --wait --long'</span>
+</code></pre></div>
+<p>Подробно про проверку — <a href="../cloud-init/">cloud-init</a>, раздел «Проверка работы cloud-init».</p>
+<h2 id="vm_2">Управление VM</h2>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>server<span class="w"> </span>list
+openstack<span class="w"> </span>server<span class="w"> </span>show<span class="w"> </span>web-1
+openstack<span class="w"> </span>server<span class="w"> </span>stop<span class="w"> </span>web-1
+openstack<span class="w"> </span>server<span class="w"> </span>start<span class="w"> </span>web-1
+openstack<span class="w"> </span>server<span class="w"> </span>reboot<span class="w"> </span>web-1<span class="w">                    </span><span class="c1"># soft</span>
+openstack<span class="w"> </span>server<span class="w"> </span>reboot<span class="w"> </span>--hard<span class="w"> </span>web-1<span class="w">             </span><span class="c1"># «кнопкой питания»</span>
+openstack<span class="w"> </span>server<span class="w"> </span>delete<span class="w"> </span>web-1<span class="w"> </span>--wait
+
+<span class="c1"># сменить размер</span>
+openstack<span class="w"> </span>server<span class="w"> </span>resize<span class="w"> </span>--flavor<span class="w"> </span>m1.medium<span class="w"> </span>web-1
+openstack<span class="w"> </span>server<span class="w"> </span>list<span class="w"> </span>--name<span class="w"> </span>web-1<span class="w">               </span><span class="c1"># статус VERIFY_RESIZE</span>
+openstack<span class="w"> </span>server<span class="w"> </span>resize<span class="w"> </span>confirm<span class="w"> </span>web-1<span class="w">            </span><span class="c1"># в старых версиях: openstack server resize --confirm web-1</span>
+openstack<span class="w"> </span>server<span class="w"> </span>resize<span class="w"> </span>revert<span class="w"> </span>web-1<span class="w">             </span><span class="c1"># или откатить</span>
+
+<span class="c1"># переустановить ОС с образа (данные на корневом диске пропадут)</span>
+openstack<span class="w"> </span>server<span class="w"> </span>rebuild<span class="w"> </span>--image<span class="w"> </span><span class="s2">"Ubuntu 24.04"</span><span class="w"> </span>web-1
+
+<span class="c1"># снапшот VM → образ в Glance</span>
+openstack<span class="w"> </span>server<span class="w"> </span>image<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>web-1-2026-09-30<span class="w"> </span>--wait<span class="w"> </span>web-1
+
+<span class="c1"># консоль и история</span>
+openstack<span class="w"> </span>console<span class="w"> </span>url<span class="w"> </span>show<span class="w"> </span>web-1<span class="w">                 </span><span class="c1"># ссылка на VNC-консоль</span>
+openstack<span class="w"> </span>console<span class="w"> </span>log<span class="w"> </span>show<span class="w"> </span>web-1<span class="w"> </span>--lines<span class="w"> </span><span class="m">50</span><span class="w">      </span><span class="c1"># лог загрузки</span>
+openstack<span class="w"> </span>server<span class="w"> </span>event<span class="w"> </span>list<span class="w"> </span>web-1<span class="w">                </span><span class="c1"># история действий (create, reboot, resize…)</span>
+openstack<span class="w"> </span>server<span class="w"> </span>event<span class="w"> </span>show<span class="w"> </span>web-1<span class="w"> </span>&lt;request-id&gt;<span class="w">   </span><span class="c1"># подробности, в том числе ошибка</span>
+</code></pre></div>
+<h3 id="vm_3">Статусы VM</h3>
+<table>
+<thead>
+<tr>
+<th>Статус</th>
+<th>Значит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BUILD</code></td>
+<td>создаётся</td>
+</tr>
+<tr>
+<td><code>ACTIVE</code></td>
+<td>работает</td>
+</tr>
+<tr>
+<td><code>SHUTOFF</code></td>
+<td>выключена (ресурсы квоты заняты!)</td>
+</tr>
+<tr>
+<td><code>REBOOT</code> / <code>HARD_REBOOT</code></td>
+<td>перезагружается</td>
+</tr>
+<tr>
+<td><code>RESIZE</code> → <code>VERIFY_RESIZE</code></td>
+<td>меняется flavor, ждёт подтверждения</td>
+</tr>
+<tr>
+<td><code>ERROR</code></td>
+<td>не удалось — причина в поле <code>fault</code></td>
+</tr>
+<tr>
+<td><code>SHELVED_OFFLOADED</code></td>
+<td>«отложена»: диск сохранён, ресурсы гипервизора освобождены (<code>server shelve</code> / <code>unshelve</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cinder">Диски (Cinder)</h2>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>volume<span class="w"> </span><span class="nb">type</span><span class="w"> </span>list<span class="w">                           </span><span class="c1"># типы дисков (ssd, hdd…)</span>
+openstack<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>--size<span class="w"> </span><span class="m">20</span><span class="w"> </span>--type<span class="w"> </span>ssd<span class="w"> </span>data-1
+openstack<span class="w"> </span>server<span class="w"> </span>add<span class="w"> </span>volume<span class="w"> </span>web-1<span class="w"> </span>data-1<span class="w">             </span><span class="c1"># в VM появится /dev/vdb</span>
+openstack<span class="w"> </span>volume<span class="w"> </span>list
+openstack<span class="w"> </span>server<span class="w"> </span>remove<span class="w"> </span>volume<span class="w"> </span>web-1<span class="w"> </span>data-1
+
+openstack<span class="w"> </span>volume<span class="w"> </span>snapshot<span class="w"> </span>create<span class="w"> </span>--volume<span class="w"> </span>data-1<span class="w"> </span>data-1-snap
+openstack<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>--snapshot<span class="w"> </span>data-1-snap<span class="w"> </span>--size<span class="w"> </span><span class="m">20</span><span class="w"> </span>data-1-restored
+openstack<span class="w"> </span>volume<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--size<span class="w"> </span><span class="m">40</span><span class="w"> </span>data-1<span class="w">                </span><span class="c1"># увеличить (часто только в статусе available)</span>
+openstack<span class="w"> </span>volume<span class="w"> </span>delete<span class="w"> </span>data-1
+</code></pre></div>
+<p>Внутри VM после подключения: <code>lsblk</code>, <code>sudo mkfs.ext4 /dev/vdb</code>, смонтировать и прописать в <code>/etc/fstab</code> по <code>UUID</code> (или через <code>mounts</code>/<code>fs_setup</code> в cloud-init).</p>
+<h2 id="glance">Образы (Glance)</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># загрузить официальный облачный образ</span>
+curl<span class="w"> </span>-LO<span class="w"> </span>https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
+openstack<span class="w"> </span>image<span class="w"> </span>create<span class="w"> </span><span class="s2">"ubuntu-24.04-custom"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file<span class="w"> </span>noble-server-cloudimg-amd64.img<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--disk-format<span class="w"> </span>qcow2<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--container-format<span class="w"> </span>bare<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--property<span class="w"> </span><span class="nv">os_distro</span><span class="o">=</span>ubuntu<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--private
+
+openstack<span class="w"> </span>image<span class="w"> </span>list<span class="w"> </span>--private
+openstack<span class="w"> </span>image<span class="w"> </span>show<span class="w"> </span>ubuntu-24.04-custom<span class="w"> </span>-c<span class="w"> </span>status<span class="w"> </span>-c<span class="w"> </span>size<span class="w"> </span>-c<span class="w"> </span>min_disk
+openstack<span class="w"> </span>image<span class="w"> </span>delete<span class="w"> </span>ubuntu-24.04-custom
+</code></pre></div>
+<p>Свои образы удобно собирать <strong>Packer</strong>-ом (builder <code>openstack</code>): VM → настройка → снапшот → образ.</p>
+<h2 id="octavia">Балансировщик (Octavia)</h2>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>python-octaviaclient
+
+openstack<span class="w"> </span>loadbalancer<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>web-lb<span class="w"> </span>--vip-subnet-id<span class="w"> </span>app-subnet<span class="w"> </span>--wait
+openstack<span class="w"> </span>loadbalancer<span class="w"> </span>listener<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>web-http<span class="w"> </span>--protocol<span class="w"> </span>HTTP<span class="w"> </span>--protocol-port<span class="w"> </span><span class="m">80</span><span class="w"> </span>web-lb<span class="w"> </span>--wait
+openstack<span class="w"> </span>loadbalancer<span class="w"> </span>pool<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>web-pool<span class="w"> </span>--lb-algorithm<span class="w"> </span>ROUND_ROBIN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--listener<span class="w"> </span>web-http<span class="w"> </span>--protocol<span class="w"> </span>HTTP<span class="w"> </span>--wait
+openstack<span class="w"> </span>loadbalancer<span class="w"> </span>healthmonitor<span class="w"> </span>create<span class="w"> </span>--delay<span class="w"> </span><span class="m">5</span><span class="w"> </span>--timeout<span class="w"> </span><span class="m">3</span><span class="w"> </span>--max-retries<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--type<span class="w"> </span>HTTP<span class="w"> </span>--url-path<span class="w"> </span>/health<span class="w"> </span>web-pool<span class="w"> </span>--wait
+openstack<span class="w"> </span>loadbalancer<span class="w"> </span>member<span class="w"> </span>create<span class="w"> </span>--subnet-id<span class="w"> </span>app-subnet<span class="w"> </span>--address<span class="w"> </span><span class="m">10</span>.10.0.11<span class="w"> </span>--protocol-port<span class="w"> </span><span class="m">80</span><span class="w"> </span>web-pool
+openstack<span class="w"> </span>loadbalancer<span class="w"> </span>member<span class="w"> </span>create<span class="w"> </span>--subnet-id<span class="w"> </span>app-subnet<span class="w"> </span>--address<span class="w"> </span><span class="m">10</span>.10.0.12<span class="w"> </span>--protocol-port<span class="w"> </span><span class="m">80</span><span class="w"> </span>web-pool
+
+openstack<span class="w"> </span>loadbalancer<span class="w"> </span>show<span class="w"> </span>web-lb<span class="w"> </span>-c<span class="w"> </span>vip_address<span class="w"> </span>-c<span class="w"> </span>provisioning_status<span class="w"> </span>-c<span class="w"> </span>operating_status
+openstack<span class="w"> </span>loadbalancer<span class="w"> </span>member<span class="w"> </span>list<span class="w"> </span>web-pool<span class="w">          </span><span class="c1"># operating_status ONLINE / ERROR</span>
+<span class="c1"># публичный адрес: floating IP на vip_port_id балансировщика</span>
+openstack<span class="w"> </span>floating<span class="w"> </span>ip<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--port<span class="w"> </span><span class="k">$(</span>openstack<span class="w"> </span>loadbalancer<span class="w"> </span>show<span class="w"> </span>web-lb<span class="w"> </span>-f<span class="w"> </span>value<span class="w"> </span>-c<span class="w"> </span>vip_port_id<span class="k">)</span><span class="w"> </span><span class="m">203</span>.0.113.30
+</code></pre></div>
+<blockquote>
+<p>Операции Octavia асинхронные: пока балансировщик в <code>PENDING_UPDATE</code>, следующая команда вернёт ошибку — отсюда <code>--wait</code>.</p>
+</blockquote>
+<h2 id="swift-s3">Объектное хранилище (Swift / S3)</h2>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>container<span class="w"> </span>create<span class="w"> </span>backups
+openstack<span class="w"> </span>object<span class="w"> </span>create<span class="w"> </span>backups<span class="w"> </span>db-2026-09-30.dump
+openstack<span class="w"> </span>object<span class="w"> </span>list<span class="w"> </span>backups
+openstack<span class="w"> </span>object<span class="w"> </span>save<span class="w"> </span>backups<span class="w"> </span>db-2026-09-30.dump
+openstack<span class="w"> </span>object<span class="w"> </span>delete<span class="w"> </span>backups<span class="w"> </span>db-2026-09-30.dump
+</code></pre></div>
+<p>Многие облака дают к нему и <strong>S3-совместимый</strong> доступ (<code>openstack ec2 credentials create</code> → ключи для <code>aws s3 --endpoint-url ...</code>, restic, Terraform backend).</p>
+<h2 id="anti-affinity-vm">Anti-affinity: разнести VM по хостам</h2>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>server<span class="w"> </span>group<span class="w"> </span>create<span class="w"> </span>--policy<span class="w"> </span>anti-affinity<span class="w"> </span>web-group
+<span class="nv">GROUP_ID</span><span class="o">=</span><span class="k">$(</span>openstack<span class="w"> </span>server<span class="w"> </span>group<span class="w"> </span>show<span class="w"> </span>web-group<span class="w"> </span>-f<span class="w"> </span>value<span class="w"> </span>-c<span class="w"> </span>id<span class="k">)</span>
+
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>openstack<span class="w"> </span>server<span class="w"> </span>create<span class="w"> </span>web-<span class="nv">$i</span><span class="w"> </span>--flavor<span class="w"> </span>m1.small<span class="w"> </span>--image<span class="w"> </span><span class="s2">"Ubuntu 24.04"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--network<span class="w"> </span>app-net<span class="w"> </span>--key-name<span class="w"> </span>alex-key<span class="w"> </span>--security-group<span class="w"> </span>web-sg<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--hint<span class="w"> </span><span class="nv">group</span><span class="o">=</span><span class="nv">$GROUP_ID</span><span class="w"> </span>--wait
+<span class="k">done</span>
+</code></pre></div>
+<p>Упадёт один гипервизор — упадёт одна VM, а не все три.</p>
+<h2 id="_8">Уборка</h2>
+<p>Удалять в обратном порядке — иначе «ресурс используется»:</p>
+<div class="highlight"><pre><span></span><code>openstack<span class="w"> </span>server<span class="w"> </span>remove<span class="w"> </span>floating<span class="w"> </span>ip<span class="w"> </span>web-1<span class="w"> </span><span class="m">203</span>.0.113.25
+openstack<span class="w"> </span>floating<span class="w"> </span>ip<span class="w"> </span>delete<span class="w"> </span><span class="m">203</span>.0.113.25<span class="w">           </span><span class="c1"># неиспользуемые floating IP часто стоят денег</span>
+openstack<span class="w"> </span>server<span class="w"> </span>delete<span class="w"> </span>web-1<span class="w"> </span>--wait
+openstack<span class="w"> </span>volume<span class="w"> </span>delete<span class="w"> </span>data-1
+openstack<span class="w"> </span>router<span class="w"> </span>remove<span class="w"> </span>subnet<span class="w"> </span>app-router<span class="w"> </span>app-subnet
+openstack<span class="w"> </span>router<span class="w"> </span><span class="nb">unset</span><span class="w"> </span>--external-gateway<span class="w"> </span>app-router
+openstack<span class="w"> </span>router<span class="w"> </span>delete<span class="w"> </span>app-router
+openstack<span class="w"> </span>subnet<span class="w"> </span>delete<span class="w"> </span>app-subnet
+openstack<span class="w"> </span>network<span class="w"> </span>delete<span class="w"> </span>app-net
+openstack<span class="w"> </span>security<span class="w"> </span>group<span class="w"> </span>delete<span class="w"> </span>web-sg
+openstack<span class="w"> </span>keypair<span class="w"> </span>delete<span class="w"> </span>alex-key
+</code></pre></div>
+<h2 id="terraform-ansible">Terraform и Ansible</h2>
+<p>Руками через CLI — для изучения и отладки. Постоянная инфраструктура — кодом.</p>
+<h3 id="terraform">Terraform</h3>
+<div class="highlight"><pre><span></span><code><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">openstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">"terraform-provider-openstack/openstack"</span>
+<span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"~&gt; 3.0"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">"openstack"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">cloud</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"ci"</span><span class="c1">                        # запись из clouds.yaml (или переменные OS_*)</span>
+<span class="p">}</span>
+
+<span class="kr">data</span><span class="w"> </span><span class="nc">"openstack_networking_network_v2"</span><span class="w"> </span><span class="nv">"public"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"public"</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">"openstack_compute_instance_v2"</span><span class="w"> </span><span class="nv">"web"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">name</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s2">"web-1"</span>
+<span class="w">  </span><span class="na">flavor_name</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"m1.small"</span>
+<span class="w">  </span><span class="na">image_name</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s2">"Ubuntu 24.04"</span>
+<span class="w">  </span><span class="na">key_pair</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="s2">"alex-key"</span>
+<span class="w">  </span><span class="na">security_groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"web-sg"</span><span class="p">]</span>
+<span class="w">  </span><span class="na">user_data</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nf">file</span><span class="p">(</span><span class="s2">"${path.module}/cloud-init.yaml"</span><span class="p">)</span>
+
+<span class="w">  </span><span class="nb">network</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"app-net"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">"openstack_networking_floatingip_v2"</span><span class="w"> </span><span class="nv">"web"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">pool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">data.openstack_networking_network_v2.public.name</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">"openstack_networking_floatingip_associate_v2"</span><span class="w"> </span><span class="nv">"web"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">floating_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">openstack_networking_floatingip_v2.web.address</span>
+<span class="w">  </span><span class="na">port_id</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nv">openstack_compute_instance_v2.web.network[0].port</span>
+<span class="p">}</span>
+
+<span class="kr">output</span><span class="w"> </span><span class="nv">"web_ip"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">openstack_networking_floatingip_v2.web.address</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+<p>Имена ресурсов и мажорная версия провайдера меняются — сверяйся с документацией <code>terraform-provider-openstack</code> для своей версии.</p>
+</blockquote>
+<h3 id="ansible">Ansible</h3>
+<p>Коллекция <code>openstack.cloud</code> — и модули, и динамический inventory:</p>
+<div class="highlight"><pre><span></span><code>ansible-galaxy<span class="w"> </span>collection<span class="w"> </span>install<span class="w"> </span>openstack.cloud
+pip<span class="w"> </span>install<span class="w"> </span>openstacksdk
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># inventory/openstack.yml — хосты берутся из облака</span>
+<span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openstack.cloud.openstack</span>
+<span class="nt">all_projects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">expand_hostvars</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>ansible-inventory<span class="w"> </span>-i<span class="w"> </span>inventory/openstack.yml<span class="w"> </span>--graph
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Создать VM</span>
+<span class="w">  </span><span class="nt">openstack.cloud.server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cloud</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lab</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">web-1</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ubuntu 24.04</span>
+<span class="w">    </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">m1.small</span>
+<span class="w">    </span><span class="nt">key_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alex-key</span>
+<span class="w">    </span><span class="nt">network</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-net</span>
+<span class="w">    </span><span class="nt">security_groups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">web-sg</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">userdata</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">lookup('file',</span><span class="nv"> </span><span class="s">'cloud-init.yaml')</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">    </span><span class="nt">auto_ip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">wait</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<h2 id="_9">Диагностика</h2>
+<table>
+<thead>
+<tr>
+<th>Симптом</th>
+<th>Где смотреть</th>
+<th>Частые причины</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VM в <code>ERROR</code></td>
+<td><code>openstack server show web-1 -c fault</code></td>
+<td><code>No valid host was found</code> — нет ресурсов на гипервизорах или не подходит flavor/AZ; превышена квота</td>
+</tr>
+<tr>
+<td><code>Quota exceeded for cores/ram/instances</code></td>
+<td><code>openstack limits show --absolute</code>, Horizon → Overview</td>
+<td>квота проекта; выключенные VM тоже занимают квоту</td>
+</tr>
+<tr>
+<td>VM <code>ACTIVE</code>, но не пингуется floating IP</td>
+<td>security group, <code>openstack router show app-router</code> (есть ли <code>external_gateway_info</code>), <code>openstack port list --server web-1</code></td>
+<td>нет правила ICMP/SSH; у роутера нет внешнего шлюза; подсеть не подключена к роутеру</td>
+</tr>
+<tr>
+<td>SSH: <code>Permission denied (publickey)</code></td>
+<td><code>openstack server show web-1 -c key_name</code>, лог консоли</td>
+<td>VM создана без key pair; не тот пользователь для образа</td>
+</tr>
+<tr>
+<td>SSH: <code>Connection timed out</code></td>
+<td>security group, лог консоли</td>
+<td>нет правила на 22; VM ещё грузится; неправильный IP</td>
+</tr>
+<tr>
+<td>cloud-init не отработал</td>
+<td><code>openstack console log show web-1</code></td>
+<td>нет доступа к metadata service (попробовать <code>--config-drive true</code>); ошибка в user-data — см. <a href="../cloud-init/">cloud-init</a></td>
+</tr>
+<tr>
+<td>Не удаляется сеть / роутер</td>
+<td><code>openstack port list --network app-net</code></td>
+<td>остались порты (VM, балансировщик, интерфейс роутера)</td>
+</tr>
+<tr>
+<td>Octavia: <code>Invalid state PENDING_UPDATE</code></td>
+<td><code>openstack loadbalancer show web-lb</code></td>
+<td>предыдущая операция ещё идёт — <code>--wait</code></td>
+</tr>
+<tr>
+<td>CLI: <code>The request you have made requires authentication (HTTP 401)</code></td>
+<td><code>openstack token issue</code></td>
+<td>неверный пароль/домен/проект, истёк application credential</td>
+</tr>
+<tr>
+<td>CLI: <code>Could not find versioned identity endpoints</code></td>
+<td><code>echo $OS_AUTH_URL</code></td>
+<td>неправильный <code>auth_url</code> (нет <code>/v3</code>, не тот порт)</td>
+</tr>
+</tbody>
+</table>
+<p>Пользователь по умолчанию в облачных образах:</p>
+<table>
+<thead>
+<tr>
+<th>Образ</th>
+<th>Пользователь</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ubuntu</td>
+<td><code>ubuntu</code></td>
+</tr>
+<tr>
+<td>Debian</td>
+<td><code>debian</code></td>
+</tr>
+<tr>
+<td>Rocky / Alma / CentOS Stream</td>
+<td><code>rocky</code> / <code>almalinux</code> / <code>cloud-user</code></td>
+</tr>
+<tr>
+<td>Fedora</td>
+<td><code>fedora</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Отладочный флаг <code>--debug</code> у любой команды <code>openstack</code> показывает HTTP-запросы к API и ответы — видно, какой сервис и почему вернул ошибку.</p>
+</blockquote>
+<h2 id="_10">Частые ошибки</h2>
+<table>
+<thead>
+<tr>
+<th>Ошибка</th>
+<th>Последствие</th>
+<th>Как правильно</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Пароль в <code>clouds.yaml</code> в git</td>
+<td>утечка доступа ко всему проекту</td>
+<td>пароли в <code>secure.yaml</code> вне git, в CI — application credentials</td>
+</tr>
+<tr>
+<td>SSH открыт на <code>0.0.0.0/0</code></td>
+<td>перебор паролей и сканеры</td>
+<td>только свой IP / VPN / бастион</td>
+</tr>
+<tr>
+<td>Выключенные VM «для экономии»</td>
+<td>квота занята, в публичном облаке может тарифицироваться</td>
+<td><code>server shelve</code> или удалить</td>
+</tr>
+<tr>
+<td>Забытые floating IP и volume после удаления VM</td>
+<td>лишние расходы, исчерпание квоты</td>
+<td>уборка по списку, всё через Terraform</td>
+</tr>
+<tr>
+<td>Корневой диск только эфемерный</td>
+<td>данные пропадут при удалении/rebuild VM</td>
+<td>данные — на отдельном volume</td>
+</tr>
+<tr>
+<td>Ресурсы создаются руками в Horizon</td>
+<td>нельзя воспроизвести, непонятно, кто и зачем создал</td>
+<td>Terraform / Ansible, Horizon — для просмотра и отладки</td>
+</tr>
+</tbody>
+</table>
+<h2 id="best-practices">Best Practices</h2>
+<ul>
+<li><strong>clouds.yaml + <code>OS_CLOUD</code></strong> вместо RC-файлов, пароли — в <code>secure.yaml</code>.</li>
+<li><strong>Application credentials</strong> для Terraform, Ansible и CI — с минимальной ролью и сроком жизни.</li>
+<li><strong>Network Topology в Horizon</strong> — первым делом, когда непонятно, почему нет связи.</li>
+<li><strong><code>-f value -c ...</code> и <code>-f json</code></strong> в скриптах, а не парсинг таблиц.</li>
+<li><strong><code>--wait</code></strong> для операций, после которых идут следующие шаги.</li>
+<li><strong>Anti-affinity server groups</strong> для реплик одного сервиса.</li>
+<li><strong>Данные на volume-ах</strong>, VM — пересоздаваемые (cloud-init + Ansible или свой образ).</li>
+<li><strong>Вся постоянная инфраструктура — в Terraform</strong>, CLI — для изучения и диагностики.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
