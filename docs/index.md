@@ -24,6 +24,7 @@
 - [**Облака**](cloud.md) — IaaS/PaaS/SaaS, IAM, VPC, object storage, managed vs self-hosted; [cloud-init](cloud-init.md) — первичная настройка VM и проверка его работы; [OpenStack](openstack.md) — Horizon UI и CLI: сети, VM, диски, floating IP, Octavia, Terraform
 - [**Безопасность**](security.md) — секреты, сканирование уязвимостей, SSH-хардening, RBAC, NetworkPolicy; [секреты: Vault, External Secrets, Sealed Secrets, SOPS](secrets.md)
 - [**Практика**](project-e2e.md) — сквозной проект для портфолио через весь стек
+- [**Диплом: Momo Store**](diploma-momo-store.md) — выполнение итогового проекта: Terraform в Yandex Cloud, Managed Kubernetes на прерываемых узлах, Helm, GitLab CI (build → test → release → deploy), R.E.D.-дашборд; [Terraform и облако](diploma-terraform.md), [образы, Helm и кластер](diploma-k8s.md), [CI/CD](diploma-cicd.md), [мониторинг](diploma-monitoring.md), [журнал проблем](diploma-troubleshooting.md), [вопросы для защиты](diploma-defense.md)
 
 ## Подход
 

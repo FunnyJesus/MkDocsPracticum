@@ -105,6 +105,14 @@ nav:
       - secrets.md
   - Практика:
       - project-e2e.md
+  - "Диплом: Momo Store":
+      - diploma-momo-store.md
+      - diploma-terraform.md
+      - diploma-k8s.md
+      - diploma-cicd.md
+      - diploma-monitoring.md
+      - diploma-troubleshooting.md
+      - diploma-defense.md
 markdown_extensions:
   - admonition
   - pymdownx.details
