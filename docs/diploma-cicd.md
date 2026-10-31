@@ -281,7 +281,14 @@ check "/api/categories" '"id"'
     Поды не станут Ready → `--atomic` вернёт `0.1.0` → пайплайн красный → уведомление в Telegram.
     `helm history momo-store -n momo-store` покажет ревизию отката. Потом вернуть путь и выпустить `v0.1.2`.
 
-## Уведомления в Telegram
+## Уведомления: Telegram и почта
+
+!!! warning "Telegram Bot API недоступен из российских дата-центров"
+    С раннеров Практикума и из Yandex Cloud `api.telegram.org` таймаутит. Поэтому два канала, оба с
+    `allow_failure: true`: Telegram (сработает с прокси или из другой сети) и **почта через SMTP Яндекса**
+    (`notify-email-success` / `notify-email-failure`, переменные `SMTP_USER`, `SMTP_PASSWORD` — пароль
+    приложения, Masked, `MAIL_TO`). Подробно — [журнал проблем](diploma-troubleshooting.md), № 18–21.
+
 
 ```yaml
 notify-success:

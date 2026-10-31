@@ -359,6 +359,131 @@ git push --force-with-lease origin <ветка>
 * `--force-with-lease` — не затереть чужие изменения, если ветку кто-то обновил.
 * Хэши коммитов меняются; на чужой (общей) ветке так делать нельзя без договорённости.
 
+## 18. Telegram Bot API недоступен из российских дата-центров
+
+**Симптом.** Задача `notify-success`:
+
+```
+$ ci/scripts/telegram.sh "$PIPELINE_STATUS"
+curl: (28) Connection timed out after 10001 milliseconds
+```
+
+**Диагностика** — сравнить, откуда доступно:
+
+```bash
+curl -s -o /dev/null -w "%{http_code} %{time_connect}s\n" --max-time 15 https://api.telegram.org/   # с Mac: 302
+kubectl run tg-probe -n default --rm -i --restart=Never --image=curlimages/curl:8.11.1 --command -- \
+  sh -c 'nslookup api.telegram.org; curl -sS --max-time 12 https://api.telegram.org/; \
+         curl -s -o /dev/null -w "github: %{http_code}\n" https://api.github.com/'
+route -n get api.telegram.org | grep interface     # на Mac: utun4 — трафик идёт через VPN
+```
+
+| Откуда | `api.telegram.org` | Остальной интернет |
+|---|---|---|
+| Mac (через VPN) | 302 | ✅ |
+| Под в Yandex Cloud | таймаут (и по имени, и по IP `149.154.167.220`) | GitHub 200 |
+| Раннер GitLab Практикума | таймаут | ✅ |
+
+**Причина.** DNS отвечает, но TCP-соединение до серверов Telegram из российских ДЦ не устанавливается.
+Токен и код ни при чём.
+
+**Что не подходит:**
+
+* `tg-ws-proxy`, ссылки `t.me/proxy?server=...&secret=...` — это **MTProto**-прокси для приложений Telegram.
+  Bot API — обычный HTTPS, а `curl -x` понимает только HTTP/SOCKS. Через MTProto бот может работать
+  только через библиотеку клиента (Telethon: вход по `bot_token` + `api_id/api_hash` + MTProxy) — отдельный проект.
+* Интеграция Telegram в GitLab — сервер GitLab Практикума тоже в Yandex Cloud.
+
+!!! warning "secret в ссылке MTProto-прокси — это пароль"
+    Не публиковать ссылку в README, конспекте, логах CI.
+
+**Решение:**
+
+1. `allow_failure: true` в шаблоне `.telegram` — недоступный канал не красит пайплайн релиза.
+2. Резервный канал — **почта через SMTP**: `smtp.yandex.ru:465` из облака доступен.
+3. Поддержка `TELEGRAM_PROXY` (HTTP/SOCKS) — если появится обычный прокси за рубежом: `curl ${TELEGRAM_PROXY:+-x "$TELEGRAM_PROXY"} ...`.
+4. Описать ограничение в README и спросить куратора, как засчитывается звёздочка.
+
+**Вывод.** Если внешний сервис «таймаутит» только из CI — проверить из того же сегмента сети
+(под в кластере), сравнить с другим сайтом и с локальной машиной; посмотреть, не через VPN ли работает локально.
+
+## 19. `when: allow_failure` — такого значения нет
+
+**Симптом.** Первая попытка сделать уведомления необязательными:
+
+```yaml
+rules:
+  - if: $TELEGRAM_BOT_TOKEN && $TELEGRAM_CHAT_ID
+    when: allow_failure        # ✗
+```
+
+**Причина.** `when` решает, **когда** запускать задачу: `on_success`, `on_failure`, `always`, `manual`,
+`delayed`, `never`. `allow_failure` — отдельный ключ задачи (как `stage`, `image`). К тому же так
+потерялась бы разница между `notify-success` (`on_success`) и `notify-failure` (`on_failure`).
+
+**Решение** — одна строка в общем шаблоне, `when` не трогать:
+
+```yaml
+.telegram:
+  stage: .post
+  allow_failure: true      # действует на все задачи с extends: .telegram
+```
+
+Валидность `.gitlab-ci.yml` можно проверить заранее: Build → Pipeline editor → Validate (или CI Lint).
+
+## 20. После merge пайплайна нет вообще
+
+**Симптом.** MR с изменениями только в `ci/notify.yml`, `ci/scripts/email.sh` и `README.md`:
+ни пайплайна MR, ни пайплайна `master` после merge — и письма нет.
+
+**Причина.** У всех задач build/test есть `rules: changes` по своим каталогам — под эти файлы не подошла
+ни одна. Остались бы только задачи `.post` (уведомления), а **GitLab не создаёт пайплайн, в котором только
+`.pre`/`.post` задачи** — он считается пустым.
+
+**Решение.** Для проверки — Build → Pipelines → **Run pipeline** на нужной ветке: при ручном запуске
+(`CI_PIPELINE_SOURCE = web`) `changes` считаются выполненными, запускается всё.
+Если важно, чтобы правки CI всегда запускали проверки — добавить `ci/**/*` в `changes` ключевых задач.
+
+## 21. Уведомления по почте через SMTP из CI
+
+Не проблема, а рабочий рецепт — `curl` умеет SMTP, отдельный образ не нужен:
+
+```bash
+encoded_subject="=?UTF-8?B?$(printf '%s' "$subject" | base64 | tr -d '\n')?="   # кириллица в заголовке — RFC 2047
+
+cat > mail.txt <<MAIL
+From: momo-store CI <${SMTP_USER}>
+To: <${MAIL_TO}>
+Subject: ${encoded_subject}
+Date: $(date -R)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Текст письма...
+MAIL
+
+curl -sS --fail --max-time 30 --ssl-reqd --crlf \
+  --url smtps://smtp.yandex.ru:465 \
+  --user "${SMTP_USER}:${SMTP_PASSWORD}" \
+  --mail-from "$SMTP_USER" --mail-rcpt "$MAIL_TO" \
+  --upload-file mail.txt
+```
+
+| Деталь | Зачем |
+|---|---|
+| `smtps://...:465` + `--ssl-reqd` | TLS сразу (implicit TLS); для 587 — STARTTLS |
+| `--crlf` | SMTP требует переводы строк CRLF |
+| `From` = логин | Яндекс не даёт отправлять от чужого адреса |
+| **Пароль приложения** | Яндекс ID → Безопасность → Пароли приложений → Почта; основной пароль в CI не класть. В Почте включить «Почтовые программы» → IMAP и пароли приложений |
+| `SMTP_PASSWORD` — Masked | не светить в логах |
+
+Проверки:
+
+* доступность порта — `curl -s -o /dev/null -w '%{time_connect}' smtp://smtp.yandex.ru:587/` (ответ 502 = сервер жив, ждёт TLS/авторизацию);
+* TLS и авторизация — отправка с ложным паролем → `curl: (67) Login denied`: значит, всё, кроме пароля, верно;
+* содержимое без отправки — режим `EMAIL_DRY_RUN=1` в скрипте.
+
 ## Чек-лист диагностики
 
 | Уровень | Чем проверить |
@@ -369,5 +494,6 @@ git push --force-with-lease origin <ветка>
 | Kubernetes | `get pods -A`, `describe`, `lastState.terminated.reason`, `top`, `events` |
 | Сеть / Ingress | `curl -w '%{http_code}'` снаружи, `kubectl run curl` изнутри |
 | Метрики | `up{}`, список `__name__`, запрос в API Prometheus |
-| CI | лог задачи, флаги переменных, раннер и его теги, `rules: changes` |
+| CI | лог задачи, флаги переменных, раннер и его теги, `rules: changes`, только ли `.post`-задачи в пайплайне |
+| Внешний сервис из CI | тот же запрос из пода в кластере и локально; сравнить с другим сайтом; локально — не через VPN ли |
 | Окружение | `echo $KUBECONFIG`, `which`, версия инструмента |
