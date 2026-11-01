@@ -484,6 +484,92 @@ curl -sS --fail --max-time 30 --ssl-reqd --crlf \
 * TLS и авторизация — отправка с ложным паролем → `curl: (67) Login denied`: значит, всё, кроме пароля, верно;
 * содержимое без отправки — режим `EMAIL_DRY_RUN=1` в скрипте.
 
+## 22. Реплики собираются на одном узле
+
+**Симптом.** После нагрузочного теста и после rolling update `kubectl get pods -o wide` показывает
+обе реплики backend на одном узле — хотя в чарте `podAntiAffinity` «на разные узлы».
+
+**Причина.** Два механизма:
+
+* *preferred* anti-affinity — **пожелание** с весом: проигрывает оценке по свободным ресурсам;
+* правило учитывает **все** поды с меткой. При rolling update (`maxSurge: 1`) новый под №2 «видит»
+  новый под №1 на узле A и ещё живой старый на узле B — ничья, выбран A по ресурсам. Старые удаляются —
+  оба новых на A. При scale-down ReplicaSet удаляет поды вообще без учёта узлов.
+
+Чем опасно: прервут этот узел — backend недоступен, пока поды не поднимутся на втором.
+PDB защищает только от «вежливого» drain (Eviction API), не от жёсткой остановки ВМ.
+
+**Решение:**
+
+```yaml
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: DoNotSchedule      # строго
+    nodeTaintsPolicy: Honor               # cordon/NotReady-узел не считается доменом → нет Pending при прерывании
+    matchLabelKeys: [pod-template-hash]   # считать только поды текущей ревизии ReplicaSet
+    labelSelector:
+      matchLabels: { app.kubernetes.io/name: backend, app.kubernetes.io/instance: momo-store }
+```
+
+Проверка полей до релиза — server-side dry-run (API кластера скажет, если поле не поддерживается
+или будет отброшено):
+
+```bash
+helm template ... | yq 'select(.kind == "Deployment")' > d.yaml
+kubectl apply -n momo-store --dry-run=server -f d.yaml -o json | jq '.spec.template.spec.topologySpreadConstraints'
+```
+
+После релиза — по одной реплике на узел. С 5 репликами на 2 узлах — 3/2.
+Обратно после возвращения узла поды не перераспределяются сами — для этого descheduler.
+
+## 23. `backend-build` падает: таймаут до gcr.io
+
+**Симптом.** Трижды за день:
+
+```
+Retrieving image gcr.io/distroless/static-debian12:nonroot from registry gcr.io
+error building image: ... Get "https://gcr.io/v2/...": dial tcp 172.253.130.82:443: i/o timeout
+```
+
+Retry иногда помогает, иногда нет.
+
+**Причина.** Сеть раннеров (российский ДЦ) нестабильно достаёт до реестра Google.
+
+**Решение.** Убрать внешнюю зависимость из сборки — финальная стадия `FROM scratch`:
+
+```dockerfile
+FROM scratch
+COPY --from=build /out/api /api
+USER 65532:65532          # числом — /etc/passwd в scratch нет
+ENTRYPOINT ["/api"]
+```
+
+Подходит, когда бинарник статический (`CGO_ENABLED=0`) и не нужны CA-сертификаты (нет исходящего HTTPS),
+tzdata, shell. Образ 20 МБ → 4 МБ. Если CA нужны — `COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/`.
+Альтернатива — зеркалировать базовый образ в свой реестр (`crane copy`).
+
+**Вывод.** Флаки-шаг, который «лечится ретраем», — это долг: он упадёт в самый неудобный момент
+(на демо, при проверке). Лучше убрать причину.
+
+## 24. Проверка автоотката: что происходит по шагам
+
+Сломать **readinessProbe** (`path: /broken` → 404) и выпустить тег:
+
+| Время | Событие |
+|---|---|
+| T | Helm: ревизия N+1 `pending-upgrade`; новый под `0/1 Running`, старые `1/1` (`maxUnavailable: 0`) |
+| T…T+5м | `--wait` ждёт Ready; пользователи на старых подах — 17/17 проверок `200` |
+| T+5м | `--atomic`: ревизия N+2 «Rollback to N» — откатывается **весь релиз** (и frontend, который успел обновиться) |
+| | `UPGRADE FAILED ... not ready` → задача красная → уведомление ❌ |
+
+* readiness, а не liveness: контейнер жив, под просто не получает трафик; liveness дала бы рестарты/CrashLoopBackOff.
+* Причина в `kubectl describe pod`: `Readiness probe failed: HTTP probe failed with statuscode: 404`.
+* `--timeout` Helm должен быть меньше таймаута задачи CI — иначе раннер убьёт задачу без отката,
+  релиз останется `pending-upgrade`.
+* Стадия release уже прошла — образ и Release версии существуют, но в прод не попали (build once).
+* Опубликованный тег не переписывают: следующая рабочая версия — новый PATCH (`v0.1.3`).
+
 ## Чек-лист диагностики
 
 | Уровень | Чем проверить |

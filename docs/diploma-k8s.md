@@ -482,7 +482,7 @@ kubectl -n kube-system logs -l app.kubernetes.io/name=preemptible-handler
 # ... [cl1...-amud] watching preemption notice
 ```
 
-Вместе с ним работают: 2 реплики, `podAntiAffinity` (на разных узлах), PDB `minAvailable: 1`.
+Вместе с ним работают: 2 реплики, `topologySpreadConstraints` (строго на разных узлах, см. [журнал № 22](diploma-troubleshooting.md)), PDB `minAvailable: 1`.
 
 ### Доступ CI к кластеру
 
