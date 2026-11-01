@@ -570,6 +570,34 @@ tzdata, shell. Образ 20 МБ → 4 МБ. Если CA нужны — `COPY -
 * Стадия release уже прошла — образ и Release версии существуют, но в прод не попали (build once).
 * Опубликованный тег не переписывают: следующая рабочая версия — новый PATCH (`v0.1.3`).
 
+## 25. Trivy: не скачивается база уязвимостей
+
+**Симптом.**
+
+```
+FATAL  run error: init error: DB error: failed to download vulnerability DB:
+  ... failed to download artifact from mirror.gcr.io/aquasec/trivy-db:2: ... context deadline exceeded
+```
+
+**Причина.** Trivy при каждом запуске (без кэша) качает базу с `mirror.gcr.io` — тот же Google, что
+таймаутил на `gcr.io` (№ 23).
+
+**Решение.** Источник с фолбэком и таймаут:
+
+```yaml
+.trivy-scan:
+  variables:
+    TRIVY_DB_REPOSITORY: "ghcr.io/aquasecurity/trivy-db:2,mirror.gcr.io/aquasec/trivy-db:2"
+    TRIVY_TIMEOUT: "10m"
+```
+
+Проверка — `trivy image --download-db-only` и строка `Artifact successfully downloaded repo="ghcr.io/..."`.
+Сравнение из облака: ghcr.io 19 с, mirror.gcr.io 27 с.
+
+**Вывод.** Пройтись по пайплайну и выписать **все** внешние источники: базовые образы, образы задач,
+базы сканеров, пакетные менеджеры. Каждый — потенциальная точка отказа; для критичных — зеркало
+или запасной источник.
+
 ## Чек-лист диагностики
 
 | Уровень | Чем проверить |

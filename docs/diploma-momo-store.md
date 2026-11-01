@@ -13,7 +13,7 @@
 | [Образы, Helm и кластер](diploma-k8s.md) | Dockerfile'ы, nginx как шлюз, Helm-чарт, платформа, прерываемые узлы, zero-trust |
 | [CI/CD в GitLab](diploma-cicd.md) | стадии, переменные и флаги, build once, release notes, автооткат, Telegram |
 | [Мониторинг](diploma-monitoring.md) | метрики backend и ingress, R.E.D.-дашборд, PromQL |
-| [Журнал проблем](diploma-troubleshooting.md) | 24 записи: симптом → диагностика → причина → решение |
+| [Журнал проблем](diploma-troubleshooting.md) | 25 записей: симптом → диагностика → причина → решение |
 | [Вопросы для защиты](diploma-defense.md) | самопроверка: что спросит ревьюер и как ответить |
 
 ## Задание кратко
