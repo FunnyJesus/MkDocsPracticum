@@ -105,6 +105,7 @@ nav:
       - secrets.md
   - Практика:
       - project-e2e.md
+      - practice-tasks.md
   - "Диплом: Momo Store":
       - diploma-momo-store.md
       - diploma-terraform.md
