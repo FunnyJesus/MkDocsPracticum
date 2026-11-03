@@ -4,6 +4,35 @@
 
 **Container registry** — хранилище Docker-образов. CI собирает образ и делает `push`, Kubernetes/Docker на серверах делают `pull`. Это мост между «собрали» и «запустили».
 
+## Путь образа: от кода до пода
+
+В кластер **нельзя загрузить код или образ напрямую**. Кластер получает только **инструкцию** —
+манифест со **ссылкой** на образ, а за самим образом узлы ходят в registry сами.
+
+```
+ CI: build                CD: deploy                     КЛАСТЕР
+ ─────────                ──────────                     ───────
+ docker build             helm upgrade / kubectl apply   kubelet на узле
+ docker push  ──► REGISTRY ◄──────────────────────────── скачивает образ ПО ССЫЛКЕ
+                     ▲    манифест: image: reg/app:1.4.2 ──► API кластера
+                     └──── образ лежит здесь
+```
+
+Аналогия: **образ** — коробка на складе (registry), **манифест** — накладная «возьми со склада вот
+эту коробку, сделай 2 экземпляра, проверяй так», **кластер** — курьер, который сам едет на склад.
+
+| Шаг | Кто | Что нужно |
+|---|---|---|
+| упаковать приложение в образ и загрузить в registry | CI | право **push** |
+| отправить в кластер манифест со ссылкой (`image: ...`) | CD (Helm, kubectl, Argo CD) | доступ к **API кластера**, образы ему не нужны |
+| скачать образ и запустить контейнер | узел кластера (kubelet) | право **pull** |
+
+Поэтому деплой — это не «загрузить образ в кластер», а «изменить ссылку в манифесте»:
+`helm upgrade --set image.tag=1.4.3` → в Deployment новая ссылка → узлы скачивают новый образ.
+
+**Исключение для локальных кластеров:** kind и minikube не видят образы Docker хоста, их загружают
+прямо в узлы без registry: `kind load docker-image app:dev --name lab` (+ `imagePullPolicy: IfNotPresent`).
+
 ## Какие бывают
 
 | Registry | Тип | Комментарий |
@@ -116,6 +145,82 @@ spec:
 { "registry-mirrors": ["https://mirror.example.com"] }
 ```
 
+## Helm-чарты в registry (OCI)
+
+Современные registry хранят не только образы, но и **Helm-чарты** — как OCI-артефакты. Один реестр
+на всё, те же права и retention:
+
+```bash
+helm registry login registry.example.com -u robot-ci --password-stdin < token
+helm package charts/shop --version 1.4.2 --app-version 1.4.2
+helm push shop-1.4.2.tgz oci://registry.example.com/team/charts
+helm upgrade --install shop oci://registry.example.com/team/charts/shop --version 1.4.2
+```
+
+Деплой из registry, а не из рабочей копии: в кластер попадает ровно та версия чарта, что выпущена
+в релизе (так сделано в [дипломе](diploma-cicd.md)).
+
+## Образы в values чарта — для подмены на зеркала
+
+Все образы, которые использует чарт (в том числе служебные: curl для тестов, sidecar'ы), выноси в
+`values.yaml`, а не зашивай в шаблоны:
+
+```yaml
+images:
+  app: registry.example.com/team/shop:1.4.2
+  tester: alpine/k8s:1.31.4          # в закрытом контуре → registry.company/mirror/alpine/k8s:1.31.4
+  python: python:3.12-alpine
+```
+
+В закрытом контуре (корпоративная сеть без доступа в интернет) публичные образы берутся из зеркала
+во внутреннем registry — и чарт ставится без правки шаблонов, одним values-файлом.
+
+## Код без своего образа: ConfigMap
+
+Для маленьких служебных инструментов (дашборд, агент проверок, скрипт) можно **не собирать свой
+образ**: взять стандартный (`python:3.12-alpine`) и положить код в ConfigMap — так устроен дашборд
+в проекте cluster-tests.
+
+```yaml
+kind: ConfigMap
+metadata: { name: dashboard }
+data:
+  dashboard.py: |
+    {{- .Files.Get "files/dashboard.py" | nindent 4 }}
+---
+# в Deployment:
+      containers:
+        - name: dashboard
+          image: python:3.12-alpine                 # образ — по ссылке, как всегда
+          command: ["python3", "/app/dashboard.py"]  # код — не из образа, а из ConfigMap
+          volumeMounts: [{ name: app, mountPath: /app }]
+      volumes:
+        - name: app
+          configMap: { name: dashboard }
+```
+
+| | Свой образ | Стандартный образ + ConfigMap |
+|---|---|---|
+| Сборка в CI и registry | нужны | не нужны |
+| Обновление | новый образ + деплой | `helm upgrade` (+ аннотация `checksum/...` для перезапуска) |
+| Зависимости (`pip`, `npm`) | любые | только то, что есть в образе (стандартная библиотека) |
+| Размер кода | любой | ConfigMap ≤ 1 МиБ |
+| Для чего | приложения | маленькие утилиты и скрипты |
+
+## Корпоративный registry: что выяснить
+
+В компании обычно свой registry (Harbor, Nexus, Artifactory, GitLab) внутри сети. Прежде чем
+что-то пушить, спроси у DevOps/платформенной команды:
+
+1. Есть ли у команды проект в registry и как получить доступ?
+2. Пушат люди или только CI (robot-аккаунт)?
+3. Правила имён и тегов (`registry/<команда>/<сервис>:<версия>`)?
+4. Есть ли зеркало Docker Hub — откуда брать базовые образы?
+5. Какие проверки (сканер, подпись) образ проходит перед деплоем?
+
+Проверить доступ без риска: `docker login <registry>` и `docker pull` образа своей команды.
+**Личные и учебные проекты в рабочий registry не пушить** — для них `ghcr.io` или Docker Hub.
+
 ## Безопасность образов
 
 ```bash
@@ -141,6 +246,7 @@ cosign verify registry.example.com/team/shop@sha256:3f1a… \
 | Диск registry переполнен | нет retention | cleanup policies + garbage collection |
 | `http: server gave HTTP response to HTTPS client` | registry без TLS | включить TLS; для теста — `insecure-registries` в daemon.json |
 | `no matching manifest for linux/arm64` | образ собран только под amd64 | `docker buildx build --platform linux/amd64,linux/arm64` |
+| `ErrImagePull` в kind на локально собранный образ | kind не видит образы Docker хоста, а тег не из registry | `kind load docker-image <образ> --name <кластер>` и `imagePullPolicy: IfNotPresent` |
 
 ## Best Practices
 
