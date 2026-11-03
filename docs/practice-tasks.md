@@ -378,6 +378,21 @@ make up                     # кластер, ingress, metrics-server, депл�
 
 После: `make lint && make test`, коммит, pull request в `main` — CI прогонит e2e на живом kind.
 
+**Повтор задания по проекту.** После merge решение уже лежит в `main`, поэтому «с нуля» — значит в ветке
+от состояния **до** задания. Ветка-тренажёр в `main` не вливается:
+
+```bash
+git log --oneline --merges | grep "task/7"      # merge-коммит задания 7
+git switch -c repeat/7 <merge-коммит>^1         # ^1 — первый родитель: main до вливания
+make down && make up                            # кластер в состоянии «до»
+# ...делаешь задание без подсказок...
+git diff main -- charts/ Makefile               # сравни с первым решением
+git switch main && git branch -D repeat/7
+```
+
+Для [Практикума Helm](helm-practice.md) проще — пересоздать копию чарта:
+`rm -rf charts/app && cp -r charts/my-app charts/app`.
+
 ---
 
 ### Задача 6. Разбери `make up` и добавь `make status`
