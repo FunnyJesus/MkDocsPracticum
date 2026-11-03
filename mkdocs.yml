@@ -104,6 +104,7 @@ nav:
       - security.md
       - secrets.md
   - Практика:
+      - start-checklist.md
       - project-e2e.md
       - practice-tasks.md
   - "Диплом: Momo Store":
