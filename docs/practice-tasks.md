@@ -14,6 +14,8 @@
 | Terraform | IaC с провайдером Docker | `brew install hashicorp/tap/terraform` |
 | hadolint, shellcheck, trivy | линтеры и сканер | `brew install hadolint shellcheck trivy` |
 
+Kubernetes-задания (6–13) делаются на проекте [k8s-platform-lab](https://github.com/FunnyJesus/k8s-platform-lab) и развивают его; остальные — самостоятельные.
+
 Формат задания: **уровень и время** → **цель** → **требования** → **проверка** → подсказка и решение
 под спойлерами. Сначала сделай сам, потом сверяйся.
 
@@ -352,414 +354,585 @@ for i in 1 2 3 4; do curl -s localhost:8080 | grep Hostname; done   # имена
 
 ---
 
-## Kubernetes (kind)
+## Kubernetes: k8s-platform-lab
 
-### Задача 6. Свой кластер в kind
+Задания по Kubernetes делаются на твоём проекте
+[k8s-platform-lab](https://github.com/FunnyJesus/k8s-platform-lab): каждое — **доработка проекта**, которая
+остаётся в репозитории и в портфолио. Имена в проекте: кластер kind `platform-lab`, namespace, релиз и
+Service — `my-app`, чарт `charts/my-app`; эндпоинты приложения — `/healthz`, `/readyz`, `/metrics`,
+`/api/work?ms=N`, `/admin/ready`.
+
+Перед каждым заданием:
+
+```bash
+cd ~/Documents/my_repo/k8s-platform-lab
+git switch main && git pull
+git switch -c task/<номер>-<кратко>
+make up                     # кластер, ingress, metrics-server, деплой; уже поднят — не пересоздаёт
+```
+
+После: `make lint && make test`, коммит, pull request в `main` — CI прогонит e2e на живом kind.
+
+---
+
+### Задача 6. Разбери `make up` и добавь `make status`
 
 **Уровень:** ★☆☆ · **Время:** ~30 мин
 
-**Цель.** Локальный кластер из 3 узлов и первый деплой.
+**Цель.** Понимать каждую строку своего Makefile и иметь одну команду для диагностики.
 
 **Требования.**
 
-- kind: 1 control-plane + 2 worker, имя кластера `lab`;
-- Deployment `web` (`nginx:1.27-alpine`) на 3 реплики и Service типа ClusterIP;
-- открыть в браузере через `port-forward`;
-- посмотреть, по каким узлам разошлись поды.
+- Ответить (в описании PR) на вопросы:
+    1. Почему `deploy` зависит от `build`, а `build` — от `cluster`? Что будет при `make deploy` на пустой машине?
+    2. Зачем `kind export kubeconfig` в цели `cluster` и в отдельной цели `kubeconfig`?
+    3. Зачем цель `ingress` патчит контроллер `nodeSelector: ingress-ready`? Что сломается без патча?
+    4. Зачем в начале цели `ingress` удаляются Job'ы admission-webhook?
+    5. Что делают `--wait --timeout 5m` в `deploy` и что будет, если поды не станут Ready?
+- Добавить цель `make status`: ноды, ресурсы релиза с узлами, последние 10 событий namespace, история
+  Helm. Цель видна в `make help`.
 
 **Проверка.**
 
 ```bash
-kubectl get nodes
-kubectl get pods -o wide            # колонка NODE
-kubectl port-forward svc/web 8080:80 &  curl -s localhost:8080 | head -3
+make help | grep status
+make status
 ```
 
+??? tip "Подсказка"
+    Ответы на 3 и 2 есть в README («Честные ограничения»). Для 4: какие поля Job можно менять после создания?
+
 ??? success "Решение"
-    ```yaml
-    # kind.yaml
-    kind: Cluster
-    apiVersion: kind.x-k8s.io/v1alpha4
-    nodes:
-      - role: control-plane
-      - role: worker
-      - role: worker
+    ```make
+    status: ## состояние кластера и релиза
+    	kubectl get nodes -o wide
+    	kubectl -n $(NS) get deploy,pods,hpa,pdb,ingress -o wide
+    	kubectl -n $(NS) get events --sort-by=.lastTimestamp | tail -10
+    	helm -n $(NS) history $(RELEASE) --max 5
     ```
 
-    ```bash
-    kind create cluster --name lab --config kind.yaml
-    kubectl create deployment web --image=nginx:1.27-alpine --replicas=3
-    kubectl expose deployment web --port=80
-    kubectl get pods -o wide
-    ```
+    И `status` — в `.PHONY`. Отступ в рецептах Makefile — **табуляция**, не пробелы.
 
-    Удалить: `kind delete cluster --name lab`. Образ, собранный локально, в kind загружают так:
-    `kind load docker-image hello:1.0 --name lab` — кластер не видит образы Docker хоста.
+    1. Цепочка гарантирует порядок: образ собирается, когда кластер есть, и загружается в него
+       (`kind load`), а чарт ставится, когда образ уже в кластере. На пустой машине `make deploy` сам
+       создаст кластер и соберёт образ — но без ingress и metrics-server (их ставит только `up`).
+    2. kind пишет адрес API-сервера с портом Docker, который меняется после перезапуска Docker —
+       старый kubeconfig перестаёт работать.
+    3. Порты 80/443 проброшены `extraPortMappings` только на control-plane. Уедет контроллер на воркер —
+       `localhost` перестанет отвечать.
+    4. `spec.template` у Job неизменяем: повторный `kubectl apply` манифеста другой версии упадёт с
+       `field is immutable`. Удаление делает цель повторяемой.
+    5. Helm ждёт готовности ресурсов; не дождался за 5 минут — команда падает, **но релиз остаётся**
+       в состоянии `failed` с новыми подами, отката нет (см. задачу 10).
 
 ---
 
-### Задача 7. Production-ready манифест Deployment
+### Задача 7. Pod Security `restricted` — включить по-настоящему
 
 **Уровень:** ★★☆ · **Время:** ~45 мин
 
-**Цель.** Написать манифест руками (без `kubectl create`) со всем, что ждут на ревью.
+**Цель.** README проверяет совместимость с профилем `restricted` через `--dry-run`. Включи профиль
+на namespace и докажи, что он работает.
 
-**Требования** (образ `nginxinc/nginx-unprivileged:1.27-alpine`, порт 8080):
+**Требования.**
 
-- 2 реплики, `RollingUpdate` с `maxUnavailable: 0`;
-- readiness и liveness пробы на `/`;
-- requests и limits;
-- `runAsNonRoot`, `readOnlyRootFilesystem`, `allowPrivilegeEscalation: false`, `drop: [ALL]`;
-- под не падает из-за read-only файловой системы;
-- Service на порт 80 → 8080.
+- namespace `my-app` создаётся **до** деплоя с метками `pod-security.kubernetes.io/enforce=restricted`
+  и `warn=restricted` (цель `make namespace`, от неё зависит `deploy`);
+- под, нарушающий профиль, не создаётся;
+- `make deploy` и **`make test`** проходят.
 
 **Проверка.**
 
 ```bash
-kubectl apply -f deploy.yaml
-kubectl get pods                                         # 1/1 Running, без рестартов
-kubectl exec deploy/web -- touch /etc/x                  # Read-only file system
-kubectl port-forward svc/web 8080:80 & curl -sI localhost:8080 | head -1
+kubectl get ns my-app --show-labels
+kubectl run root-test -n my-app --image=nginx:1.27-alpine      # должен быть отклонён
+make deploy && make test
 ```
 
 ??? tip "Подсказка"
-    nginx пишет pid и временные файлы в `/tmp`. При read-only корне туда нужен `emptyDir`.
+    Под из `helm test` — тоже под в этом namespace. Посмотри на `templates/tests/test-endpoints.yaml`.
+    И проверь, каким пользователем запускается образ `curlimages/curl`: `runAsNonRoot` не умеет
+    проверять пользователя, заданного **именем**.
 
 ??? success "Решение"
+    ```make
+    namespace: ## namespace с Pod Security restricted
+    	kubectl create namespace $(NS) --dry-run=client -o yaml | kubectl apply -f -
+    	kubectl label namespace $(NS) --overwrite \
+    		pod-security.kubernetes.io/enforce=restricted \
+    		pod-security.kubernetes.io/warn=restricted
+
+    deploy: build namespace ## поставить/обновить чарт
+    ```
+
+    `kubectl run root-test` → `Forbidden: violates PodSecurity "restricted:latest":
+    allowPrivilegeEscalation != false, unrestricted capabilities, runAsNonRoot != true, seccompProfile...`
+
+    `make test` после включения профиля **падает** — под теста без `securityContext`. Исправление
+    в `tests/test-endpoints.yaml`:
+
     ```yaml
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata: { name: web }
     spec:
-      replicas: 2
-      strategy:
-        type: RollingUpdate
-        rollingUpdate: { maxUnavailable: 0, maxSurge: 1 }
-      selector:
-        matchLabels: { app: web }
-      template:
-        metadata:
-          labels: { app: web }
-        spec:
-          automountServiceAccountToken: false
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534          # числом: у curlimages/curl пользователь задан именем
+        runAsGroup: 65534
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: curl
+          image: curlimages/curl:8.11.1
           securityContext:
-            runAsNonRoot: true
-            seccompProfile: { type: RuntimeDefault }
-          containers:
-            - name: nginx
-              image: nginxinc/nginx-unprivileged:1.27-alpine
-              ports: [{ name: http, containerPort: 8080 }]
-              readinessProbe: { httpGet: { path: /, port: http }, periodSeconds: 5 }
-              livenessProbe:  { httpGet: { path: /, port: http }, periodSeconds: 10 }
-              resources:
-                requests: { cpu: 50m, memory: 32Mi }
-                limits:   { memory: 64Mi }
-              securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
-                capabilities: { drop: [ALL] }
-              volumeMounts: [{ name: tmp, mountPath: /tmp }]
-          volumes: [{ name: tmp, emptyDir: {} }]
-    ---
-    apiVersion: v1
-    kind: Service
-    metadata: { name: web }
-    spec:
-      selector: { app: web }
-      ports: [{ port: 80, targetPort: http }]
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: [ALL] }
+          # command / args — без изменений
     ```
 
-    **Почему limit только на память.** CPU limit вызывает троттлинг даже при свободном узле;
-    многие команды ставят на CPU только request. Память — несжимаемый ресурс, limit нужен.
+    Без `runAsUser` числом под упадёт с `CreateContainerConfigError: container has runAsNonRoot and
+    image has non-numeric user, cannot verify user is non-root`. Обнови README: профиль теперь
+    **включён**, а не только проверен.
 
 ---
 
-### Задача 8. ConfigMap: env против файла
+### Задача 8. `ADMIN_TOKEN` из Secret и ручной вывод пода из балансировки
 
-**Уровень:** ★★☆ · **Время:** ~30 мин
+**Уровень:** ★★☆ · **Время:** ~1 ч
 
-**Цель.** Увидеть разницу: как приложение получает изменения ConfigMap через переменную и через файл.
+**Цель.** В приложении есть `POST /admin/ready`, но он выключен, пока не задан `ADMIN_TOKEN`.
+Передай токен безопасно и покажи разницу readiness и liveness на живом трафике.
 
 **Требования.**
 
-- ConfigMap `app-config` с ключом `GREETING=hello`;
-- под `busybox`, который каждые 5 секунд печатает `$GREETING` **и** содержимое смонтированного файла;
-- поменять значение на `bye` и понаблюдать за логами 2 минуты;
-- объяснить, что увидел, и как заставить поды подхватить изменение.
+- в values: `admin.token` (пусто — Secret не создаётся, эндпоинт выключен) и `admin.existingSecret`;
+- токен **не коммитится** — передаётся при деплое (добавь в Makefile переменную `HELM_EXTRA`);
+- при смене токена поды перезапускаются;
+- демонстрация: вывести один под из балансировки → он `0/1`, но **не перезапускается**, его нет в
+  EndpointSlice, через Ingress его `instance` не отвечает; вернуть обратно.
 
 **Проверка.**
 
 ```bash
-kubectl logs -f deploy/cfg-demo
-kubectl patch configmap app-config -p '{"data":{"GREETING":"bye"}}'
+TOKEN=$(openssl rand -hex 16)
+make deploy HELM_EXTRA="--set admin.token=$TOKEN"
+POD=$(kubectl -n my-app get pod -l app.kubernetes.io/name=my-app -o name | head -1)
+kubectl -n my-app port-forward $POD 8000:8000 &
+curl -X POST "localhost:8000/admin/ready?value=false&token=$TOKEN"
+kubectl -n my-app get pods
+for i in $(seq 10); do curl -s localhost/; echo; done
 ```
+
+??? tip "Подсказка"
+    `envFrom` принимает и `configMapRef`, и `secretRef`. Перезапуск при смене — та же техника, что
+    `checksum/config` в твоём `deployment.yaml`.
 
 ??? success "Решение"
     ```yaml
-    apiVersion: v1
-    kind: ConfigMap
-    metadata: { name: app-config }
-    data: { GREETING: hello }
-    ---
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata: { name: cfg-demo }
-    spec:
-      selector: { matchLabels: { app: cfg-demo } }
-      template:
-        metadata: { labels: { app: cfg-demo } }
-        spec:
-          containers:
-            - name: demo
-              image: busybox:1.37
-              command: ["sh", "-c", "while true; do echo env=$GREETING file=$(cat /cfg/GREETING); sleep 5; done"]
-              envFrom: [{ configMapRef: { name: app-config } }]
-              volumeMounts: [{ name: cfg, mountPath: /cfg }]
-          volumes: [{ name: cfg, configMap: { name: app-config } }]
+    # values.yaml
+    admin:
+      token: ""            # только через --set, не коммитить
+      existingSecret: ""   # или имя готового Secret с ключом ADMIN_TOKEN
     ```
 
-    **Что видно.** `env=hello` не меняется никогда — переменные окружения читаются один раз при старте.
-    `file=` меняется на `bye` примерно через минуту — kubelet обновляет смонтированный том
-    (**но не при `subPath`!**). Подхватить в env: `kubectl rollout restart deploy/cfg-demo`, а в Helm —
-    аннотация `checksum/config` с хэшем ConfigMap в шаблоне пода.
+    ```yaml
+    # templates/secret.yaml
+    {{- if and .Values.admin.token (not .Values.admin.existingSecret) }}
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: {{ include "my-app.fullname" . }}-admin
+      labels:
+        {{- include "my-app.labels" . | nindent 4 }}
+    type: Opaque
+    stringData:
+      ADMIN_TOKEN: {{ .Values.admin.token | quote }}
+    {{- end }}
+    ```
+
+    В `deployment.yaml` — аннотация пода и второй источник `envFrom`:
+
+    ```yaml
+            checksum/admin: {{ .Values.admin.token | sha256sum }}
+    ...
+              envFrom:
+                - configMapRef:
+                    name: {{ include "my-app.fullname" . }}-config
+                {{- if or .Values.admin.token .Values.admin.existingSecret }}
+                - secretRef:
+                    name: {{ .Values.admin.existingSecret | default (printf "%s-admin" (include "my-app.fullname" .)) }}
+                {{- end }}
+    ```
+
+    В Makefile: `HELM_EXTRA ?=` и `$(HELM_EXTRA)` в конце команды `helm upgrade` цели `deploy`.
+
+    Что видно: под `0/1 Running`, **RESTARTS не растёт** — `/readyz` отдаёт 503, а `/healthz` по-прежнему
+    200. `kubectl -n my-app get endpointslices -l kubernetes.io/service-name=my-app -o yaml` — у его адреса
+    `ready: false`. Через Ingress отвечает только второй `instance`. Вернуть: `value=true`.
+    Так выводят под на отладку, не убивая его, — и так же ведёт себя под во время прогрева.
 
 ---
 
-### Задача 9. Zero-trust: NetworkPolicy в kind
+### Задача 9. Zero-trust: Calico и NetworkPolicy в чарте
 
-**Уровень:** ★★★ · **Время:** ~1 ч
+**Уровень:** ★★★ · **Время:** ~1,5 ч
 
-**Цель.** Запретить весь трафик в namespace и разрешить только нужный — и доказать это проверками.
+**Цель.** Под приложения принимает трафик только от ingress-nginx и от проверок, наружу не ходит никуда.
 
 **Требования.**
 
-- kind **без** стандартного CNI + Calico (стандартный kindnet NetworkPolicy игнорирует);
-- namespace `shop`: `api` (nginx) и `client` (curl);
-- `default-deny-all` (ingress и egress), затем разрешить: `client → api:80` и DNS;
-- проверить: `client → api` работает, под из `default` → `api` — таймаут, `api` → интернет — таймаут.
-
-**Проверка.** Таблица из трёх проверок «откуда → куда → ожидание → результат».
+- кластер с Calico: в стандартном CNI kind (kindnet) NetworkPolicy **игнорируются**;
+- цель `make calico`, входит в `make up`;
+- в чарте `networkPolicy.enabled`: вход в под приложения — только из namespace `ingress-nginx` и от
+  пода `helm test`, на порт `http`; исходящий трафик — запрещён;
+- `make test` проходит;
+- таблица проверок: под из `default` → `my-app` (таймаут), Ingress → приложение (200),
+  приложение → интернет (таймаут).
 
 ??? tip "Подсказка"
-    В конфиге kind: `networking: { disableDefaultCNI: true, podSubnet: 192.168.0.0/16 }`, потом
-    `kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml`.
-    Пока Calico не встал, узлы `NotReady`. Не забудь про DNS — без него `curl api` не разрезолвит имя.
+    Кластер придётся пересоздать (`make down && make up`) — CNI задаётся при создании. Пока Calico не
+    встал, узлы `NotReady`. Посмотри на метки пода из `helm test`: какие из них совпадают с селектором
+    приложения?
 
 ??? success "Решение"
+    `configs/cluster.yaml` — в корень конфига:
+
     ```yaml
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 192.168.0.0/16      # пул Calico по умолчанию
+    ```
+
+    ```make
+    calico: ## CNI Calico — нужен для NetworkPolicy
+    	kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml
+    	kubectl -n kube-system rollout status ds/calico-node --timeout=300s
+
+    up: cluster calico ingress metrics deploy  ## всё с нуля до рабочей ссылки
+    ```
+
+    ```yaml
+    # templates/networkpolicy.yaml
+    {{- if .Values.networkPolicy.enabled }}
     apiVersion: networking.k8s.io/v1
     kind: NetworkPolicy
-    metadata: { name: default-deny-all, namespace: shop }
+    metadata:
+      name: {{ include "my-app.fullname" . }}
+      labels:
+        {{- include "my-app.labels" . | nindent 4 }}
     spec:
-      podSelector: {}
+      podSelector:
+        matchLabels:
+          {{- include "my-app.selectorLabels" . | nindent 6 }}
       policyTypes: [Ingress, Egress]
-    ---
-    apiVersion: networking.k8s.io/v1
-    kind: NetworkPolicy
-    metadata: { name: allow-dns, namespace: shop }
-    spec:
-      podSelector: {}
-      policyTypes: [Egress]
-      egress:
-        - to:
-            - namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: kube-system } }
-              podSelector: { matchLabels: { k8s-app: kube-dns } }
-          ports: [{ protocol: UDP, port: 53 }, { protocol: TCP, port: 53 }]
-    ---
-    apiVersion: networking.k8s.io/v1
-    kind: NetworkPolicy
-    metadata: { name: api-from-client, namespace: shop }
-    spec:
-      podSelector: { matchLabels: { app: api } }
-      policyTypes: [Ingress]
       ingress:
-        - from: [{ podSelector: { matchLabels: { app: client } } }]
-          ports: [{ port: 80 }]
-    ---
-    apiVersion: networking.k8s.io/v1
-    kind: NetworkPolicy
-    metadata: { name: client-to-api, namespace: shop }
-    spec:
-      podSelector: { matchLabels: { app: client } }
-      policyTypes: [Egress]
-      egress:
-        - to: [{ podSelector: { matchLabels: { app: api } } }]
-          ports: [{ port: 80 }]
+        - from:
+            - namespaceSelector:
+                matchLabels: { kubernetes.io/metadata.name: ingress-nginx }
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+                  app.kubernetes.io/component: test
+          ports:
+            - port: http
+      egress: []          # приложению наружу не нужно ничего
+    {{- end }}
     ```
 
-    Нужны **обе** стороны: egress у клиента и ingress у сервера — default-deny закрыл обе.
-    Заблокированный запрос — таймаут, а не `Connection refused`: Calico молча отбрасывает пакеты.
-    Подробно — [Диплом: zero-trust](diploma-k8s.md).
+    **Ловушка.** Под теста получает метки через `my-app.labels`, а туда входят `selectorLabels` —
+    политика приложения выберет и его: исходящий трафик теста к приложению будет запрещён, `make test`
+    повиснет. Метки пода теста:
+
+    ```yaml
+      labels:
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: test
+    ```
+
+    В CI кластер на kindnet (`cluster-ci.yaml`) — политики там не применяются, e2e пройдёт и без них.
+    Это стоит записать в «Честные ограничения». Когда появится мониторинг в кластере (задача 13), добавь
+    правило входа из namespace `monitoring`.
 
 ---
 
-### Задача 10. Почини три сломанных пода
+### Задача 10. Почини сломанный релиз
 
-**Уровень:** ★★☆ · **Время:** ~30 мин
+**Уровень:** ★★☆ · **Время:** ~45 мин
 
-**Цель.** Найти причину по симптому — не глядя в манифесты, только через kubectl.
+**Цель.** Распознать четыре типичные поломки по симптомам и откатить релиз.
+
+Перед началом — `helm -n my-app history my-app`. Ломай **по одной**, после каждой — диагностика и
+`helm -n my-app rollback my-app`:
 
 ```bash
-kubectl run broken-1 --image=nginx:1.27-alpne
-kubectl run broken-2 --image=busybox:1.37 -- sh -c "echo starting; exit 1"
-kubectl run broken-3 --image=nginx:1.27-alpine --overrides='{"spec":{"containers":[{"name":"broken-3","image":"nginx:1.27-alpine","resources":{"requests":{"cpu":"100"}}}]}}'
+helm -n my-app upgrade my-app charts/my-app --reuse-values --set readinessProbe.httpGet.path=/nope
+helm -n my-app upgrade my-app charts/my-app --reuse-values --set image.tag=nope
+helm -n my-app upgrade my-app charts/my-app --reuse-values \
+  --set resources.requests.cpu=10 --set resources.limits.cpu=10
+helm -n my-app upgrade my-app charts/my-app --reuse-values \
+  --set resources.requests.memory=30Mi --set resources.limits.memory=30Mi
 ```
 
-**Требования.** Для каждого: статус, команда, которой нашёл причину, причина, исправление.
+**Требования.** Для каждой: статус пода, команда, где видна причина, причина. Отдельно ответь: почему
+приложение через Ingress продолжало отвечать во время каждой поломки? Последний шаг — сделай так,
+чтобы `make deploy` откатывался сам.
 
 ??? tip "Подсказка"
-    Три главные команды: `kubectl get pods` (статус), `kubectl describe pod` (секция Events внизу),
-    `kubectl logs` (и `--previous` для упавшего контейнера).
+    `kubectl get pods`, `kubectl describe pod` (Events внизу), `kubectl logs --previous`,
+    `kubectl get pod -o jsonpath='{.status.containerStatuses[0].lastState.terminated.reason}'`.
 
 ??? success "Решение"
-    | Под | Статус | Где видно | Причина |
+    | Поломка | Статус | Где видно | Причина |
     |---|---|---|---|
-    | `broken-1` | `ImagePullBackOff` | `describe` → Events: `Failed to pull image ... not found` | опечатка в теге `alpne` |
-    | `broken-2` | `CrashLoopBackOff` | `logs broken-2 --previous` → `starting`; `describe` → `Exit Code: 1` | процесс сам завершается с ошибкой |
-    | `broken-3` | `Pending` | `describe` → Events: `0/3 nodes are available: 3 Insufficient cpu` | request 100 CPU — такого узла нет |
+    | readiness `/nope` | новый под `0/1 Running` | `describe`: `Readiness probe failed: HTTP probe failed with statuscode: 404` | проба на несуществующий путь |
+    | `image.tag=nope` | `ErrImagePull` / `ImagePullBackOff` | `describe`: `pull access denied ... k8s-platform-lab:nope` | образа нет ни в kind, ни в Docker Hub |
+    | `cpu=10` | `Pending` | `describe`: `Insufficient cpu` (+ taint control-plane) | такого узла нет |
+    | память 30Mi | `CrashLoopBackOff` | `lastState.terminated.reason: OOMKilled` | Python + FastAPI не помещаются в 30 МиБ |
 
-    Порядок диагностики пода: **статус → Events → логи (в т.ч. `--previous`) → `kubectl get events
-    --sort-by=.lastTimestamp`**. `Pending` — это про планирование (ресурсы, taints, affinity, PVC),
-    `CrashLoopBackOff` — про само приложение, `ImagePullBackOff` — про образ и доступ к реестру.
+    Приложение отвечало, потому что rolling update не убирает старые поды, пока новые не Ready:
+    у двух реплик `maxUnavailable` 25 % округляется вниз до 0.
+
+    Автооткат: `--atomic` в `make deploy` (в Helm 4 он переименован в `--rollback-on-failure` —
+    проверь `helm upgrade --help`). Не дождался готовности за `--timeout` — Helm сам вернёт прошлую ревизию.
 
 ---
 
-### Задача 11. HPA под нагрузкой
+### Задача 11. HPA: проверь утверждение README
 
 **Уровень:** ★★★ · **Время:** ~1 ч
 
-**Цель.** Включить автомасштабирование по CPU и увидеть его в работе.
+**Цель.** Как тестировщик: README утверждает, что потолок автоскейлинга — 4 реплики из-за
+`nodeTaintsPolicy`, а в CI — 2. Проверь это экспериментом и приведи README в соответствие с реальностью.
 
 **Требования.**
 
-- metrics-server в kind (`kubectl top pods` работает);
-- Deployment `php-apache` (образ `registry.k8s.io/hpa-example`, request CPU 200m) + Service;
-- HPA: 1–5 реплик, цель 50 % CPU;
-- нагрузка из пода с `wget` в цикле; записать, через сколько выросли реплики и через сколько вернулись.
+- найди в `values.yaml`, какое `nodeTaintsPolicy` стоит на самом деле, и предскажи результат;
+- подними `autoscaling.maxReplicas` до 8 и дай нагрузку;
+- посчитай поды по узлам, найди `Pending` (если есть) и их причину;
+- исправь README (или values) так, чтобы описание совпадало с поведением.
 
 **Проверка.**
 
 ```bash
-kubectl get hpa php-apache -w
-kubectl run load --rm -it --image=busybox:1.37 -- sh -c "while true; do wget -q -O- http://php-apache; done"
+make deploy HELM_EXTRA="--set autoscaling.maxReplicas=8"    # HELM_EXTRA — из задачи 8
+BASE_URL=http://localhost ./scripts/generate-load.sh 180 16
+kubectl -n my-app get hpa -w
+kubectl -n my-app get pods -l app.kubernetes.io/name=my-app \
+  -o custom-columns=NODE:.spec.nodeName,STATUS:.status.phase --no-headers | sort | uniq -c
 ```
 
 ??? tip "Подсказка"
-    В kind у kubelet самоподписанный сертификат — metrics-server нужно запустить с
-    `--kubelet-insecure-tls`.
+    С `Ignore` узел control-plane — домен распределения, хотя поды на него не попадают из-за taint;
+    с `Honor` узлы с непереносимыми taint из расчёта исключаются. Посчитай `maxSkew` для обоих случаев.
 
 ??? success "Решение"
-    ```bash
-    kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-    kubectl -n kube-system patch deploy metrics-server --type=json \
-      -p '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+    В `values.yaml` стоит `nodeTaintsPolicy: Honor` (добавлено коммитом «nodeTaintsPolicy в топологию»),
+    а README описывает поведение `Ignore`:
 
-    kubectl create deployment php-apache --image=registry.k8s.io/hpa-example
-    kubectl set resources deploy php-apache --requests=cpu=200m
-    kubectl expose deploy php-apache --port=80
-    kubectl autoscale deploy php-apache --cpu-percent=50 --min=1 --max=5
-    ```
+    - **`Ignore`:** домены — control-plane (всегда 0 подов) и два воркера; `maxSkew: 2` → на воркере не
+      больше 0 + 2 = 2 пода → потолок **4**. В CI (control-plane + 1 воркер) → **2**.
+    - **`Honor`:** control-plane не считается; домены — только воркеры, и распределение ограничивает лишь
+      разницу между ними (5/3, 4/4…). Потолок — `autoscaling.maxReplicas` и свободный CPU узлов
+      (`requests.cpu: 100m` на под). В CI единственный воркер — единственный домен, ограничения нет.
 
-    Рост — 30–60 с (сбор метрик + цикл HPA 15 с), уменьшение — ~5 мин (окно стабилизации
-    scale-down по умолчанию 300 с). Без `requests` HPA показывает `<unknown>`: утилизация считается
-    от request. Сравни с [нагрузочным тестом диплома](diploma-momo-store.md).
+    Значит, раздел «Честные ограничения» устарел: пункты про «потолок 4» и «в CI две реплики» нужно
+    переписать (или вернуть `Ignore`, если ограничение было намеренным). Сколько реплик поднимет HPA,
+    зависит от нагрузки и того, сколько CPU отдано Docker — запиши свои цифры в README.
 
 ---
 
-### Задача 12. CronJob с данными на диске
+### Задача 12. Синтетический мониторинг: CronJob в чарте
 
-**Уровень:** ★★☆ · **Время:** ~40 мин
+**Уровень:** ★★☆ · **Время:** ~45 мин
 
-**Цель.** Периодическая задача, которая пишет в постоянное хранилище, и её ручной запуск.
+**Цель.** Раз в 5 минут проверять приложение «снаружи пода» — так, как его видит клиент.
 
 **Требования.**
 
-- PVC на 100Mi;
-- CronJob каждую минуту дописывает дату в `/data/log.txt`;
-- одновременно не больше одного запуска; хранить 3 успешных и 1 неудачный Job;
-- запустить задачу вручную, не дожидаясь расписания;
-- прочитать файл, не дожидаясь следующего запуска.
+- `templates/cronjob.yaml` под флагом `synthetic.enabled`; расписание и путь — в values;
+- `curl` к Service `my-app`, Job падает при ответе не 200; не больше одного запуска одновременно;
+- хранить 3 успешных и 3 упавших Job;
+- проходит профиль `restricted` (задача 7) и NetworkPolicy (задача 9);
+- запустить вручную; сломать путь и увидеть упавший Job.
+
+**Проверка.**
+
+```bash
+kubectl -n my-app create job --from=cronjob/my-app-synthetic synthetic-manual
+kubectl -n my-app logs job/synthetic-manual
+make deploy HELM_EXTRA="--set synthetic.path=/nope" && kubectl -n my-app create job --from=cronjob/my-app-synthetic synthetic-fail
+kubectl -n my-app get jobs
+```
 
 ??? success "Решение"
     ```yaml
-    apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata: { name: data }
-    spec:
-      accessModes: [ReadWriteOnce]
-      resources: { requests: { storage: 100Mi } }
-    ---
+    # values.yaml
+    synthetic:
+      enabled: true
+      schedule: "*/5 * * * *"
+      path: /readyz
+    ```
+
+    ```yaml
+    # templates/cronjob.yaml
+    {{- if .Values.synthetic.enabled }}
     apiVersion: batch/v1
     kind: CronJob
-    metadata: { name: stamp }
+    metadata:
+      name: {{ include "my-app.fullname" . }}-synthetic
+      labels:
+        {{- include "my-app.labels" . | nindent 4 }}
     spec:
-      schedule: "*/1 * * * *"
+      schedule: {{ .Values.synthetic.schedule | quote }}
       concurrencyPolicy: Forbid
       successfulJobsHistoryLimit: 3
-      failedJobsHistoryLimit: 1
+      failedJobsHistoryLimit: 3
       jobTemplate:
         spec:
-          backoffLimit: 2
+          backoffLimit: 0
+          activeDeadlineSeconds: 60
           template:
+            metadata:
+              labels:
+                app.kubernetes.io/instance: {{ .Release.Name }}
+                app.kubernetes.io/component: synthetic
             spec:
-              restartPolicy: OnFailure
+              restartPolicy: Never
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 65534
+                runAsGroup: 65534
+                seccompProfile: { type: RuntimeDefault }
               containers:
-                - name: stamp
-                  image: busybox:1.37
-                  command: ["sh", "-c", "date >> /data/log.txt; tail -3 /data/log.txt"]
-                  volumeMounts: [{ name: data, mountPath: /data }]
-              volumes: [{ name: data, persistentVolumeClaim: { claimName: data } }]
+                - name: probe
+                  image: curlimages/curl:8.11.1
+                  args: ["-fsS", "--max-time", "5",
+                         "http://{{ include "my-app.fullname" . }}:{{ .Values.service.port }}{{ .Values.synthetic.path }}"]
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    readOnlyRootFilesystem: true
+                    capabilities: { drop: [ALL] }
+    {{- end }}
     ```
 
-    ```bash
-    kubectl create job --from=cronjob/stamp manual-1
-    kubectl logs job/manual-1
-    ```
-
-    В kind PVC обслуживает local-path-provisioner (StorageClass `standard`). `ReadWriteOnce` — том
-    монтируется только на один узел: Job'ы, попавшие на другой узел, ждут в `Pending`/`ContainerCreating`.
+    Метки пода — **не** селектор приложения (иначе его зацепит NetworkPolicy приложения, как под теста).
+    В NetworkPolicy из задачи 9 добавь в `from` ещё `podSelector` с `component: synthetic`.
+    `curl -f` возвращает код 22 на ответ ≥ 400 → Job `Failed`. Следующий шаг — алерт на упавшие Job
+    (`kube_job_status_failed` из kube-state-metrics, задача 13).
 
 ---
 
-## Helm
+### Задача 13. Мониторинг в кластер: ServiceMonitor, дашборд и SLO-алерт
 
-### Задача 13. Чарт для своего сервиса
+**Уровень:** ★★★ · **Время:** ~2 ч
 
-**Уровень:** ★★☆ · **Время:** ~1,5 ч
-
-**Цель.** Упаковать сервис из задачи 1 в Helm-чарт и пройти цикл install → upgrade → rollback.
+**Цель.** Пункт из «Дальше по плану» README: Prometheus и Grafana в кластере, а не только в compose,
+и алерт на твой SLO (p95 `/api/*` < 200 мс).
 
 **Требования.**
 
-- чарт `hello` (из `helm create` — убрать лишнее: ingress, serviceaccount, tests);
-- образ `hello:1.0` загружен в kind; пробы на `/health`; resources;
-- `values-dev.yaml` (1 реплика) и `values-prod.yaml` (3 реплики, больше ресурсов);
-- `helm lint` и `helm template` без ошибок;
-- установить с dev, обновить на prod, откатиться на ревизию 1.
+- цель `make monitoring`: kube-prometheus-stack в namespace `monitoring` (без Alertmanager) — и она
+  действительно выполняется (проверь `make -n monitoring`);
+- в чарте `ServiceMonitor` и `PrometheusRule` — создаются, только если в кластере есть их CRD;
+- дашборд `monitoring/grafana/dashboards/app-overview.json` подхватывается Grafana в кластере;
+- алерты: `AppLatencySLOBreach` (p95 `/api/*` > 0,2 с в течение 5 мин) и `AppNoReadyInstances`;
+- вызвать SLO-алерт нагрузкой с медленными запросами и увидеть его в Prometheus.
 
 **Проверка.**
 
 ```bash
-helm history hello                       # 3 ревизии: install, upgrade, rollback
-kubectl get deploy hello -o jsonpath='{.spec.replicas}'   # после отката — 1
+kubectl -n monitoring port-forward svc/kube-prometheus-stack-prometheus 9090 &
+open http://localhost:9090/targets           # my-app — UP
+SLOW_EVERY=2 SLOW_MS=400 BASE_URL=http://localhost ./scripts/generate-load.sh 420 8
+open http://localhost:9090/alerts            # AppLatencySLOBreach: Pending → Firing
 ```
 
-??? success "Решение"
-    ```bash
-    kind load docker-image hello:1.0 --name lab
-    helm create hello && cd hello
-    rm -rf templates/ingress.yaml templates/serviceaccount.yaml templates/hpa.yaml templates/tests
-    # deployment.yaml: убрать serviceAccountName; values.yaml: image.repository=hello, tag=1.0,
-    # pullPolicy=IfNotPresent, service.port=8080, probes path=/health
-    helm lint . && helm template hello . -f values-dev.yaml | less
+??? tip "Подсказка"
+    Дашборд писался под compose: проверь, какой `job` в его запросах и какой будет в кластере. И помни,
+    что `{{ }}` в шаблонах Prometheus Helm тоже попытается выполнить.
 
-    helm install hello . -f values-dev.yaml
-    helm upgrade hello . -f values-prod.yaml
-    helm rollback hello 1
+??? success "Решение"
+    ```make
+    monitoring: ## Prometheus + Grafana в кластере
+    	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts --force-update
+    	helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+    		--namespace monitoring --create-namespace --wait --timeout 10m \
+    		--set alertmanager.enabled=false \
+    		--set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false \
+    		--set prometheus.prometheusSpec.ruleSelectorNilUsesHelmValues=false
+    	kubectl -n monitoring create configmap app-overview-dashboard \
+    		--from-file=monitoring/grafana/dashboards/app-overview.json --dry-run=client -o yaml | kubectl apply -f -
+    	kubectl -n monitoring label configmap app-overview-dashboard grafana_dashboard=1 --overwrite
     ```
 
-    `pullPolicy: IfNotPresent` обязателен — иначе kubelet пойдёт за `hello:1.0` в Docker Hub.
-    Подробнее о шаблонах — [Практикум Helm](helm-practice.md).
+    **Обязательно добавь `monitoring` в `.PHONY`.** В проекте есть каталог `monitoring/`, и без `.PHONY`
+    make считает цель выполненной — «файл» с таким именем уже существует: `make monitoring` ответит
+    `'monitoring' is up to date` и ничего не сделает.
+
+    `...NilUsesHelmValues=false` — иначе Prometheus берёт только ServiceMonitor и правила с меткой своего
+    релиза. Порядок: сначала `make monitoring` (ставит CRD), потом `make deploy`.
+
+    ```yaml
+    # templates/servicemonitor.yaml
+    {{- if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1/ServiceMonitor" }}
+    apiVersion: monitoring.coreos.com/v1
+    kind: ServiceMonitor
+    metadata:
+      name: {{ include "my-app.fullname" . }}
+      labels:
+        {{- include "my-app.labels" . | nindent 4 }}
+    spec:
+      selector:
+        matchLabels:
+          {{- include "my-app.selectorLabels" . | nindent 6 }}
+      endpoints:
+        - port: http
+          path: /metrics
+          interval: 15s
+    {{- end }}
+    ```
+
+    ```yaml
+    # templates/prometheusrule.yaml
+    {{- if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1/PrometheusRule" }}
+    apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: {{ include "my-app.fullname" . }}
+      labels:
+        {{- include "my-app.labels" . | nindent 4 }}
+    spec:
+      groups:
+        - name: {{ include "my-app.fullname" . }}.slo
+          rules:
+            - alert: AppLatencySLOBreach
+              expr: |
+                histogram_quantile(0.95, sum by (le) (rate(
+                  http_request_duration_seconds_bucket{namespace="{{ .Release.Namespace }}", path=~"/api/.*"}[5m]
+                ))) > 0.2
+              for: 5m
+              labels: { severity: warning }
+              annotations:
+                summary: "p95 /api/* выше 200 мс — SLO нарушен"
+            - alert: AppNoReadyInstances
+              expr: sum(app_ready{namespace="{{ .Release.Namespace }}"}) < 1
+              for: 1m
+              labels: { severity: critical }
+              annotations:
+                summary: "нет ни одного готового инстанса"
+    {{- end }}
+    ```
+
+    **Ловушки:**
+
+    - В кластере метка `job` = имя Service (`my-app`), а дашборд фильтрует `job="app"` (так в compose).
+      Замени в JSON на `job=~"app|my-app"` — дашборд заработает в обоих местах.
+    - Шаблоны Prometheus вида `{{ $labels.instance }}` внутри чарта Helm выполнит сам и упадёт —
+      экранируй: `{{ "{{" }} $labels.instance {{ "}}" }}`. В решении выше их нет специально.
+    - С NetworkPolicy из задачи 9 разреши вход из namespace `monitoring` на порт `http`.
+
+    Grafana: `kubectl -n monitoring port-forward svc/kube-prometheus-stack-grafana 3000:80`, пароль —
+    `kubectl -n monitoring get secret kube-prometheus-stack-grafana -o jsonpath='{.data.admin-password}' | base64 -d`.
+    Стек тяжёлый: дай Docker не меньше 6 ГБ памяти.
 
 ---
 
@@ -1129,15 +1302,17 @@ ansible-galaxy collection install community.docker
 
 - просканировать `python:3.9` и `python:3.12-slim`: сравнить число CRITICAL/HIGH;
 - оставить только исправимые (`--ignore-unfixed`) — сколько осталось?
-- `trivy config` по Dockerfile из задачи 3 (плохому) и манифесту из задачи 7;
-- добиться: 0 исправимых CRITICAL в образе, 0 HIGH в манифесте.
+- `trivy config` по Dockerfile из задачи 3 (плохому) и по чарту `charts/my-app` из k8s-platform-lab;
+- `trivy image` по образу проекта `k8s-platform-lab:dev`;
+- добиться: 0 исправимых CRITICAL в образе, 0 HIGH в чарте.
 
 ??? success "Решение"
     ```bash
     trivy image --severity CRITICAL,HIGH python:3.9 | tail -3
     trivy image --severity CRITICAL,HIGH --ignore-unfixed python:3.12-slim
     trivy config --severity HIGH,CRITICAL ./bad/      # Dockerfile: root, latest-подобные теги, apt без --no-install-recommends
-    trivy config ./k8s/deploy.yaml                    # securityContext, limits, readOnlyRootFilesystem...
+    trivy config ~/Documents/my_repo/k8s-platform-lab/charts/my-app   # Helm-чарт сканируется целиком
+    trivy image --severity CRITICAL,HIGH --ignore-unfixed k8s-platform-lab:dev
     ```
 
     Основные рычаги: свежая и **минимальная** база (slim/alpine/distroless/scratch), `apk/apt upgrade`
@@ -1183,7 +1358,7 @@ ansible-galaxy collection install community.docker
 
 ## GitOps
 
-### Задача 23. Argo CD в kind
+### Задача 23. Argo CD для k8s-platform-lab
 
 **Уровень:** ★★★ · **Время:** ~1,5 ч
 
@@ -1191,11 +1366,16 @@ ansible-galaxy collection install community.docker
 
 **Требования.**
 
-- Argo CD в kind, доступ к UI через port-forward;
-- репозиторий с манифестом из задачи 7 в каталоге `k8s/`;
-- Application с `automated: { prune: true, selfHeal: true }`;
-- изменить `replicas` в git → кластер подтянул изменение;
-- `kubectl scale` руками → Argo CD вернул значение из git.
+- Argo CD в кластере `platform-lab`, доступ к UI через port-forward;
+- Application смотрит на чарт `charts/my-app` твоего репозитория на GitHub, ветка `task/23-gitops`;
+- релиз в отдельном namespace `my-app-gitops`, Ingress выключен (иначе конфликт с релизом
+  `make deploy` за тот же путь `/`);
+- `automated: { prune: true, selfHeal: true }`;
+- изменить `config.LOG_LEVEL` в ветке → кластер подтянул; поправить ConfigMap руками → Argo CD вернул.
+
+??? tip "Подсказка"
+    Образ `k8s-platform-lab:dev` должен быть загружен в kind (`make build`) — Argo CD его не соберёт.
+    Значения для чарта задаются в `spec.source.helm`.
 
 ??? success "Решение"
     ```bash
@@ -1208,20 +1388,27 @@ ansible-galaxy collection install community.docker
     ```yaml
     apiVersion: argoproj.io/v1alpha1
     kind: Application
-    metadata: { name: web, namespace: argocd }
+    metadata: { name: my-app, namespace: argocd }
     spec:
       project: default
       source:
-        repoURL: https://github.com/<user>/<repo>.git
-        targetRevision: main
-        path: k8s
+        repoURL: https://github.com/FunnyJesus/k8s-platform-lab.git
+        targetRevision: task/23-gitops
+        path: charts/my-app
+        helm:
+          valuesObject:
+            image: { repository: k8s-platform-lab, tag: dev }
+            ingress: { enabled: false }
       destination:
         server: https://kubernetes.default.svc
-        namespace: web
+        namespace: my-app-gitops
       syncPolicy:
         automated: { prune: true, selfHeal: true }
         syncOptions: [CreateNamespace=true]
     ```
 
-    Argo CD опрашивает git раз в ~3 минуты (быстрее — кнопка Refresh или webhook). `selfHeal` возвращает
-    ручной `kubectl scale` почти сразу. Подробнее — [GitOps](gitops.md).
+    Проверка selfHeal:
+    `kubectl -n my-app-gitops patch configmap my-app-config -p '{"data":{"LOG_LEVEL":"DEBUG"}}'` →
+    через несколько секунд значение снова из git. Argo CD опрашивает git раз в ~3 минуты (быстрее —
+    Refresh в UI или webhook). Если включил профиль `restricted` (задача 7) — повесь метки и на
+    `my-app-gitops`. Подробнее — [GitOps](gitops.md).
