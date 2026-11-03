@@ -1,0 +1,5013 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://FunnyJesus.github.io/MkDocsPracticum/bash-first-scripts/">
+      
+      
+        <link rel="prev" href="../bash-scripts/">
+      
+      
+        <link rel="next" href="../bash-cheatsheet/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Bash: первые полезные скрипты - MkDocsPracticum</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#bash" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MkDocsPracticum" class="md-header__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MkDocsPracticum
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Bash: первые полезные скрипты
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MkDocsPracticum" class="md-nav__button md-logo" aria-label="MkDocsPracticum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    MkDocsPracticum
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Что такое DevOps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Собеседование
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Собеседование
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interview-mantra/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мантра: вопросы на каждый день
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Вопросы к собеседованию DevOps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Git
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux & Command
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux & Command
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-filesystem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: структура каталогов и куда что класть
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux: диагностика и производительность
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text-processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обработка текста: grep, regex, sed, awk, jq, yq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text-processing-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обработка текста: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSH глубже: config, бастион, туннели, agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tmux-vim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmux и vim: минимум для работы на серверах
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD (Continuous Delivery)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CD (Continuous Delivery)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Continuous Delivery / Deployment (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: стратегии деплоя (подробно)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cd-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CD: шпаргалка топ-20
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bash Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash: первые полезные скрипты
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash: первые полезные скрипты
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Где запускать
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bash_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bash: основы
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bash: основы">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 1. Сводка о сервере
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 2. Сервис отвечает?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 3. Бэкап каталога с датой в имени
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 4. Удалить старые логи — безопасно
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 5. Дождаться, пока сервис поднимется
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bash_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bash: файлы и вывод команд
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bash: файлы и вывод команд">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 6. Проверить список адресов из файла
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 7. Топ ошибок в логе
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 8. Предупреждение о заполнении диска
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bash-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bash: Kubernetes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bash: Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 9. Перезапуск деплоймента — с защитой от прода
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 10. Собрать диагностику пода для баг-репорта
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bash-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bash: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python Script
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python Script
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makefile
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Makefile
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../makefile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makefile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../makefile-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Makefile: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    IaC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaС
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: команды Terraform с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iac-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC: шпаргалка топ-20 команд Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terraform-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terraform: продвинутый уровень
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ansible
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible (теория)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ansible-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ansible: шпаргалка топ-20 конструкций
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Container Registry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker Compose
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-compose/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compose-networks-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Шпаргалка: сети в Docker Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load-balancing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Балансировка нагрузки (Load Balancing)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kubernetes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: команды с подробным описанием
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k9s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    k9s — быстрая навигация по кластеру
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-loadbalancer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoadBalancer в Kubernetes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gateway-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway API — замена Ingress (и ingress-nginx)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kustomize/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kustomize
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Helm
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-podinfo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm: production-ready чарт (podinfo)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm: шпаргалка команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k8s-yaml-map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Карта: где какой параметр в манифесте и в Helm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm-practice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практикум: Helm на k8s-platform-lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitOps (Argo CD)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GitOps (Argo CD)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitOps и Argo CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../argocd-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Argo CD: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Nginx
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nginx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nginx-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Сети
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сети: шпаргалка топ-20 команд
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_20" >
+        
+          
+          <label class="md-nav__link" for="__nav_20" id="__nav_20_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Базы данных и очереди
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_20_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_20">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Базы данных и очереди
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../databases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Базы данных для DevOps (PostgreSQL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postgres-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PostgreSQL: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../message-queues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Очереди сообщений: Kafka и RabbitMQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_21" >
+        
+          
+          <label class="md-nav__link" for="__nav_21" id="__nav_21_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг и логи
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_21_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_21">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Мониторинг и логи
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг и логирование
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prometheus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prometheus и Alertmanager: настройка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../grafana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grafana: настройка и provisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector: сбор и обработка логов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Трейсинг и OpenTelemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мониторинг: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22" >
+        
+          
+          <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SRE и надёжность
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_22">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SRE и надёжность
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SRE: инциденты, on-call, postmortem, error budget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backup-dr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Бэкапы и Disaster Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../incidents-practice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практика: 10 типовых инцидентов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Облака
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Облака
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Облака
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud-init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cloud-init: первичная настройка виртуальных машин
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openstack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenStack: работа через UI (Horizon) и CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openstack-cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenStack: шпаргалка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Безопасность
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Безопасность
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Безопасность (DevSecOps)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../secrets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Секреты: Vault, External Secrets, Sealed Secrets, SOPS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практика
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Практика
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../start-checklist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Памятка: от нуля до работающего сервиса
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../study-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    План: 12 недель до уверенного джуна
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-e2e/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сквозной проект: от кода до мониторинга
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../practice-tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Практические задания
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Диплом: Momo Store
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Диплом: Momo Store
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diploma-momo-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Дипломный проект: Momo Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diploma-terraform/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Диплом: Terraform и облако
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diploma-k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Диплом: образы, Helm и кластер
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diploma-cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Диплом: CI/CD в GitLab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diploma-monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Диплом: мониторинг
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diploma-troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Диплом: журнал проблем
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diploma-defense/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Диплом: вопросы для защиты
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Где запускать
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bash_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bash: основы
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bash: основы">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 1. Сводка о сервере
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 2. Сервис отвечает?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 3. Бэкап каталога с датой в имени
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 4. Удалить старые логи — безопасно
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 5. Дождаться, пока сервис поднимется
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bash_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bash: файлы и вывод команд
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bash: файлы и вывод команд">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 6. Проверить список адресов из файла
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 7. Топ ошибок в логе
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 8. Предупреждение о заполнении диска
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bash-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bash: Kubernetes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bash: Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 9. Перезапуск деплоймента — с защитой от прода
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задача 10. Собрать диагностику пода для баг-репорта
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="bash">Bash: первые полезные скрипты</h1>
+<p>Лестница из 10 маленьких скриптов, которые реально нужны в работе. Каждый следующий добавляет
+<strong>один-два новых приёма</strong> к уже знакомым. Не перескакивай: третий скрипт строится на первых двух.</p>
+<p>Справка по синтаксису — <a href="../bash-scripts/">Bash-скрипты</a> и <a href="../bash-cheatsheet/">шпаргалка</a>.
+Большой скрипт со всеми «а что, если…» — задача 18 в <a href="../practice-tasks/">Практических заданиях</a>.</p>
+<h2 id="_1">Где запускать</h2>
+<p>Скрипты пишутся для <strong>Linux-серверов</strong>. На macOS часть команд другая (<code>free</code>, <code>uptime -p</code>, <code>/proc</code>,
+ключи <code>date</code> и <code>find</code>), поэтому запускай в контейнере Ubuntu:</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/bash-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/bash-lab
+docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>:/w<span class="w"> </span>-w<span class="w"> </span>/w<span class="w"> </span>ubuntu:24.04<span class="w"> </span>bash
+apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>-qq<span class="w"> </span>curl<span class="w"> </span>procps<span class="w"> </span>shellcheck<span class="w">   </span><span class="c1"># внутри контейнера, один раз</span>
+</code></pre></div>
+<p>Файлы в <code>~/bash-lab</code> видны и на Mac (редактор), и в контейнере (запуск).</p>
+<p><strong>Каждый скрипт:</strong></p>
+<div class="highlight"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>имя.sh<span class="w">      </span><span class="c1"># сделать исполняемым</span>
+./имя.sh<span class="w">             </span><span class="c1"># запустить</span>
+shellcheck<span class="w"> </span>имя.sh<span class="w">    </span><span class="c1"># линтер: подсказывает кавычки, read -r и другие ошибки новичка</span>
+</code></pre></div>
+<p><strong>Как работать:</strong> сначала напиши сам, проверь, прогони <code>shellcheck</code>, и только потом открывай решение.
+Подсказка — если застрял дольше 15 минут. Эти же задания выдаёт бот-тренажёр (<code>/task</code>) и возвращает
+их на повтор — тогда без подсказок.</p>
+<hr />
+<h2 id="bash_1">Bash: основы</h2>
+<h3 id="1">Задача 1. Сводка о сервере</h3>
+<p><strong>Уровень:</strong> ★☆☆ · <strong>Время:</strong> ~15 мин</p>
+<p><strong>Цель.</strong> Одной командой узнать, что за машина перед тобой: первое, что делаешь на незнакомом сервере.</p>
+<p><strong>Что потренируешь:</strong> подстановку команды <code>$(...)</code>, конвейер <code>|</code>, простейший <code>awk</code>.</p>
+<p><strong>Требования.</strong> Скрипт <code>sysinfo.sh</code> выводит:</p>
+<div class="highlight"><pre><span></span><code>Хост:     ...
+ОС:       Ubuntu 24.04 LTS
+Аптайм:   up 3 hours, 12 minutes
+Загрузка: 0.15 0.10 0.05 (ядер: 4)
+Память:   1.2Gi из 7.7Gi
+Диск /:   12G из 59G (21%)
+</code></pre></div>
+<details class="tip">
+<summary>Подсказка</summary>
+<p><code>hostname</code>, <code>uptime -p</code>, <code>nproc</code>. Название ОС — в файле <code>/etc/os-release</code>, строка
+<code>PRETTY_NAME="Ubuntu 24.04 LTS"</code>: найти её <code>grep</code>, вырезать текст между кавычками — <code>cut -d '"' -f2</code>.
+Загрузка — первые три числа файла <code>/proc/loadavg</code>. Из <code>free -h</code> и <code>df -h /</code> нужную строку и колонки
+достаёт <code>awk</code>: <code>awk '/^Mem:/ {print $3}'</code> — третья колонка строки, начинающейся с <code>Mem:</code>.</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Сводка о сервере: имя, ОС, аптайм, загрузка, память, диск</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Хост:     </span><span class="k">$(</span>hostname<span class="k">)</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"ОС:       </span><span class="k">$(</span>grep<span class="w"> </span><span class="s1">'^PRETTY_NAME='</span><span class="w"> </span>/etc/os-release<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">'"'</span><span class="w"> </span>-f2<span class="k">)</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Аптайм:   </span><span class="k">$(</span>uptime<span class="w"> </span>-p<span class="k">)</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Загрузка: </span><span class="k">$(</span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">' '</span><span class="w"> </span>-f1-3<span class="w"> </span>/proc/loadavg<span class="k">)</span><span class="s2"> (ядер: </span><span class="k">$(</span>nproc<span class="k">)</span><span class="s2">)"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Память:   </span><span class="k">$(</span>free<span class="w"> </span>-h<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'/^Mem:/ {print $3 " из " $2}'</span><span class="k">)</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Диск /:   </span><span class="k">$(</span>df<span class="w"> </span>-h<span class="w"> </span>/<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'NR==2 {print $3 " из " $2 " (" $5 ")"}'</span><span class="k">)</span><span class="s2">"</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> <code>$(команда)</code> подставляет вывод команды в строку. <code>cut -d '"' -f2</code> режет строку по
+кавычкам и берёт второй кусок — текст внутри них. В <code>awk</code> <code>NR==2</code> — вторая строка (первая у <code>df</code> —
+заголовок), <code>$3</code> — третья колонка.</p>
+</details>
+<hr />
+<h3 id="2">Задача 2. Сервис отвечает?</h3>
+<p><strong>Уровень:</strong> ★☆☆ · <strong>Время:</strong> ~20 мин</p>
+<p><strong>Цель.</strong> Проверить, что сайт или API отвечает <code>200</code> — и сообщить об этом <strong>кодом выхода</strong>, чтобы
+скрипт можно было использовать в других скриптах и в CI.</p>
+<p><strong>Что потренируешь:</strong> аргументы <code>$1</code>, проверку «аргумент не забыли», <code>if</code>, код выхода <code>exit</code>.</p>
+<p><strong>Требования.</strong></p>
+<ul>
+<li><code>./is-up.sh https://ya.ru</code> → <code>OK https://ya.ru</code>, код выхода <code>0</code>;</li>
+<li><code>./is-up.sh https://ya.ru/no-such-page</code> → <code>FAIL ... (код 404)</code>, код выхода <code>1</code>;</li>
+<li>без аргумента — понятное сообщение, как запускать;</li>
+<li>не ждать дольше 5 секунд.</li>
+</ul>
+<p><strong>Проверка.</strong></p>
+<div class="highlight"><pre><span></span><code>./is-up.sh<span class="w"> </span>https://ya.ru<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"код выхода: </span><span class="nv">$?</span><span class="s2">"</span>
+./is-up.sh<span class="w"> </span>https://ya.ru/no-such-page<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"код выхода: </span><span class="nv">$?</span><span class="s2">"</span>
+./is-up.sh<span class="w"> </span>https://ya.ru<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"можно деплоить"</span><span class="w">     </span><span class="c1"># &amp;&amp; — только если код 0</span>
+</code></pre></div>
+<details class="tip">
+<summary>Подсказка</summary>
+<p>Код ответа: <code>curl -s -o /dev/null -w '%{http_code}' URL</code>. Многие сайты отвечают не 200, а <strong>перенаправлением</strong>
+(301/302 — «иди туда») — ключ <code>-L</code> заставляет curl пройти по нему до конечного ответа.
+Обязательный аргумент с сообщением:
+<code>url="${1:?usage: $0 &lt;url&gt;}"</code>. <code>$?</code> — код выхода последней команды.</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Проверка, что URL отвечает 200. Код выхода: 0 — OK, 1 — нет.</span>
+
+<span class="nv">url</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="p">:?usage: </span><span class="nv">$0</span><span class="p"> &lt;url&gt;</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="nv">code</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-sL<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>--max-time<span class="w"> </span><span class="m">5</span><span class="w"> </span>-w<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$url</span><span class="s2">"</span><span class="k">)</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$code</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"200"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"OK </span><span class="nv">$url</span><span class="s2">"</span>
+<span class="k">else</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"FAIL </span><span class="nv">$url</span><span class="s2"> (код </span><span class="nv">$code</span><span class="s2">)"</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> <code>-L</code> — без него <code>https://ya.ru</code> даёт <code>302</code> (перенаправление) и скрипт сказал бы <code>FAIL</code>
+про рабочий сайт. Код выхода — главный способ скриптов «разговаривать» друг с другом: <code>0</code> — успех,
+не <code>0</code> — ошибка. Именно его смотрят <code>&amp;&amp;</code>, <code>||</code>, <code>if</code> и CI. <code>"$url"</code> в кавычках — иначе адрес с <code>&amp;</code>
+или пробелом сломает команду. Если сайт не ответил вовсе, <code>curl</code> выдаст код <code>000</code>.</p>
+</details>
+<hr />
+<h3 id="3">Задача 3. Бэкап каталога с датой в имени</h3>
+<p><strong>Уровень:</strong> ★☆☆ · <strong>Время:</strong> ~20 мин</p>
+<p><strong>Цель.</strong> Перед рискованным изменением (обновление, правка конфига) — сохранить каталог в архив.</p>
+<p><strong>Что потренируешь:</strong> <code>set -euo pipefail</code>, значение по умолчанию <code>${VAR:-...}</code>, <code>date</code>, <code>tar</code>.</p>
+<p><strong>Требования.</strong></p>
+<ul>
+<li><code>./backup.sh /etc/nginx</code> → архив <code>nginx-20261103-143015.tar.gz</code>;</li>
+<li>куда класть — переменная <code>BACKUP_DIR</code>, по умолчанию <code>~/backups</code> (каталог создать, если нет);</li>
+<li>если каталога-источника нет — скрипт падает, а не создаёт пустой архив;</li>
+<li>в конце — путь и размер архива.</li>
+</ul>
+<p><strong>Проверка.</strong></p>
+<div class="highlight"><pre><span></span><code>./backup.sh<span class="w"> </span>/etc
+<span class="nv">BACKUP_DIR</span><span class="o">=</span>/tmp/bk<span class="w"> </span>./backup.sh<span class="w"> </span>/etc/apt
+./backup.sh<span class="w"> </span>/нет-такого<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span><span class="w">                  </span><span class="c1"># не 0</span>
+tar<span class="w"> </span>-tzf<span class="w"> </span>~/backups/etc-*.tar.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-3<span class="w">        </span><span class="c1"># что внутри</span>
+</code></pre></div>
+<details class="tip">
+<summary>Подсказка</summary>
+<p><code>date +%Y%m%d-%H%M%S</code>, <code>basename</code> и <code>dirname</code> — имя и родитель пути. <code>tar -czf АРХИВ -C РОДИТЕЛЬ ИМЯ</code> —
+в архиве будет только <code>ИМЯ/...</code>, без полного пути. Подвох: <code>tar</code> создаёт файл архива <strong>до</strong> того, как
+обнаружит, что источника нет, — проверь каталог заранее: <code>[ -d "$src" ]</code>.</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Бэкап каталога в tar.gz с датой в имени</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+
+<span class="nv">src</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="p">:?usage: </span><span class="nv">$0</span><span class="p"> &lt;каталог&gt;</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">dest</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">BACKUP_DIR</span><span class="k">:-</span><span class="nv">$HOME</span><span class="p">/backups</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">name</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">"</span><span class="nv">$src</span><span class="s2">"</span><span class="k">)</span><span class="s2">-</span><span class="k">$(</span>date<span class="w"> </span>+%Y%m%d-%H%M%S<span class="k">)</span><span class="s2">.tar.gz"</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-d<span class="w"> </span><span class="s2">"</span><span class="nv">$src</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Нет каталога: </span><span class="nv">$src</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+
+mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$dest</span><span class="s2">"</span>
+tar<span class="w"> </span>-czf<span class="w"> </span><span class="s2">"</span><span class="nv">$dest</span><span class="s2">/</span><span class="nv">$name</span><span class="s2">"</span><span class="w"> </span>-C<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$src</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">"</span><span class="nv">$src</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Бэкап: </span><span class="nv">$dest</span><span class="s2">/</span><span class="nv">$name</span><span class="s2"> (</span><span class="k">$(</span>du<span class="w"> </span>-h<span class="w"> </span><span class="s2">"</span><span class="nv">$dest</span><span class="s2">/</span><span class="nv">$name</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-f1<span class="k">)</span><span class="s2">)"</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> <code>set -euo pipefail</code> — три страховки: <code>-e</code> остановиться на первой ошибке, <code>-u</code> ошибка
+при обращении к несуществующей переменной (опечатка в имени), <code>-o pipefail</code> — ошибка в середине
+конвейера не теряется. Ставь в каждый скрипт, который что-то меняет. Но <code>set -e</code> не спасает от
+последствий: без проверки <code>[ -d ]</code> <code>tar</code> упал бы, <strong>успев создать битый архив</strong>. Проверяй входные
+данные до того, как что-то создавать или менять.</p>
+</details>
+<hr />
+<h3 id="4">Задача 4. Удалить старые логи — безопасно</h3>
+<p><strong>Уровень:</strong> ★☆☆ · <strong>Время:</strong> ~20 мин</p>
+<p><strong>Цель.</strong> Диск забит старыми логами. Удалить <code>*.log</code> старше N дней — но <strong>сначала показать</strong>, что будет
+удалено, и удалять только с явным флагом.</p>
+<p><strong>Что потренируешь:</strong> <code>find</code> с условиями, необязательный аргумент <code>${3:-}</code>, режим «сухого прогона».</p>
+<p><strong>Требования.</strong></p>
+<ul>
+<li><code>./cleanup.sh /var/log/app 7</code> — только <strong>показать</strong> файлы <code>*.log</code> старше 7 дней;</li>
+<li><code>./cleanup.sh /var/log/app 7 --force</code> — удалить их и показать, что удалено;</li>
+<li>другие файлы и свежие логи не трогать.</li>
+</ul>
+<p><strong>Проверка</strong> — сделать тестовые файлы с датой в прошлом:</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/logs
+touch<span class="w"> </span>-d<span class="w"> </span><span class="s1">'10 days ago'</span><span class="w"> </span>/tmp/logs/old.log
+touch<span class="w"> </span>-d<span class="w"> </span><span class="s1">'10 days ago'</span><span class="w"> </span>/tmp/logs/old.txt
+touch<span class="w"> </span>/tmp/logs/new.log
+./cleanup.sh<span class="w"> </span>/tmp/logs<span class="w"> </span><span class="m">7</span><span class="w">          </span><span class="c1"># покажет только old.log</span>
+./cleanup.sh<span class="w"> </span>/tmp/logs<span class="w"> </span><span class="m">7</span><span class="w"> </span>--force<span class="w">  </span><span class="c1"># удалит old.log</span>
+ls<span class="w"> </span>/tmp/logs<span class="w">                      </span><span class="c1"># new.log и old.txt на месте</span>
+</code></pre></div>
+<details class="tip">
+<summary>Подсказка</summary>
+<p><code>find КАТАЛОГ -type f -name '*.log' -mtime +7 -print</code> — файлы, изменённые больше 7 дней назад.
+Добавить <code>-delete</code> — удалить. Третий аргумент необязательный: <code>"${3:-}"</code> — пустая строка, если его нет
+(иначе <code>set -u</code> упадёт).</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Удаление *.log старше N дней. Без --force только показывает, что будет удалено.</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+
+<span class="nv">dir</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="p">:?usage: </span><span class="nv">$0</span><span class="p"> &lt;каталог&gt; &lt;дней&gt; [--force]</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">days</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">2</span><span class="p">:?укажи, старше скольких дней удалять</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">3</span><span class="k">:-</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"--force"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span>find<span class="w"> </span><span class="s2">"</span><span class="nv">$dir</span><span class="s2">"</span><span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s1">'*.log'</span><span class="w"> </span>-mtime<span class="w"> </span>+<span class="s2">"</span><span class="nv">$days</span><span class="s2">"</span><span class="w"> </span>-print<span class="w"> </span>-delete
+<span class="k">else</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Будут удалены (запусти с --force, чтобы удалить):"</span>
+<span class="w">  </span>find<span class="w"> </span><span class="s2">"</span><span class="nv">$dir</span><span class="s2">"</span><span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s1">'*.log'</span><span class="w"> </span>-mtime<span class="w"> </span>+<span class="s2">"</span><span class="nv">$days</span><span class="s2">"</span><span class="w"> </span>-print
+<span class="k">fi</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> Любой скрипт, который <strong>удаляет</strong>, по умолчанию должен только показывать — опечатка
+в пути (<code>/</code> вместо <code>/var/log/app</code>) стоит дорого. <code>'*.log'</code> в одинарных кавычках — чтобы шаблон
+раскрыл <code>find</code>, а не bash. Удаление по расписанию — через cron или systemd timer.</p>
+</details>
+<hr />
+<h3 id="5">Задача 5. Дождаться, пока сервис поднимется</h3>
+<p><strong>Уровень:</strong> ★★☆ · <strong>Время:</strong> ~30 мин</p>
+<p><strong>Цель.</strong> После деплоя или <code>docker compose up</code> сервис стартует не мгновенно. Скрипт ждёт, пока URL
+начнёт отвечать, но не дольше таймаута.</p>
+<p><strong>Что потренируешь:</strong> цикл <code>until</code>, арифметику <code>$(( ))</code>, вывод ошибок в stderr (<code>&gt;&amp;2</code>).</p>
+<p><strong>Требования.</strong></p>
+<ul>
+<li><code>./wait-for.sh http://localhost:8080/health 60</code> — опрашивать раз в 2 секунды;</li>
+<li>ответил — <code>... отвечает</code>, код <code>0</code>;</li>
+<li>не ответил за таймаут — сообщение в <strong>stderr</strong>, код <code>1</code>;</li>
+<li>таймаут по умолчанию — 60 секунд.</li>
+</ul>
+<p><strong>Проверка.</strong></p>
+<div class="highlight"><pre><span></span><code>./wait-for.sh<span class="w"> </span>https://ya.ru<span class="w"> </span><span class="m">10</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span><span class="w">               </span><span class="c1"># сразу OK</span>
+./wait-for.sh<span class="w"> </span>http://localhost:9999<span class="w"> </span><span class="m">6</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span><span class="w">        </span><span class="c1"># ~6 секунд, потом FAIL и 1</span>
+<span class="c1"># с настоящим сервисом (в другом терминале):</span>
+<span class="c1">#   sleep 10 &amp;&amp; docker run --rm -p 8080:80 nginx:1.27-alpine</span>
+./wait-for.sh<span class="w"> </span>http://localhost:8080<span class="w"> </span><span class="m">30</span>
+</code></pre></div>
+<details class="tip">
+<summary>Подсказка</summary>
+<p><code>until КОМАНДА; do ...; done</code> — повторять, пока команда <strong>не</strong> завершится успешно. <code>curl -sf</code> возвращает
+ошибку на ответы 4xx/5xx и на недоступность. Текущее время в секундах — <code>date +%s</code>; срок —
+<code>$(( $(date +%s) + timeout ))</code>.</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Ждать, пока URL начнёт отвечать (2xx/3xx). Код 1 — если не дождались за таймаут.</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+
+<span class="nv">url</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="p">:?usage: </span><span class="nv">$0</span><span class="p"> &lt;url&gt; [таймаут_сек]</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">timeout</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">2</span><span class="k">:-</span><span class="nv">60</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">deadline</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="k">$(</span>date<span class="w"> </span>+%s<span class="k">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">timeout</span><span class="w"> </span><span class="k">))</span>
+
+<span class="k">until</span><span class="w"> </span>curl<span class="w"> </span>-sf<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>--max-time<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="s2">"</span><span class="nv">$url</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>date<span class="w"> </span>+%s<span class="k">)</span><span class="s2">"</span><span class="w"> </span>-ge<span class="w"> </span><span class="s2">"</span><span class="nv">$deadline</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Не дождался </span><span class="nv">$url</span><span class="s2"> за </span><span class="si">${</span><span class="nv">timeout</span><span class="si">}</span><span class="s2">с"</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"ждём </span><span class="nv">$url</span><span class="s2">..."</span>
+<span class="w">  </span>sleep<span class="w"> </span><span class="m">2</span>
+<span class="k">done</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$url</span><span class="s2"> отвечает"</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> <code>until</code> с командой — частый приём: «повторяй, пока не получится». Без таймаута такой
+цикл в CI висел бы вечно. Ошибку — в stderr (<code>&gt;&amp;2</code>): тогда <code>./wait-for.sh ... &gt; log</code> не спрячет её.
+Так же устроены проверки в CI после деплоя (smoke-тест <a href="../diploma-cicd/">диплома</a>).</p>
+</details>
+<hr />
+<h2 id="bash_2">Bash: файлы и вывод команд</h2>
+<h3 id="6">Задача 6. Проверить список адресов из файла</h3>
+<p><strong>Уровень:</strong> ★★☆ · <strong>Время:</strong> ~30 мин</p>
+<p><strong>Цель.</strong> Смоук-проверка стенда: пройти по списку адресов и показать, какие отвечают.</p>
+<p><strong>Что потренируешь:</strong> чтение файла построчно <code>while read</code>, пропуск пустых строк и комментариев.</p>
+<p><strong>Требования.</strong></p>
+<ul>
+<li>адреса в <code>urls.txt</code>, по одному в строке; пустые строки и строки с <code>#</code> пропускать;</li>
+<li>для каждого: <code>OK  200 адрес</code> или <code>FAIL 404 адрес</code>;</li>
+<li>код выхода <code>1</code>, если хотя бы один адрес не ответил.</li>
+</ul>
+<div class="highlight"><pre><span></span><code># urls.txt
+https://ya.ru
+https://github.com
+
+# сломанный:
+https://ya.ru/no-such-page
+</code></pre></div>
+<details class="tip">
+<summary>Подсказка</summary>
+<p><code>while read -r url; do ...; done &lt; urls.txt</code>. Пропустить строку: <code>[ -z "$url" ] &amp;&amp; continue</code>
+(пустая), <code>[[ "$url" == \#* ]] &amp;&amp; continue</code> (комментарий). Флаг «был сбой» — переменная <code>failed=1</code>,
+в конце <code>exit "$failed"</code>.</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Проверка списка URL из файла. Код 1 — если хотя бы один не ответил 2xx/3xx.</span>
+
+<span class="nv">file</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">urls</span><span class="p">.txt</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">failed</span><span class="o">=</span><span class="m">0</span>
+
+<span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>url<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">"</span><span class="nv">$url</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">continue</span>
+<span class="w">  </span><span class="o">[[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$url</span><span class="s2">"</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="se">\#</span>*<span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">continue</span>
+
+<span class="w">  </span><span class="nv">code</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>--max-time<span class="w"> </span><span class="m">5</span><span class="w"> </span>-w<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$url</span><span class="s2">"</span><span class="k">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$code</span><span class="s2">"</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">2</span>*<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s2">"</span><span class="nv">$code</span><span class="s2">"</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">3</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"OK   </span><span class="nv">$code</span><span class="s2"> </span><span class="nv">$url</span><span class="s2">"</span>
+<span class="w">  </span><span class="k">else</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"FAIL </span><span class="nv">$code</span><span class="s2"> </span><span class="nv">$url</span><span class="s2">"</span>
+<span class="w">    </span><span class="nv">failed</span><span class="o">=</span><span class="m">1</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="k">done</span><span class="w"> </span>&lt;<span class="w"> </span><span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span>
+
+<span class="nb">exit</span><span class="w"> </span><span class="s2">"</span><span class="nv">$failed</span><span class="s2">"</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> <code>read -r</code> — не превращать <code>\</code> в спецсимвол (shellcheck подскажет). <code>set -e</code> здесь
+специально нет: <code>curl</code> к недоступному адресу возвращает ошибку, и <code>code=$(curl ...)</code> с <code>set -e</code>
+оборвал бы весь скрипт на первом же упавшем сайте (код при этом всё равно <code>000</code> — его печатает <code>-w</code>).
+Полная версия с <code>set -e</code>, <code>|| true</code>, ретраями и потерянной последней строкой — задача 18
+практических заданий.</p>
+</details>
+<hr />
+<h3 id="7">Задача 7. Топ ошибок в логе</h3>
+<p><strong>Уровень:</strong> ★★☆ · <strong>Время:</strong> ~30 мин</p>
+<p><strong>Цель.</strong> Инцидент: «что вообще сыпется в логе?». Посчитать ошибки и показать самые частые.</p>
+<p><strong>Что потренируешь:</strong> <code>grep</code>, <code>sed</code>, классический конвейер <code>sort | uniq -c | sort -rn | head</code>.</p>
+<p>Тестовый лог:</p>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>app.log<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<span class="s">2026-11-03 10:00:01 INFO started</span>
+<span class="s">2026-11-03 10:00:02 ERROR db timeout</span>
+<span class="s">2026-11-03 10:00:03 ERROR db timeout</span>
+<span class="s">2026-11-03 10:00:04 WARN slow request</span>
+<span class="s">2026-11-03 10:00:05 ERROR payment declined</span>
+<span class="s">2026-11-03 10:00:06 ERROR db timeout</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p><strong>Требования.</strong></p>
+<div class="highlight"><pre><span></span><code>Строк с ошибками: 4
+Топ повторяющихся ошибок:
+      3 ERROR db timeout
+      1 ERROR payment declined
+</code></pre></div>
+<ul>
+<li>дата и время в начале строки при подсчёте не учитываются (иначе каждая строка уникальна);</li>
+<li>если ошибок нет — <code>Строк с ошибками: 0</code>, скрипт не падает.</li>
+</ul>
+<details class="tip">
+<summary>Подсказка</summary>
+<p><code>grep -c</code> — число строк. Отрезать дату: <code>sed -E 's/^[0-9-]+ [0-9:]+ //'</code>. Посчитать одинаковые строки:
+<code>sort | uniq -c</code>, по убыванию — <code>sort -rn</code>, первые 5 — <code>head -5</code>. Подвох: <code>grep</code> без совпадений
+возвращает код <code>1</code>, и <code>set -e</code> остановит скрипт.</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Число строк с ERROR и топ-5 повторяющихся ошибок (без даты и времени)</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+
+<span class="nv">log</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="p">:?usage: </span><span class="nv">$0</span><span class="p"> &lt;лог-файл&gt;</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="nv">total</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span>-c<span class="w"> </span><span class="s1">'ERROR'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$log</span><span class="s2">"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span><span class="k">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Строк с ошибками: </span><span class="nv">$total</span><span class="s2">"</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$total</span><span class="s2">"</span><span class="w"> </span>-gt<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Топ повторяющихся ошибок:"</span>
+<span class="w">  </span>grep<span class="w"> </span><span class="s1">'ERROR'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$log</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-E<span class="w"> </span><span class="s1">'s/^[0-9-]+ [0-9:]+ //'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-rn<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-5
+<span class="k">fi</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> <code>|| true</code> — <code>grep -c</code> при нуле совпадений печатает <code>0</code>, но возвращает код <code>1</code>; без
+<code>|| true</code> скрипт с <code>set -e</code> упал бы на «хорошем» логе. Конвейер <code>sort | uniq -c | sort -rn</code> —
+один из самых полезных в работе: так же ищут самые частые IP в логах nginx или самые частые
+пути запросов.</p>
+</details>
+<hr />
+<h3 id="8">Задача 8. Предупреждение о заполнении диска</h3>
+<p><strong>Уровень:</strong> ★★☆ · <strong>Время:</strong> ~30 мин</p>
+<p><strong>Цель.</strong> Скрипт для cron: проверить все разделы и предупредить, если какой-то заполнен выше порога.</p>
+<p><strong>Что потренируешь:</strong> цикл по выводу команды, обрезку символа <code>${var%\%}</code>, сравнение чисел <code>-ge</code>.</p>
+<p><strong>Требования.</strong></p>
+<ul>
+<li><code>./disk-alert.sh 80</code> — порог в процентах, по умолчанию <code>80</code>;</li>
+<li>для каждого раздела выше порога: <code>ВНИМАНИЕ: / заполнен на 91% (порог 80%)</code>, код выхода <code>1</code>;</li>
+<li>всё в порядке — <code>Все разделы ниже 80%</code>, код <code>0</code>.</li>
+</ul>
+<p><strong>Проверка.</strong></p>
+<div class="highlight"><pre><span></span><code>./disk-alert.sh<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+./disk-alert.sh<span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span><span class="w">      </span><span class="c1"># порог 1% — сработает на любом разделе</span>
+</code></pre></div>
+<details class="tip">
+<summary>Подсказка</summary>
+<p><code>df -P | awk 'NR&gt;1 &amp;&amp; $5 ~ /^[0-9]+%$/ {print $5, $6}'</code> даёт строки вида <code>21% /</code> (условие
+<code>$5 ~ ...</code> отсекает служебные разделы, где вместо процента <code>-</code>). Читать их в цикле:
+<code>while read -r use mount; do ... done &lt; &lt;(команда)</code>. Убрать <code>%</code>: <code>${use%\%}</code>. Сравнение чисел —
+<code>[ "$use" -ge "$limit" ]</code> (не <code>&gt;</code> — это сравнение строк).</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Предупреждение, если раздел заполнен выше порога. Код 1 — есть такие разделы.</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+
+<span class="nv">limit</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">80</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">status</span><span class="o">=</span><span class="m">0</span>
+
+<span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>use<span class="w"> </span>mount<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nv">use</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">use</span><span class="p">%</span><span class="se">\%</span><span class="si">}</span><span class="s2">"</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$use</span><span class="s2">"</span><span class="w"> </span>-ge<span class="w"> </span><span class="s2">"</span><span class="nv">$limit</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"ВНИМАНИЕ: </span><span class="nv">$mount</span><span class="s2"> заполнен на </span><span class="nv">$use</span><span class="s2">% (порог </span><span class="nv">$limit</span><span class="s2">%)"</span>
+<span class="w">    </span><span class="nv">status</span><span class="o">=</span><span class="m">1</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="k">done</span><span class="w"> </span>&lt;<span class="w"> </span>&lt;<span class="o">(</span>df<span class="w"> </span>-P<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'NR&gt;1 &amp;&amp; $5 ~ /^[0-9]+%$/ {print $5, $6}'</span><span class="o">)</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$status</span><span class="s2">"</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Все разделы ниже </span><span class="nv">$limit</span><span class="s2">%"</span>
+<span class="k">fi</span>
+<span class="nb">exit</span><span class="w"> </span><span class="s2">"</span><span class="nv">$status</span><span class="s2">"</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> <code>&lt; &lt;(команда)</code> — подать вывод команды в цикл. С <code>команда | while ...</code> переменная
+<code>status</code> менялась бы в подоболочке и снаружи цикла осталась бы <code>0</code>. <code>df -P</code> — стабильный формат
+колонок для скриптов; условие в <code>awk</code> пропускает разделы без процента (иначе <code>[ "-" -ge 80 ]</code> сыплет
+ошибками). Для cron: <code>*/15 * * * * /opt/scripts/disk-alert.sh 85 || &lt;уведомление&gt;</code>.</p>
+</details>
+<hr />
+<h2 id="bash-kubernetes">Bash: Kubernetes</h2>
+<p>Нужен кластер — <code>make up</code> в <a href="https://github.com/FunnyJesus/k8s-platform-lab">k8s-platform-lab</a>.
+Скрипты запускай на Mac (там <code>kubectl</code>), не в контейнере.</p>
+<h3 id="9">Задача 9. Перезапуск деплоймента — с защитой от прода</h3>
+<p><strong>Уровень:</strong> ★★☆ · <strong>Время:</strong> ~30 мин</p>
+<p><strong>Цель.</strong> Частая просьба: «перезапусти сервис». Скрипт перезапускает Deployment, ждёт готовности и
+показывает поды — и <strong>переспрашивает</strong>, если текущий кластер похож на прод.</p>
+<p><strong>Что потренируешь:</strong> <code>kubectl</code> в скриптах, <code>read -p</code> (вопрос пользователю), шаблон <code>*prod*</code>.</p>
+<p><strong>Требования.</strong></p>
+<ul>
+<li><code>./restart.sh my-app my-app</code> (deployment, namespace; namespace по умолчанию <code>default</code>);</li>
+<li>в начале — какой кластер (контекст), namespace и deployment;</li>
+<li>если в имени контекста есть <code>prod</code> — спросить подтверждение, по умолчанию «нет»;</li>
+<li>дождаться окончания rollout (не дольше 3 минут) и показать поды.</li>
+</ul>
+<p><strong>Проверка.</strong></p>
+<div class="highlight"><pre><span></span><code>./restart.sh<span class="w"> </span>my-app<span class="w"> </span>my-app
+kubectl<span class="w"> </span>-n<span class="w"> </span>my-app<span class="w"> </span>get<span class="w"> </span>pods<span class="w">          </span><span class="c1"># поды пересозданы, AGE — секунды</span>
+</code></pre></div>
+<details class="tip">
+<summary>Подсказка</summary>
+<p>Текущий контекст: <code>kubectl config current-context</code>. Перезапуск без изменения манифеста:
+<code>kubectl rollout restart deployment/ИМЯ</code>, ожидание: <code>kubectl rollout status ... --timeout=180s</code>.
+Вопрос: <code>read -r -p "Точно? [y/N] " answer</code>.</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Перезапуск Deployment с ожиданием готовности. На prod-контексте спрашивает подтверждение.</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+
+<span class="nv">deploy</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="p">:?usage: </span><span class="nv">$0</span><span class="p"> &lt;deployment&gt; [namespace]</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">ns</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">2</span><span class="k">:-</span><span class="nv">default</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">ctx</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>config<span class="w"> </span>current-context<span class="k">)</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Кластер: </span><span class="nv">$ctx</span><span class="s2"> | namespace: </span><span class="nv">$ns</span><span class="s2"> | deployment: </span><span class="nv">$deploy</span><span class="s2">"</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$ctx</span><span class="s2">"</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*prod*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>-p<span class="w"> </span><span class="s2">"Это prod. Точно перезапустить? [y/N] "</span><span class="w"> </span>answer
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$answer</span><span class="s2">"</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">"y"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Отменено"</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="k">fi</span>
+
+kubectl<span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$ns</span><span class="s2">"</span><span class="w"> </span>rollout<span class="w"> </span>restart<span class="w"> </span>deployment/<span class="s2">"</span><span class="nv">$deploy</span><span class="s2">"</span>
+kubectl<span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$ns</span><span class="s2">"</span><span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deployment/<span class="s2">"</span><span class="nv">$deploy</span><span class="s2">"</span><span class="w"> </span>--timeout<span class="o">=</span>180s
+kubectl<span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$ns</span><span class="s2">"</span><span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-o<span class="w"> </span>wide<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"^NAME|^</span><span class="nv">$deploy</span><span class="s2">-"</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> Самая частая серьёзная ошибка с <code>kubectl</code> — команда не в том кластере. Поэтому
+скрипт сначала <strong>показывает</strong>, куда идёт, а на проде переспрашивает. <code>rollout restart</code> меняет
+аннотацию пода — Deployment пересоздаёт поды по правилам rolling update, без даунтайма.</p>
+</details>
+<hr />
+<h3 id="10-">Задача 10. Собрать диагностику пода для баг-репорта</h3>
+<p><strong>Уровень:</strong> ★★☆ · <strong>Время:</strong> ~30 мин</p>
+<p><strong>Цель.</strong> Под падает. Разработчику нужно всё сразу: манифест, describe, логи (и предыдущего запуска),
+события. Скрипт собирает это в один архив — приложить к задаче.</p>
+<p><strong>Что потренируешь:</strong> сбор вывода в файлы, <code>|| true</code> для необязательных шагов, <code>2&gt;&amp;1</code>, архив.</p>
+<p><strong>Требования.</strong></p>
+<ul>
+<li><code>./collect-debug.sh my-app-7d9f... my-app</code> (pod, namespace);</li>
+<li>в архиве <code>debug-&lt;pod&gt;-&lt;дата&gt;.tar.gz</code>: <code>pod.yaml</code>, <code>describe.txt</code>, <code>logs.txt</code>, <code>logs-previous.txt</code>,
+  <code>events.txt</code>;</li>
+<li>если предыдущего запуска не было (под не перезапускался) — скрипт <strong>не падает</strong>;</li>
+<li>временная папка после архивации удаляется.</li>
+</ul>
+<p><strong>Проверка</strong> — на поде, который точно перезапускался:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>crash<span class="w"> </span>--image<span class="o">=</span>busybox:1.37<span class="w"> </span>--<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s2">"echo boom; exit 1"</span>
+sleep<span class="w"> </span><span class="m">30</span>
+./collect-debug.sh<span class="w"> </span>crash<span class="w"> </span>default
+tar<span class="w"> </span>-tzf<span class="w"> </span>debug-crash-*.tar.gz
+kubectl<span class="w"> </span>delete<span class="w"> </span>pod<span class="w"> </span>crash
+</code></pre></div>
+<details class="tip">
+<summary>Подсказка</summary>
+<p><code>kubectl logs ПОД --previous</code> падает, если перезапусков не было, — допиши <code>|| true</code>. Ошибку тоже
+стоит сохранить в файл: <code>&gt; файл 2&gt;&amp;1</code>. Архив папки: <code>tar -czf папка.tar.gz папка</code>.</p>
+</details>
+<details class="success">
+<summary>Решение</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># Диагностика пода в архив: манифест, describe, логи (и предыдущего запуска), события namespace</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+
+<span class="nv">pod</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="p">:?usage: </span><span class="nv">$0</span><span class="p"> &lt;pod&gt; [namespace]</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">ns</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">2</span><span class="k">:-</span><span class="nv">default</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">out</span><span class="o">=</span><span class="s2">"debug-</span><span class="nv">$pod</span><span class="s2">-</span><span class="k">$(</span>date<span class="w"> </span>+%Y%m%d-%H%M%S<span class="k">)</span><span class="s2">"</span>
+
+mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span>
+kubectl<span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$ns</span><span class="s2">"</span><span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span><span class="s2">"</span><span class="nv">$pod</span><span class="s2">"</span><span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">/pod.yaml"</span>
+kubectl<span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$ns</span><span class="s2">"</span><span class="w"> </span>describe<span class="w"> </span>pod<span class="w"> </span><span class="s2">"</span><span class="nv">$pod</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">/describe.txt"</span>
+kubectl<span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$ns</span><span class="s2">"</span><span class="w"> </span>logs<span class="w"> </span><span class="s2">"</span><span class="nv">$pod</span><span class="s2">"</span><span class="w"> </span>--all-containers<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">/logs.txt"</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+kubectl<span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$ns</span><span class="s2">"</span><span class="w"> </span>logs<span class="w"> </span><span class="s2">"</span><span class="nv">$pod</span><span class="s2">"</span><span class="w"> </span>--all-containers<span class="w"> </span>--previous<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">/logs-previous.txt"</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+kubectl<span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$ns</span><span class="s2">"</span><span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>--sort-by<span class="o">=</span>.lastTimestamp<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">/events.txt"</span>
+
+tar<span class="w"> </span>-czf<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">.tar.gz"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span>
+rm<span class="w"> </span>-rf<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Собрано: </span><span class="nv">$out</span><span class="s2">.tar.gz — приложи к баг-репорту"</span>
+</code></pre></div>
+<p><strong>Почему так.</strong> Логи — <code>|| true</code>: их может не быть, и это не повод терять остальное. А <code>get pod</code> и
+<code>describe</code> — без него: если пода нет (опечатка в имени), архив без них бессмысленен, лучше упасть сразу.
+<code>2&gt;&amp;1</code> — сообщение «previous terminated container not found» тоже информация, пусть будет в файле.
+Для тестировщика это готовый инструмент: баг-репорт на упавший сервис — одной командой.</p>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>
