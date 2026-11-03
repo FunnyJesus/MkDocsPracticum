@@ -24,10 +24,11 @@
 ### Неделя 1. Linux и Bash
 
 - [ ] Читать: [Linux](linux.md), [Структура каталогов](linux-filesystem.md), [Диагностика](linux-troubleshooting.md), [Bash-скрипты](bash-scripts.md)
+- [ ] Сделать: [Первые полезные скрипты](bash-first-scripts.md) 1–8 (по одному-два в день)
 - [ ] Сделать: задача 18 «Скрипт проверки доступности сайтов», задача 19 «Диск полон, а файлов нет»
 - [ ] Проверить себя: Мантра → Linux; «сервер тормозит — твои действия?»
 
-**Результат:** скрипт `check-urls.sh` в репозитории, `shellcheck` чистый.
+**Результат:** репозиторий `bash-lab` с 8 скриптами и `check-urls.sh`, `shellcheck` чистый.
 
 ### Неделя 2. Сети и Git
 
@@ -74,6 +75,7 @@
 ### Неделя 6. Kubernetes: основы
 
 - [ ] Читать: [Kubernetes](k8s.md), [Команды](k8s-commands.md), [k9s](k9s.md)
+- [ ] Сделать: [Первые полезные скрипты](bash-first-scripts.md) 9–10 — перезапуск и сбор диагностики пода
 - [ ] Сделать: в [k8s-platform-lab](https://github.com/FunnyJesus/k8s-platform-lab) — задача 6 (`make up`,
   `make status`) и задача 10 «Почини сломанный релиз»
 - [ ] Проверить себя: «Pending / CrashLoopBackOff / ImagePullBackOff — что значит и где смотреть?»,

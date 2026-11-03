@@ -7,7 +7,7 @@
 - [**Что такое DevOps**](devops.md) — зачем нужен DevOps, CALMS, жизненный цикл, метрики DORA, роли DevOps/SRE/Platform, карта навыков и порядок изучения
 - [**Собеседование**](interview-mantra.md) — мантра на каждый день: 175+ вопросов с короткими ответами; [подробные ответы со ссылками](interview.md)
 - [**Linux**](linux.md) — основы ОС: компоненты, процессы, базовые команды (`ls`, `cat`, `grep`, `find`, `ps`, `systemctl`, `tar`, сеть и др.); [структура каталогов и куда что деплоить](linux-filesystem.md); [диагностика и производительность](linux-troubleshooting.md), [обработка текста: grep, sed, awk, jq, yq](text-processing.md), [SSH: config, бастион, туннели](ssh.md), [tmux и vim](tmux-vim.md)
-- [**Bash Script**](bash-scripts.md) — написание скриптов: переменные, массивы, операторы `|`, `||`, `&&`, циклы, функции, if-else, case
+- [**Bash Script**](bash-scripts.md) — написание скриптов: переменные, массивы, операторы `|`, `||`, `&&`, циклы, функции, if-else, case; [первые полезные скрипты](bash-first-scripts.md) — лестница из 10 заданий: от сводки о сервере до сбора диагностики пода для баг-репорта
 - [**Makefile**](makefile.md) — автоматизация команд проекта: цели, зависимости, `.PHONY`, переменные, `make help`, Makefile для Docker/Terraform/Helm
 - [**Git**](git.md) — контроль версий: коммиты, ветки, слияния, работа с удалённым репозиторием
 - [**CI**](ci.md) — непрерывная интеграция: Pipeline, Stage, Jobs, GitLab CI / GitHub Actions
