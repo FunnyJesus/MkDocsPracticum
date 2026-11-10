@@ -81,6 +81,7 @@ nav:
   - Сети:
       - networking.md
       - networking-cheatsheet.md
+      - curl.md
   - Базы данных и очереди:
       - databases.md
       - postgres-cheatsheet.md

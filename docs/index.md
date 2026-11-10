@@ -5,7 +5,7 @@
 ## Разделы
 
 - [**Что такое DevOps**](devops.md) — зачем нужен DevOps, CALMS, жизненный цикл, метрики DORA, роли DevOps/SRE/Platform, карта навыков и порядок изучения
-- [**Собеседование**](interview-mantra.md) — мантра на каждый день: 175+ вопросов с короткими ответами; [подробные ответы со ссылками](interview.md)
+- [**Собеседование**](interview-mantra.md) — мантра на каждый день: 180 вопросов с короткими ответами; [подробные ответы со ссылками](interview.md)
 - [**Linux**](linux.md) — основы ОС: компоненты, процессы, базовые команды (`ls`, `cat`, `grep`, `find`, `ps`, `systemctl`, `tar`, сеть и др.); [структура каталогов и куда что деплоить](linux-filesystem.md); [диагностика и производительность](linux-troubleshooting.md), [обработка текста: grep, sed, awk, jq, yq](text-processing.md), [SSH: config, бастион, туннели](ssh.md), [tmux и vim](tmux-vim.md)
 - [**Bash Script**](bash-scripts.md) — написание скриптов: переменные, массивы, операторы `|`, `||`, `&&`, циклы, функции, if-else, case; [первые полезные скрипты](bash-first-scripts.md) — лестница из 10 заданий: от сводки о сервере до сбора диагностики пода для баг-репорта
 - [**Makefile**](makefile.md) — автоматизация команд проекта: цели, зависимости, `.PHONY`, переменные, `make help`, Makefile для Docker/Terraform/Helm
@@ -17,7 +17,7 @@
 - [**Helm**](helm.md) — пакетный менеджер K8s: чарты, шаблоны, values по окружениям, релизы и откаты; [production-ready чарт podinfo](helm-podinfo.md) — helpers, HPA, PDB, Redis, хуки и тесты; [карта: где какой параметр в манифесте и в Helm](k8s-yaml-map.md); [практикум на своём чарте](helm-practice.md)
 - [**GitOps / Argo CD**](gitops.md) — pull-деплой из git, Application, drift и selfHeal, app-of-apps, ApplicationSet
 - [**Nginx**](nginx.md) — веб-сервер и reverse proxy: location, upstream, HTTPS и certbot, лимиты, разбор 502/504
-- [**Сети**](networking.md) — OSI/TCP-IP, TCP vs UDP, DNS, HTTP/HTTPS, TLS, firewall, диагностика
+- [**Сети**](networking.md) — OSI/TCP-IP, TCP vs UDP, DNS, HTTP/HTTPS, TLS, firewall, диагностика; [curl: главные флаги и приёмы](curl.md)
 - [**Базы данных**](databases.md) — PostgreSQL для DevOps: доступы, бэкапы и PITR, репликация, PgBouncer, диагностика, миграции; [очереди сообщений: Kafka и RabbitMQ](message-queues.md)
 - [**Мониторинг и логи**](monitoring.md) — обзор стека, ELK/Loki, SLI/SLO/SLA, учебный стенд в Docker Compose; настройка: [Prometheus и Alertmanager](prometheus.md), [Grafana](grafana.md), [Vector](vector.md), [трейсинг и OpenTelemetry](tracing.md)
 - [**SRE и надёжность**](sre.md) — error budget, burn rate, инциденты, on-call, runbook, blameless postmortem; [бэкапы и DR](backup-dr.md); [10 типовых инцидентов](incidents-practice.md)
