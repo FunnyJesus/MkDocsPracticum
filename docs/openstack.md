@@ -446,8 +446,8 @@ openstack loadbalancer pool create --name web-pool --lb-algorithm ROUND_ROBIN \
   --listener web-http --protocol HTTP --wait
 openstack loadbalancer healthmonitor create --delay 5 --timeout 3 --max-retries 3 \
   --type HTTP --url-path /health web-pool --wait
-openstack loadbalancer member create --subnet-id app-subnet --address 10.10.0.11 --protocol-port 80 web-pool
-openstack loadbalancer member create --subnet-id app-subnet --address 10.10.0.12 --protocol-port 80 web-pool
+openstack loadbalancer member create --subnet-id app-subnet --address 10.10.0.11 --protocol-port 80 web-pool --wait
+openstack loadbalancer member create --subnet-id app-subnet --address 10.10.0.12 --protocol-port 80 web-pool --wait
 
 openstack loadbalancer show web-lb -c vip_address -c provisioning_status -c operating_status
 openstack loadbalancer member list web-pool          # operating_status ONLINE / ERROR
@@ -456,6 +456,81 @@ openstack floating ip set --port $(openstack loadbalancer show web-lb -f value -
 ```
 
 > Операции Octavia асинхронные: пока балансировщик в `PENDING_UPDATE`, следующая команда вернёт ошибку — отсюда `--wait`.
+
+### Зависший балансировщик
+
+Балансировщик «висит» в `PENDING_CREATE`, `PENDING_UPDATE` или `PENDING_DELETE` и не реагирует на команды.
+
+**Почему так.** `PENDING_*` означает, что octavia-worker прямо сейчас выполняет операцию. На это время объект **заблокирован**: любая команда к нему и его дочерним объектам (listener, pool, member) получит `409 Invalid state PENDING_UPDATE`. Это защита от одновременных изменений. Чаще всего процесс не завис, а ждёт по таймаутам — пока создастся VM-амфора, пока она ответит контроллеру. Это может занять 10–25 минут, после чего балансировщик сам перейдёт в `ACTIVE` или `ERROR`.
+
+Два разных статуса:
+
+| Поле | Что показывает | Значения |
+|---|---|---|
+| `provisioning_status` | состояние **операции**; именно он блокирует изменения | `PENDING_CREATE`, `PENDING_UPDATE`, `PENDING_DELETE`, `ACTIVE`, `ERROR`, `DELETED` |
+| `operating_status` | **работает** ли балансировщик и его участники сейчас | `ONLINE`, `OFFLINE`, `DEGRADED`, `ERROR`, `NO_MONITOR` |
+
+#### Что может сделать пользователь
+
+```bash
+# 1. Где именно застряло: дерево статусов LB → listeners → pools → members
+openstack loadbalancer show web-lb -c provisioning_status -c operating_status -c updated_at
+openstack loadbalancer status show web-lb
+
+# 2. Подождать и следить, не сменился ли статус
+watch -n 15 "openstack loadbalancer show web-lb -f value -c provisioning_status"
+
+# 3. Перешёл в ERROR — удалить вместе со всеми дочерними объектами
+openstack loadbalancer delete --cascade web-lb
+```
+
+Если балансировщик **висит в `PENDING_*` дольше 30–60 минут**, процесс на стороне облака потерян, и **сам пользователь ничего сделать не может**: у Octavia нет API для сброса статуса. Нужно писать в поддержку провайдера (VK Cloud, Selectel и др.) или администраторам OpenStack и указывать:
+
+* **ID балансировщика** (`openstack loadbalancer show web-lb -f value -c id`);
+* текущий `provisioning_status` и `updated_at`;
+* какую операцию запускал и когда (создание, удаление, добавление member).
+
+#### Что делает администратор облака
+
+**1. Найти причину, а не только сбросить статус.**
+
+```bash
+# логи воркера (путь зависит от установки: systemd, kolla-ansible, OpenStack-Helm)
+journalctl -u octavia-worker --since "1 hour ago" | grep <lb-id>
+grep <lb-id> /var/log/kolla/octavia/octavia-worker.log        # kolla-ansible
+
+# амфоры балансировщика и их VM (только admin)
+openstack loadbalancer amphora list --loadbalancer <lb-id>
+openstack server list --all-projects --name amphora- --long
+```
+
+| Причина | Признак |
+|---|---|
+| **octavia-worker перезапустился посреди операции** | без включённого **jobboard** процесс не возобновится — балансировщик останется в `PENDING_*` **навсегда**. Самый частый случай «завис навечно» |
+| Амфора не создалась | квота сервисного проекта Octavia (instances, cores, RAM), нет образа с тегом `amp_image_tag`, `No valid host was found` в Nova |
+| Контроллер не достучался до амфоры | не работает сеть управления `lb-mgmt-net`: нет связи с агентом амфоры (порт 9443), амфора не шлёт heartbeat в health-manager; проблемы с сертификатами |
+| Ошибка Neutron | не создался или не привязался VIP-порт |
+
+**2. Сбросить статус в `ERROR` и удалить.** Только убедившись по логам, что ни один воркер сейчас этот балансировщик не обрабатывает, и сделав бэкап базы:
+
+```sql
+-- база octavia
+UPDATE load_balancer SET provisioning_status = 'ERROR' WHERE id = '<lb-id>';
+-- если застряли и дочерние объекты
+UPDATE listener SET provisioning_status = 'ERROR' WHERE load_balancer_id = '<lb-id>';
+UPDATE pool     SET provisioning_status = 'ERROR' WHERE load_balancer_id = '<lb-id>';
+```
+
+```bash
+openstack loadbalancer delete --cascade <lb-id>
+```
+
+**3. Убрать «сирот»**, если операция оборвалась на середине: VM-амфоры `amphora-*` в сервисном проекте, VIP-порт `octavia-lb-<lb-id>` в Neutron, security group `lb-<lb-id>`.
+
+#### Как не попадать в это снова
+
+* **Не отправлять несколько операций подряд на один балансировщик.** Каждое создание listener, pool или member переводит LB в `PENDING_UPDATE` — параллельные запросы получают 409, и кажется, что «всё зависло». В CLI — `--wait` у каждой команды, в Terraform — дочерние ресурсы последовательно (`depends_on`) и увеличенные `timeouts`.
+* **Администраторам:** включить jobboard (драйвер `amphorav2` и Redis или ZooKeeper для хранения прогресса операций), не перезапускать octavia-worker во время операций, мониторить квоту сервисного проекта и связность `lb-mgmt-net`.
 
 ## Объектное хранилище (Swift / S3)
 
@@ -601,7 +676,7 @@ ansible-inventory -i inventory/openstack.yml --graph
 | SSH: `Connection timed out` | security group, лог консоли | нет правила на 22; VM ещё грузится; неправильный IP |
 | cloud-init не отработал | `openstack console log show web-1` | нет доступа к metadata service (попробовать `--config-drive true`); ошибка в user-data — см. [cloud-init](cloud-init.md) |
 | Не удаляется сеть / роутер | `openstack port list --network app-net` | остались порты (VM, балансировщик, интерфейс роутера) |
-| Octavia: `Invalid state PENDING_UPDATE` | `openstack loadbalancer show web-lb` | предыдущая операция ещё идёт — `--wait` |
+| Octavia: `Invalid state PENDING_UPDATE` | `openstack loadbalancer show web-lb` | предыдущая операция ещё идёт — `--wait`; висит долго — см. «Зависший балансировщик» |
 | CLI: `The request you have made requires authentication (HTTP 401)` | `openstack token issue` | неверный пароль/домен/проект, истёк application credential |
 | CLI: `Could not find versioned identity endpoints` | `echo $OS_AUTH_URL` | неправильный `auth_url` (нет `/v3`, не тот порт) |
 
